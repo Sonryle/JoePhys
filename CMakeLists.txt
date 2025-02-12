@@ -20,6 +20,7 @@ add_subdirectory(lib)
 # link our libraries into JoePhyss
 target_link_libraries(JoePhys PUBLIC glfw)
 target_link_libraries(JoePhys PUBLIC glad)
+target_link_libraries(JoePhys PUBLIC glm)
 
 # Set our project as the Visual Studio startup project
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${CMAKE_PROJECT_NAME})

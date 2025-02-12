@@ -1,9 +1,8 @@
 #include "renderer.hpp"
 
-void Renderer::saySomething()
+void Renderer::init()
 {
-	std::cout << "Hello from the renderer :)\n";
-	std::cin.get();
+
 
 	return;
 }

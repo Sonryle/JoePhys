@@ -6,7 +6,8 @@
 class Renderer
 {
 public:
-	void saySomething();
+
+	void init();
 };
 
 #endif
