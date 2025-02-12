@@ -1,11 +1,13 @@
 cmake_minimum_required(VERSION 3.12)
 project(JoePhys)
 
-# add all of our libraries
+# create our application
+add_executable(JoePhys src/main.cpp)
+
+# build all of our libraries
 add_subdirectory(lib)
 
-# create our application and link it to our libraries
-add_executable(JoePhys src/main.cpp)
+# link our libraries into JoePhyss
 target_link_libraries(JoePhys PUBLIC glfw)
 target_link_libraries(JoePhys PUBLIC glad)
 
