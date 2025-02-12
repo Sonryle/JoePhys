@@ -9,17 +9,16 @@
 // header files for classes
 #include <renderer.hpp>
 
-// structs
+// structs & classes
 struct Window
 {
-	GLFWwindow* handle;
+	GLFWwindow* handle = nullptr;
 	int width = 800;
 	int height = 800;
 	std::string title = "JoePhys!";
 };
-Window window;
 
-// classes
+Window window;
 Renderer renderer;
 
 // functions
@@ -51,6 +50,9 @@ int main()
 		return -1;
 	}
 
+	// Initialise renderer
+	renderer.init();
+
 	// game loop
 	while (!glfwWindowShouldClose(window.handle))
 	{
@@ -58,9 +60,8 @@ int main()
 		if (glfwGetKey(window.handle, GLFW_KEY_ESCAPE))
 			glfwSetWindowShouldClose(window.handle, true);
 
-		// set background to be red
-		glClearColor(0.95f, 0.51f, 0.49f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		// render scene
+		renderer.render();
 
 		// swap buffers and poll input events
 		glfwSwapBuffers(window.handle);
