@@ -1,0 +1,10 @@
+^D:\GLOBALMEMORY\PROJECTS\JOEPHYS\BUILD\CMAKEFILES\F078136A498A45D64F7FD27FE9F11A4D\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/GlobalMemory/Projects/JoePhys -BD:/GlobalMemory/Projects/JoePhys/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file D:/GlobalMemory/Projects/JoePhys/build/JoePhys.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
