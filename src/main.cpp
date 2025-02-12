@@ -6,6 +6,9 @@
 #include <iostream>
 #include <string>
 
+// header files for classes
+#include <renderer.hpp>
+
 // structs
 struct Window
 {
@@ -15,6 +18,9 @@ struct Window
 	std::string title = "JoePhys!";
 };
 Window window;
+
+// classes
+Renderer renderer;
 
 // functions
 void window_resize_callback(GLFWwindow*, int width, int height);
