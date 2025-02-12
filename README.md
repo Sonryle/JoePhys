@@ -9,11 +9,10 @@ There are no releases to JoePhys yet (I havent even got a window to work yet, i 
 
 ### Building on Windows
 Requirements:  
-&emsp;You must have CMake installed (https://cmake.org/download/)  
-&emsp;You must have Git installed (https://git-scm.com/downloads)
+* You must have CMake installed (https://cmake.org/download/)  
+* You must have Git installed (https://git-scm.com/downloads)
 
-Open powershell and navigate to where you want the JoePhys main folder to be downloaded.
-You can clone the JoePhys repository using Git:
+Open powershell and navigate to where you want the JoePhys main folder to be downloaded. You can clone the JoePhys repository using Git:
 ```sh
 git clone https://github.com/Sonrile/JoePhys
 cd JoePhys
@@ -24,8 +23,7 @@ mkdir build
 cd build
 cmake ..
 ```
-You will be met with a Visual Studio project file (JoePhys.sln)  
-Now just open Visual Studio and build the project (dont forget to set the config to Release!)
+In JoePhys/build you will be met with a Visual Studio project file (JoePhys.sln) use this to compile the project.
 
 #### If you don't want to install Visual Studio
 if you simply want to enjoy JoePhys without having to install visual studio, the process would look something like this:
