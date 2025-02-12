@@ -9,8 +9,8 @@ There are no releases to JoePhys yet (I havent even got a window to work yet, i 
 
 ### Building on Windows
 Requirements:  
-  You must have CMake installed (https://cmake.org/download/)  
-  You must have Git installed (https://git-scm.com/downloads)
+&emsp;You must have CMake installed (https://cmake.org/download/)  
+&emsp;You must have Git installed (https://git-scm.com/downloads)
 
 Open powershell and navigate to where you want the JoePhys main folder to be downloaded.
 You can clone the JoePhys repository using Git:
