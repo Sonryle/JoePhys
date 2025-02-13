@@ -18,7 +18,7 @@ void Renderer::init()
 	// Set up shaders
 
 	circle_shader.init("res/shaders/circle_shader.vert", "res/shaders/circle_shader.frag");
-	circle_shader.use();
+	line_shader.init("res/shaders/line_shader.vert", "res/shaders/line_shader.frag");
 
 	// Set up VAO
 
@@ -38,7 +38,10 @@ void Renderer::init()
 
 	// Set up view matrix
 	projection_matrix = glm::ortho(-400.0f, 400.0f, -400.0f, 400.0f, -100.0f, 100.0f);
+	circle_shader.use();
 	circle_shader.setMat4("projection_matrix", projection_matrix);
+	line_shader.use();
+	line_shader.setMat4("projection_matrix", projection_matrix);
 
 	return;
 }
@@ -65,6 +68,20 @@ void Renderer::render()
 
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
+	// loop over all lines and render
+	line_shader.use();
+	for (int i = 0; i < (int)line_stack.size(); i++)
+	{
+		Line* current_line = reinterpret_cast<Line*>(line_stack[i]);
+
+		line_shader.setVec2("start_position", current_line->start_position);
+		line_shader.setVec2("end_position", current_line->end_position);
+		line_shader.setFloat("thickness", current_line->thickness);
+		line_shader.setVec4("colour", current_line->colour);
+		line_shader.setInt("layer", current_line->layer);
+
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+	}
 
 	return;
 }
@@ -73,7 +90,10 @@ void Renderer::updateViewMatrix(int new_width, int new_height)
 {
 	// update projection matrix so that 0,0 is in the center of the window
 	projection_matrix = glm::ortho((float)new_width / -2, (float)new_width / 2, (float)new_height / -2, (float)new_height / 2, -100.0f, 100.0f);
+	circle_shader.use();
 	circle_shader.setMat4("projection_matrix", projection_matrix);
+	line_shader.use();
+	line_shader.setMat4("projection_matrix", projection_matrix);
 
 	return;
 }

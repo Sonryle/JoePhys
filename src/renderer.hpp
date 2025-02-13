@@ -27,6 +27,7 @@ public:
 	unsigned int VAO;
 	unsigned int VBO;
 	Shader circle_shader;
+	Shader line_shader;
 
 	// FUNCTIONS
 	// ---------

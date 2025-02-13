@@ -53,12 +53,37 @@ int main()
 	temporary_circle_two.colour = glm::vec4(0.3f, 0.3f, 1.0f, 1.0f);
 	temporary_circle_two.layer = 1;
 
+	Line temporary_line;
+	temporary_line.start_position = glm::vec2(-300.0f, 200.0f);
+	temporary_line.end_position = glm::vec2(300.0f, -200.0f);
+	temporary_line.thickness = 50;
+	temporary_line.colour = glm::vec4(0.5f, 0.5f, 0.3f, 1.0f);
+	temporary_line.layer = 1;
+
+	Line temporary_line_two;
+	temporary_line_two.start_position = glm::vec2(-300.0f, 200.0f);
+	temporary_line_two.end_position = glm::vec2(-300.0f, -200.0f);
+	temporary_line_two.thickness = 50;
+	temporary_line_two.colour = glm::vec4(0.3f, 0.5f, 0.5f, 1.0f);
+	temporary_line_two.layer = 1;
+
 	// game loop
 	while (!glfwWindowShouldClose(window.handle))
 	{
 		// close if escape key pressed
 		if (glfwGetKey(window.handle, GLFW_KEY_ESCAPE))
 			glfwSetWindowShouldClose(window.handle, true);
+
+		// TEMPORARY LINE MOVEMENT CODE
+		if (glfwGetKey(window.handle, GLFW_KEY_W))
+			temporary_line.start_position = glm::vec2(temporary_line.start_position.x, temporary_line.start_position.y + 0.5f);
+		if (glfwGetKey(window.handle, GLFW_KEY_S))
+			temporary_line.start_position = glm::vec2(temporary_line.start_position.x, temporary_line.start_position.y - 0.5f);
+
+		if (glfwGetKey(window.handle, GLFW_KEY_A))
+			temporary_line.start_position = glm::vec2(temporary_line.start_position.x - 0.5f, temporary_line.start_position.y);
+		if (glfwGetKey(window.handle, GLFW_KEY_D))
+			temporary_line.start_position = glm::vec2(temporary_line.start_position.x + 0.5f, temporary_line.start_position.y);
 
 		// render scene
 		renderer.render();

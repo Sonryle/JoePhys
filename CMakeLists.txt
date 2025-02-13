@@ -14,6 +14,8 @@ src/renderer.cpp
 src/renderer.hpp
 res/shaders/circle_shader.frag
 res/shaders/circle_shader.vert
+res/shaders/line_shader.frag
+res/shaders/line_shader.vert
 )
 
 # add /src as an include directory
