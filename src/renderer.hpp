@@ -1,17 +1,14 @@
-#ifndef RENDERER_H
-#define RENDERER_H
+#ifndef RENDERER_JP
+#define RENDERER_JP
 
 #include <iostream>
+#include <vector>
 
 // include openGL function loader
 #include <glad/glad.h>
 
 // Shader class handles shader compilation
 #include "shader.hpp"
-
-// Shapes header file gives us circle, line and square classes
-#include "shapes.hpp"
-
 
 class Renderer
 {
@@ -20,9 +17,9 @@ public:
 	// variables
 	// ---------
 
-	std::vector<Circle*> circle_stack;
-	std::vector<Line*> line_stack;
-	std::vector<Square*> square_stack;
+	std::vector<int*> circle_stack;
+	std::vector<int*> line_stack;
+	std::vector<int*> square_stack;
 	unsigned int VAO;
 	unsigned int VBO;
 	Shader defaultShader;

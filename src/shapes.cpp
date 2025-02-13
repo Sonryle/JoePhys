@@ -2,7 +2,7 @@
 
 Circle::Circle() : radius(50)
 {
-	renderer.circle_stack.push_back(this);
+	renderer.circle_stack.push_back(reinterpret_cast<int*>(this));
 	ID = (int)renderer.circle_stack.size() - 1;
 
 	return;
@@ -10,7 +10,7 @@ Circle::Circle() : radius(50)
 
 Line::Line() : thickness(50)
 {
-	renderer.line_stack.push_back(this);
+	renderer.line_stack.push_back(reinterpret_cast<int*>(this));
 	ID = (int)renderer.line_stack.size() - 1;
 
 	return;
@@ -18,7 +18,7 @@ Line::Line() : thickness(50)
 
 Square::Square() : x_scale(50), y_scale(50)
 {
-	renderer.square_stack.push_back(this);
+	renderer.square_stack.push_back(reinterpret_cast<int*>(this));
 	ID = (int)renderer.square_stack.size() - 1;
 
 	return;

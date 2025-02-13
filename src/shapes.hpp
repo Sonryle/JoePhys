@@ -1,11 +1,17 @@
 #ifndef SHAPES_H
 #define SHAPES_H
 
-// main header file
+// main header file (including our renderer instance)
 #include <main.hpp>
+
+// C++ libraries
+#include <vector>
 
 // vector & matrices
 #include <glm/glm.hpp>
+
+// renderer with shape stacks
+#include <renderer.hpp>
 
 class Circle
 {

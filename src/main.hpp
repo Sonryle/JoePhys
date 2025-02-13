@@ -1,3 +1,6 @@
+#ifndef MAIN_JP
+#define MAIN_JP
+
 // function loader & window manager
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -29,3 +32,5 @@ extern Renderer renderer;
 // ---------
 
 void windowResizeCallback(GLFWwindow*, int width, int height);
+
+#endif
