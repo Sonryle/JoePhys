@@ -59,4 +59,6 @@ void windowResizeCallback(GLFWwindow* window_handle, int width, int height)
 	// Update window width and height variables accordingly
 	window.width = width;
 	window.height = height;
+	// Update renderer's projection matrix so that coordinate system matches window dimensions
+	renderer.updateViewMatrix(width, height);
 }

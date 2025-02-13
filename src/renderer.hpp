@@ -20,12 +20,17 @@ public:
 	std::vector<int*> circle_stack;
 	std::vector<int*> line_stack;
 	std::vector<int*> square_stack;
+	glm::mat4 projection_matrix;
 	unsigned int VAO;
 	unsigned int VBO;
 	Shader defaultShader;
 
+	// FUNCTIONS
+	// ---------
+
 	void init();
 	void render();
+	void updateViewMatrix(int new_width, int new_height);
 };
 
 #endif

@@ -2,13 +2,13 @@
 
 float square_vertex[] = {
 	// first triangle
-	 1.0f,  1.0f, 0.0f,  // top right
-	 1.0f, 0.0f, 0.0f,  // bottom right
-	0.0f,  1.0f, 0.0f,  // top left
+	 400.0f,  400.0f, 0.0f,  // top right
+	 400.0f, 0.0f, 0.0f,  // bottom right
+	0.0f,  400.0f, 0.0f,  // top left
 	// second triangle
-	 1.0f, 0.0f, 0.0f,  // bottom right
+	 400.0f, 0.0f, 0.0f,  // bottom right
 	0.0f, 0.0f, 0.0f,  // bottom left
-	0.0f,  1.0f, 0.0f   // top left
+	0.0f,  400.0f , 0.0f   // top left
 };
 
 void Renderer::init()
@@ -36,6 +36,10 @@ void Renderer::init()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
+	// Set up view matrix
+	projection_matrix = glm::ortho(-400.0f, 400.0f, -400.0f, 400.0f, -100.0f, 100.0f);
+	defaultShader.setMat4("projection_matrix", projection_matrix);
+
 	return;
 }
 
@@ -49,6 +53,15 @@ void Renderer::render()
 	defaultShader.use();
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	return;
+}
+
+void Renderer::updateViewMatrix(int new_width, int new_height)
+{
+	// update projection matrix so that 0,0 is in the center of the window
+	projection_matrix = glm::ortho((float)new_width / -2, (float)new_width / 2, (float)new_height / -2, (float)new_height / 2, -100.0f, 100.0f);
+	defaultShader.setMat4("projection_matrix", projection_matrix);
 
 	return;
 }
