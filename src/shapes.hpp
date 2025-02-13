@@ -10,14 +10,12 @@
 // vector & matrices
 #include <glm/glm.hpp>
 
-// renderer with shape stacks
-#include <renderer.hpp>
-
 class Circle
 {
 public:
 
-	unsigned int ID;
+	int ID;
+	int layer;
 	float radius;
 	glm::vec2 position;
 	glm::vec4 colour;
@@ -29,7 +27,8 @@ class Line
 {
 public:
 
-	unsigned int ID;
+	int ID;
+	int layer;
 	float thickness;
 	glm::vec2 start_position;
 	glm::vec2 end_position;
@@ -42,7 +41,8 @@ class Square
 {
 public:
 
-	unsigned int ID;
+	int ID;
+	int layer;
 	float x_scale;
 	float y_scale;
 	glm::vec2 position;

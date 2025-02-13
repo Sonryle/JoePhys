@@ -1,5 +1,13 @@
 #include "main.hpp"
 
+struct Window
+{
+	GLFWwindow* handle = nullptr;
+	int width = 800;
+	int height = 800;
+	std::string title = "JoePhys!";
+};
+
 Window window;
 Renderer renderer;
 
@@ -32,6 +40,19 @@ int main()
 	// Initialise renderer
 	renderer.init();
 
+	// TEMPORARY CIRCLE TO TEST RENDERER!!!
+	Circle temporary_circle;
+	temporary_circle.position = glm::vec2(0.0f, 200.0f);
+	temporary_circle.radius = 50;
+	temporary_circle.colour = glm::vec4(0.3f, 1.0f, 0.3f, 1.0f);
+	temporary_circle.layer = 1;
+
+	Circle temporary_circle_two;
+	temporary_circle_two.position = glm::vec2(0.0f, -200.0f);
+	temporary_circle_two.radius = 50;
+	temporary_circle_two.colour = glm::vec4(0.3f, 0.3f, 1.0f, 1.0f);
+	temporary_circle_two.layer = 1;
+
 	// game loop
 	while (!glfwWindowShouldClose(window.handle))
 	{
@@ -61,4 +82,23 @@ void windowResizeCallback(GLFWwindow* window_handle, int width, int height)
 	window.height = height;
 	// Update renderer's projection matrix so that coordinate system matches window dimensions
 	renderer.updateViewMatrix(width, height);
+}
+
+int addCircle(int* circle_pointer)
+{
+	std::cout << "added a circle!\n";
+	renderer.circle_stack.push_back(circle_pointer);
+	return (int)renderer.circle_stack.size() - 1;
+}
+
+int addLine(int* line_pointer)
+{
+	renderer.line_stack.push_back(line_pointer);
+	return (int)renderer.line_stack.size() - 1;
+}
+
+int addSquare(int* square_pointer)
+{
+	renderer.square_stack.push_back(square_pointer);
+	return (int)renderer.square_stack.size() - 1;
 }

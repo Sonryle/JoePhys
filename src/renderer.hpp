@@ -10,6 +10,9 @@
 // Shader class handles shader compilation
 #include "shader.hpp"
 
+// include shape classes so we can access and render them
+#include "shapes.hpp"
+
 class Renderer
 {
 public:
@@ -23,7 +26,7 @@ public:
 	glm::mat4 projection_matrix;
 	unsigned int VAO;
 	unsigned int VBO;
-	Shader defaultShader;
+	Shader circle_shader;
 
 	// FUNCTIONS
 	// ---------

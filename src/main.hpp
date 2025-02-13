@@ -11,26 +11,16 @@
 #include <vector>
 
 // header files for classes
-#include <renderer.hpp>
 #include <shapes.hpp>
-
-// structs & classes
-// -----------------
-
-struct Window
-{
-	GLFWwindow* handle = nullptr;
-	int width = 800;
-	int height = 800;
-	std::string title = "JoePhys!";
-};
-
-extern Window window;
-extern Renderer renderer;
+#include <renderer.hpp>
 
 // functions
 // ---------
 
 void windowResizeCallback(GLFWwindow*, int width, int height);
+
+int addCircle(int* circle_pointer);
+int addLine(int* line_pointer);
+int addSquare(int* square_pointer);
 
 #endif

@@ -12,8 +12,8 @@ src/shader.cpp
 src/shader.hpp
 src/renderer.cpp
 src/renderer.hpp
-res/shaders/default_shader.frag
-res/shaders/default_shader.vert
+res/shaders/circle_shader.frag
+res/shaders/circle_shader.vert
 )
 
 # add /src as an include directory
