@@ -5,10 +5,13 @@ project(JoePhys)
 add_executable(
 JoePhys
 src/main.cpp
-src/renderer.cpp
-src/renderer.hpp
+src/main.hpp
+src/shapes.cpp
+src/shapes.hpp
 src/shader.cpp
 src/shader.hpp
+src/renderer.cpp
+src/renderer.hpp
 res/shaders/default_shader.frag
 res/shaders/default_shader.vert
 )

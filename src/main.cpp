@@ -1,28 +1,7 @@
-// function loader & window manager
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-
-// c++ libraries
-#include <iostream>
-#include <string>
-
-// header files for classes
-#include <renderer.hpp>
-
-// structs & classes
-struct Window
-{
-	GLFWwindow* handle = nullptr;
-	int width = 800;
-	int height = 800;
-	std::string title = "JoePhys!";
-};
+#include "main.hpp"
 
 Window window;
 Renderer renderer;
-
-// functions
-void window_resize_callback(GLFWwindow*, int width, int height);
 
 int main()
 {
@@ -40,7 +19,7 @@ int main()
 	glfwMakeContextCurrent(window.handle);
 
 	// Assign window resize callback function
-	glfwSetFramebufferSizeCallback(window.handle, window_resize_callback);
+	glfwSetFramebufferSizeCallback(window.handle, windowResizeCallback);
 
 
 	// Load all openGL functions using glad
@@ -73,7 +52,7 @@ int main()
 }
 
 // This function is called by GLFW every time the window is resized
-void window_resize_callback(GLFWwindow* window_handle, int width, int height)
+void windowResizeCallback(GLFWwindow* window_handle, int width, int height)
 {
 	// Set gl viewport to be the same resolution as our window
 	glViewport(0, 0, width, height);
