@@ -1,9 +1,14 @@
 #include "renderer.hpp"
 
-float vertices[] = {
--0.5f, -0.5f, 0.0f,
- 0.5f, -0.5f, 0.0f,
- 0.0f,  0.5f, 0.0f
+float square_vertex[] = {
+	// first triangle
+	 1.0f,  1.0f, 0.0f,  // top right
+	 1.0f, 0.0f, 0.0f,  // bottom right
+	0.0f,  1.0f, 0.0f,  // top left
+	// second triangle
+	 1.0f, 0.0f, 0.0f,  // bottom right
+	0.0f, 0.0f, 0.0f,  // bottom left
+	0.0f,  1.0f, 0.0f   // top left
 };
 
 void Renderer::init()
@@ -24,7 +29,7 @@ void Renderer::init()
 
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(square_vertex), square_vertex, GL_STATIC_DRAW);
 
 	// Set vertex attributes
 
@@ -43,7 +48,7 @@ void Renderer::render()
 	// draw triangle
 	defaultShader.use();
 	glBindVertexArray(VAO);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
 
 	return;
 }
