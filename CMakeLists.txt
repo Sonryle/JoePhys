@@ -7,8 +7,6 @@ JoePhys
 src/main.cpp
 src/renderer.cpp
 src/renderer.hpp
-src/sprite.cpp
-src/sprite.hpp
 src/shader.cpp
 src/shader.hpp
 res/shaders/default_shader.frag
