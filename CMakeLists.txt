@@ -9,6 +9,10 @@ src/renderer.cpp
 src/renderer.hpp
 src/sprite.cpp
 src/sprite.hpp
+src/shader.cpp
+src/shader.hpp
+res/shaders/default_shader.frag
+res/shaders/default_shader.vert
 )
 
 # add /src as an include directory
@@ -24,3 +28,15 @@ target_link_libraries(JoePhys PUBLIC glm)
 
 # Set our project as the Visual Studio startup project
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${CMAKE_PROJECT_NAME})
+
+# copy "res" folder into the build output directory (and the build directory) every time project is built
+add_custom_command(
+    TARGET ${CMAKE_PROJECT_NAME} PRE_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    "${CMAKE_SOURCE_DIR}/res" "${CMAKE_BINARY_DIR}/res"
+
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    "${CMAKE_SOURCE_DIR}/res" "${CMAKE_BINARY_DIR}/$<CONFIG>/res"
+
+    COMMENT "Copying resource folder to both build/res and build/CurrentConfig/res"
+)
