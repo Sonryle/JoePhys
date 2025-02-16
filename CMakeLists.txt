@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.12)
 project(JoePhys)
 
+# make it so that CMake always generates a compile_commands.json file (for neovim coc)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # create our application
 add_executable(
 JoePhys

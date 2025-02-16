@@ -1,6 +1,6 @@
 #include "shapes.hpp"
 
-Circle::Circle() : radius(50), ID(-1)
+Circle::Circle() : radius(50), layer(1), ID(-1)
 {
 	std::cout << "circle constructor called!\n";
 	ID = addCircle(reinterpret_cast<int*>(this));

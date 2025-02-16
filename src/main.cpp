@@ -43,7 +43,7 @@ int main()
 	// TEMPORARY CIRCLE TO TEST RENDERER!!!
 	Circle temporary_circle;
 	temporary_circle.position = glm::vec2(0.0f, 200.0f);
-	temporary_circle.radius = 50;
+	temporary_circle.radius = 40;
 	temporary_circle.colour = glm::vec4(0.3f, 1.0f, 0.3f, 1.0f);
 	temporary_circle.layer = 1;
 
@@ -53,19 +53,17 @@ int main()
 	temporary_circle_two.colour = glm::vec4(0.3f, 0.3f, 1.0f, 1.0f);
 	temporary_circle_two.layer = 1;
 
+	Circle topRightCirc;
+	topRightCirc.colour = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
+	topRightCirc.radius = 100;
+	topRightCirc.position = glm::vec2(400.0f, 400.0f);
+
 	Line temporary_line;
 	temporary_line.start_position = glm::vec2(-300.0f, 200.0f);
 	temporary_line.end_position = glm::vec2(300.0f, -200.0f);
 	temporary_line.thickness = 50;
 	temporary_line.colour = glm::vec4(0.5f, 0.5f, 0.3f, 1.0f);
 	temporary_line.layer = 1;
-
-	Line temporary_line_two;
-	temporary_line_two.start_position = glm::vec2(-300.0f, 200.0f);
-	temporary_line_two.end_position = glm::vec2(-300.0f, -200.0f);
-	temporary_line_two.thickness = 50;
-	temporary_line_two.colour = glm::vec4(0.3f, 0.5f, 0.5f, 1.0f);
-	temporary_line_two.layer = 1;
 
 	// game loop
 	while (!glfwWindowShouldClose(window.handle))
@@ -76,14 +74,14 @@ int main()
 
 		// TEMPORARY LINE MOVEMENT CODE
 		if (glfwGetKey(window.handle, GLFW_KEY_W))
-			temporary_line.start_position = glm::vec2(temporary_line.start_position.x, temporary_line.start_position.y + 0.5f);
+			temporary_line.start_position = glm::vec2(temporary_line.start_position.x, temporary_line.start_position.y + 2.5f);
 		if (glfwGetKey(window.handle, GLFW_KEY_S))
-			temporary_line.start_position = glm::vec2(temporary_line.start_position.x, temporary_line.start_position.y - 0.5f);
+			temporary_line.start_position = glm::vec2(temporary_line.start_position.x, temporary_line.start_position.y - 2.5f);
 
 		if (glfwGetKey(window.handle, GLFW_KEY_A))
-			temporary_line.start_position = glm::vec2(temporary_line.start_position.x - 0.5f, temporary_line.start_position.y);
+			temporary_line.start_position = glm::vec2(temporary_line.start_position.x - 2.5f, temporary_line.start_position.y);
 		if (glfwGetKey(window.handle, GLFW_KEY_D))
-			temporary_line.start_position = glm::vec2(temporary_line.start_position.x + 0.5f, temporary_line.start_position.y);
+			temporary_line.start_position = glm::vec2(temporary_line.start_position.x + 2.5f, temporary_line.start_position.y);
 
 		// render scene
 		renderer.render();
