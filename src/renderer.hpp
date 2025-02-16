@@ -22,6 +22,7 @@ public:
 	unsigned int VBO;
 	Shader circle_shader;
 	Shader line_shader;
+	Shader square_shader;
 
 	// FUNCTIONS
 	// ---------
@@ -33,6 +34,8 @@ public:
 	void renderCircle(Circle* circle);
 	// ----------------------------------------------------
 	void renderLine(Line* line);
+	// ----------------------------------------------------
+	void renderSquare(Square* square);
 	// ----------------------------------------------------
 };
 

@@ -74,6 +74,17 @@ int main()
 	tempLine.end_position = glm::vec2(100.0f, 200.0f);
 	tempLine.colour = glm::vec4(0.3f, 0.3f, 1.0f, 1.0f);
 
+	Square tempSquare;
+	tempSquare.layer = 1;
+	tempSquare.x_scale = 200;
+	tempSquare.y_scale = 100;
+	tempSquare.position = glm::vec2(0.0f, 0.0f);
+	tempSquare.top_left_tex_coord = glm::vec2(0.0f, 0.0f);
+	tempSquare.top_right_tex_coord = glm::vec2(0.0f, 0.0f);
+	tempSquare.bottom_left_tex_coord = glm::vec2(0.0f, 0.0f);
+	tempSquare.bottom_right_tex_coord = glm::vec2(0.0f, 0.0f);
+	tempSquare.colour = glm::vec4(0.4f, 0.8f, 0.1f, 1.0f);
+
 	// game loop
 	while (!glfwWindowShouldClose(window.handle))
 	{
@@ -92,6 +103,7 @@ int main()
 		renderer.renderLine(&tempLine);
 		renderer.renderCircle(&tempCirc);
 		renderer.renderCircle(&tempCircTwo);
+		renderer.renderSquare(&tempSquare);
 
 		// TEMPORARY LINE MOVEMENT CODE
 		// ----------------------------

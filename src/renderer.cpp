@@ -19,6 +19,7 @@ void Renderer::init()
 
 	circle_shader.init("res/shaders/circle_shader.vert", "res/shaders/circle_shader.frag");
 	line_shader.init("res/shaders/line_shader.vert", "res/shaders/line_shader.frag");
+	square_shader.init("res/shaders/square_shader.vert", "res/shaders/square_shader.frag");
 
 	// Set up VAO
 
@@ -42,6 +43,8 @@ void Renderer::init()
 	circle_shader.setMat4("projection_matrix", projection_matrix);
 	line_shader.use();
 	line_shader.setMat4("projection_matrix", projection_matrix);
+	square_shader.use();
+	square_shader.setMat4("projection_matrix", projection_matrix);
 
 	return;
 }
@@ -50,10 +53,14 @@ void Renderer::updateViewMatrix(int new_width, int new_height)
 {
 	// update projection matrix so that 0,0 is in the center of the window
 	projection_matrix = glm::ortho((float)new_width / -2, (float)new_width / 2, (float)new_height / -2, (float)new_height / 2, -100.0f, 100.0f);
+
+	// send new projection matrix to shaders
 	circle_shader.use();
 	circle_shader.setMat4("projection_matrix", projection_matrix);
 	line_shader.use();
 	line_shader.setMat4("projection_matrix", projection_matrix);
+	square_shader.use();
+	square_shader.setMat4("projection_matrix", projection_matrix);
 
 	return;
 }
@@ -80,4 +87,22 @@ void Renderer::renderLine(Line* line)
 	line_shader.setInt("layer", line->layer);
 
 	glDrawArrays(GL_TRIANGLES, 0, 6);
+}
+
+
+void Renderer::renderSquare(Square* square)
+{
+	square_shader.use();
+
+	square_shader.setVec4("colour", square->colour);
+	square_shader.setFloat("x_scale", square->x_scale);
+	square_shader.setFloat("y_scale", square->y_scale);
+	square_shader.setVec2("position", square->position);
+	square_shader.setVec2("top_left_tex_coord", square->top_left_tex_coord);
+	square_shader.setVec2("top_right_tex_coord", square->top_right_tex_coord);
+	square_shader.setVec2("bottom_left_tex_coord", square->bottom_left_tex_coord);
+	square_shader.setVec2("bottom_right_tex_coord", square->bottom_right_tex_coord);
+
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+
 }
