@@ -1,11 +1,27 @@
-#include "main.hpp"
+// C++ libraries
+#include "glm/detail/type_vec.hpp"
+#include <stdio.h>
+#include <string.h>
+
+// OpenGL function loader
+#include <glad/glad.h>
+
+// Window Manager
+#include <GLFW/glfw3.h>
+
+// JoePhys Headers
+#include <renderer.hpp>
+#include <shapes.hpp>
+
+// functions
+void windowResizeCallback(GLFWwindow*, int, int);
 
 struct Window
 {
 	GLFWwindow* handle = nullptr;
 	int width = 800;
 	int height = 800;
-	std::string title = "JoePhys!";
+	std::string title = "JoePhys! (Use WASD + Up Down Left & Right)";
 };
 
 Window window;
@@ -40,53 +56,71 @@ int main()
 	// Initialise renderer
 	renderer.init();
 
-	// TEMPORARY CIRCLE TO TEST RENDERER!!!
-	Circle temporary_circle;
-	temporary_circle.position = glm::vec2(0.0f, 200.0f);
-	temporary_circle.radius = 40;
-	temporary_circle.colour = glm::vec4(0.3f, 1.0f, 0.3f, 1.0f);
-	temporary_circle.layer = 1;
+	// TEMPORARY SHAPES
+	Circle tempCirc;
+	tempCirc.position = glm::vec2(0.0f, 0.0f);
+	tempCirc.radius = 50;
+	tempCirc.colour = glm::vec4(0.3f, 1.0f, 0.3f, 1.0f);
 
-	Circle temporary_circle_two;
-	temporary_circle_two.position = glm::vec2(0.0f, -200.0f);
-	temporary_circle_two.radius = 50;
-	temporary_circle_two.colour = glm::vec4(0.3f, 0.3f, 1.0f, 1.0f);
-	temporary_circle_two.layer = 1;
+	Circle tempCircTwo;
+	tempCircTwo.position = glm::vec2(0.0f, 0.0f);
+	tempCircTwo.radius = 50;
+	tempCircTwo.colour = glm::vec4(0.3f, 1.0f, 0.3f, 1.0f);
 
-	Circle topRightCirc;
-	topRightCirc.colour = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
-	topRightCirc.radius = 100;
-	topRightCirc.position = glm::vec2(400.0f, 400.0f);
-
-	Line temporary_line;
-	temporary_line.start_position = glm::vec2(-300.0f, 200.0f);
-	temporary_line.end_position = glm::vec2(300.0f, -200.0f);
-	temporary_line.thickness = 50;
-	temporary_line.colour = glm::vec4(0.5f, 0.5f, 0.3f, 1.0f);
-	temporary_line.layer = 1;
+	Line tempLine;
+	tempLine.layer = 1;
+	tempLine.thickness = 40;
+	tempLine.start_position = glm::vec2(200.0f, -200.0f);
+	tempLine.end_position = glm::vec2(100.0f, 200.0f);
+	tempLine.colour = glm::vec4(0.3f, 0.3f, 1.0f, 1.0f);
 
 	// game loop
 	while (!glfwWindowShouldClose(window.handle))
 	{
-		// close if escape key pressed
+		// should close window?
+		// --------------------
 		if (glfwGetKey(window.handle, GLFW_KEY_ESCAPE))
 			glfwSetWindowShouldClose(window.handle, true);
 
+		// render scene
+		// ------------
+
+		// set background to be red
+		glClearColor(0.92f, 0.28f, 0.37f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		renderer.renderLine(&tempLine);
+		renderer.renderCircle(&tempCirc);
+		renderer.renderCircle(&tempCircTwo);
+
 		// TEMPORARY LINE MOVEMENT CODE
+		// ----------------------------
+		
+		if (glfwGetKey(window.handle, GLFW_KEY_UP))
+			tempLine.end_position = glm::vec2(tempLine.end_position.x, tempLine.end_position.y + 2.5f);
+		if (glfwGetKey(window.handle, GLFW_KEY_DOWN))
+			tempLine.end_position = glm::vec2(tempLine.end_position.x, tempLine.end_position.y - 2.5f);
+
+		if (glfwGetKey(window.handle, GLFW_KEY_LEFT))
+			tempLine.end_position = glm::vec2(tempLine.end_position.x - 2.5f, tempLine.end_position.y);
+		if (glfwGetKey(window.handle, GLFW_KEY_RIGHT))
+			tempLine.end_position = glm::vec2(tempLine.end_position.x + 2.5f, tempLine.end_position.y);
+
 		if (glfwGetKey(window.handle, GLFW_KEY_W))
-			temporary_line.start_position = glm::vec2(temporary_line.start_position.x, temporary_line.start_position.y + 2.5f);
+			tempLine.start_position = glm::vec2(tempLine.start_position.x, tempLine.start_position.y + 2.5f);
 		if (glfwGetKey(window.handle, GLFW_KEY_S))
-			temporary_line.start_position = glm::vec2(temporary_line.start_position.x, temporary_line.start_position.y - 2.5f);
+			tempLine.start_position = glm::vec2(tempLine.start_position.x, tempLine.start_position.y - 2.5f);
 
 		if (glfwGetKey(window.handle, GLFW_KEY_A))
-			temporary_line.start_position = glm::vec2(temporary_line.start_position.x - 2.5f, temporary_line.start_position.y);
+			tempLine.start_position = glm::vec2(tempLine.start_position.x - 2.5f, tempLine.start_position.y);
 		if (glfwGetKey(window.handle, GLFW_KEY_D))
-			temporary_line.start_position = glm::vec2(temporary_line.start_position.x + 2.5f, temporary_line.start_position.y);
+			tempLine.start_position = glm::vec2(tempLine.start_position.x + 2.5f, tempLine.start_position.y);
 
-		// render scene
-		renderer.render();
+		tempCirc.position = tempLine.start_position;
+		tempCircTwo.position = tempLine.end_position;
 
 		// swap buffers and poll input events
+		// ----------------------------------
 		glfwSwapBuffers(window.handle);
 		glfwPollEvents();
 	}
@@ -105,23 +139,4 @@ void windowResizeCallback(GLFWwindow* window_handle, int width, int height)
 	window.height = height;
 	// Update renderer's projection matrix so that coordinate system matches window dimensions
 	renderer.updateViewMatrix(width, height);
-}
-
-int addCircle(int* circle_pointer)
-{
-	std::cout << "added a circle!\n";
-	renderer.circle_stack.push_back(circle_pointer);
-	return (int)renderer.circle_stack.size() - 1;
-}
-
-int addLine(int* line_pointer)
-{
-	renderer.line_stack.push_back(line_pointer);
-	return (int)renderer.line_stack.size() - 1;
-}
-
-int addSquare(int* square_pointer)
-{
-	renderer.square_stack.push_back(square_pointer);
-	return (int)renderer.square_stack.size() - 1;
 }

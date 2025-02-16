@@ -46,46 +46,6 @@ void Renderer::init()
 	return;
 }
 
-void Renderer::render()
-{
-	// set background to be red
-	glClearColor(0.92f, 0.28f, 0.37f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
-
-	// draw our shapes
-	glBindVertexArray(VAO);
-
-	// loop over all circles and render
-	circle_shader.use();
-	for (int i = 0; i < (int)circle_stack.size(); i++)
-	{
-		Circle* current_circle = reinterpret_cast<Circle*>(circle_stack[i]);
-
-		circle_shader.setVec2("position", current_circle->position);
-		circle_shader.setFloat("radius", current_circle->radius);
-		circle_shader.setVec4("colour", current_circle->colour);
-		circle_shader.setInt("layer", current_circle->layer);
-
-		glDrawArrays(GL_TRIANGLES, 0, 6);
-	}
-	// loop over all lines and render
-	line_shader.use();
-	for (int i = 0; i < (int)line_stack.size(); i++)
-	{
-		Line* current_line = reinterpret_cast<Line*>(line_stack[i]);
-
-		line_shader.setVec2("start_position", current_line->start_position);
-		line_shader.setVec2("end_position", current_line->end_position);
-		line_shader.setFloat("thickness", current_line->thickness);
-		line_shader.setVec4("colour", current_line->colour);
-		line_shader.setInt("layer", current_line->layer);
-
-		glDrawArrays(GL_TRIANGLES, 0, 6);
-	}
-
-	return;
-}
-
 void Renderer::updateViewMatrix(int new_width, int new_height)
 {
 	// update projection matrix so that 0,0 is in the center of the window
@@ -96,4 +56,28 @@ void Renderer::updateViewMatrix(int new_width, int new_height)
 	line_shader.setMat4("projection_matrix", projection_matrix);
 
 	return;
+}
+
+void Renderer::renderCircle(Circle* circle)
+{
+	circle_shader.use();
+	circle_shader.setInt("layer", circle->layer);
+	circle_shader.setFloat("radius", circle->radius);
+	circle_shader.setVec2("position", circle->position);
+	circle_shader.setVec4("colour", circle->colour);
+
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+}
+
+void Renderer::renderLine(Line* line)
+{
+	line_shader.use();
+	
+	line_shader.setVec2("start_position", line->start_position);
+	line_shader.setVec2("end_position", line->end_position);
+	line_shader.setFloat("thickness", line->thickness);
+	line_shader.setVec4("colour", line->colour);
+	line_shader.setInt("layer", line->layer);
+
+	glDrawArrays(GL_TRIANGLES, 0, 6);
 }

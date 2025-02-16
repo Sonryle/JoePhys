@@ -1,12 +1,6 @@
 #ifndef SHAPES_H
 #define SHAPES_H
 
-// main header file (including our renderer instance)
-#include <main.hpp>
-
-// C++ libraries
-#include <vector>
-
 // vector & matrices
 #include <glm/glm.hpp>
 
@@ -14,7 +8,7 @@ class Circle
 {
 public:
 
-	int ID;
+	int position_in_stack;
 	int layer;
 	float radius;
 	glm::vec2 position;
@@ -27,7 +21,7 @@ class Line
 {
 public:
 
-	int ID;
+	int position_in_stack;
 	int layer;
 	float thickness;
 	glm::vec2 start_position;
@@ -41,7 +35,7 @@ class Square
 {
 public:
 
-	int ID;
+	int position_in_stack;
 	int layer;
 	float x_scale;
 	float y_scale;
