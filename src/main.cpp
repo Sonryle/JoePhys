@@ -1,5 +1,4 @@
 // C++ libraries
-#include "glm/detail/type_vec.hpp"
 #include <stdio.h>
 #include <string.h>
 
@@ -13,6 +12,7 @@
 #include <clock.hpp>
 #include <renderer.hpp>
 #include <shapes.hpp>
+#include <particles.hpp>
 
 // functions
 void windowResizeCallback(GLFWwindow*, int, int);
@@ -28,6 +28,7 @@ struct Window
 Clock jp_clock;
 Window window;
 Renderer renderer;
+ParticleManager particle_manager;
 
 int main()
 {
@@ -81,6 +82,8 @@ int main()
 		// set background to be red
 		glClearColor(0.92f, 0.28f, 0.37f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		renderer.renderCircle(&particle_manager.particle_stack[0]->circle);
 
 		// swap buffers and poll input events
 		// ----------------------------------
