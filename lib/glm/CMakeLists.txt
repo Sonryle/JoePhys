@@ -4,5 +4,5 @@ project(glm)
 # Add the glad library
 add_library(glm INTERFACE)
 
-# Specify include directories for glad
-target_include_directories(glad INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+# Specify include directories for glm
+target_include_directories(glm INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})

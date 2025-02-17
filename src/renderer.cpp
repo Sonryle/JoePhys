@@ -11,9 +11,35 @@ float square_vertex[] = {
 	-1.0f,  1.0f , -1.0f   // top left
 };
 
+float texCoords[] = {
+    0.0f, 0.0f,  // lower-left corner  
+    1.0f, 0.0f,  // lower-right corner
+    0.5f, 1.0f   // top-center corner
+};
+
 void Renderer::init()
 {
 	std::cout << "initialising renderer!\n";
+
+	// enable depth testing and transparency
+
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+
+	// tell openGL how depth testing & transparency should behave
+
+	glDepthFunc(GL_LEQUAL);	// only render if fragments depth >= than depth buffer
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	// set texture wrapping options
+	
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+
+	// set texture interpolation options
+	
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	// Set up shaders
 
