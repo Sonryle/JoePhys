@@ -31,6 +31,9 @@ int main()
 {
 	// Initialise GLFW
 	glfwInit();
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// Create window using GLFW
 	window.handle = glfwCreateWindow(window.width, window.height, window.title.c_str(), NULL, NULL);
@@ -56,26 +59,34 @@ int main()
 	// Initialise renderer
 	renderer.init();
 
+	// openGL options
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);		// allow transparency
+	glDepthFunc(GL_LEQUAL);	// only render if fragments depth is equal to or larger than depth buffer
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	// TEMPORARY SHAPES
 	Circle tempCirc;
+	tempCirc.layer = 1;
 	tempCirc.position = glm::vec2(0.0f, 0.0f);
 	tempCirc.radius = 50;
 	tempCirc.colour = glm::vec4(0.3f, 1.0f, 0.3f, 1.0f);
 
 	Circle tempCircTwo;
+	tempCircTwo.layer = 1;
 	tempCircTwo.position = glm::vec2(0.0f, 0.0f);
-	tempCircTwo.radius = 50;
+	tempCircTwo.radius = 500;
 	tempCircTwo.colour = glm::vec4(0.3f, 1.0f, 0.3f, 1.0f);
 
 	Line tempLine;
-	tempLine.layer = 1;
+	tempLine.layer = 5;
 	tempLine.thickness = 40;
 	tempLine.start_position = glm::vec2(200.0f, -200.0f);
 	tempLine.end_position = glm::vec2(100.0f, 200.0f);
 	tempLine.colour = glm::vec4(0.3f, 0.3f, 1.0f, 1.0f);
 
 	Square tempSquare;
-	tempSquare.layer = 1;
+	tempSquare.layer = -1;
 	tempSquare.x_scale = 200;
 	tempSquare.y_scale = 100;
 	tempSquare.position = glm::vec2(0.0f, 0.0f);
@@ -98,12 +109,13 @@ int main()
 
 		// set background to be red
 		glClearColor(0.92f, 0.28f, 0.37f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		renderer.renderLine(&tempLine);
-		renderer.renderCircle(&tempCirc);
-		renderer.renderCircle(&tempCircTwo);
+		// render objects	(objects must be rendered from back to front)
 		renderer.renderSquare(&tempSquare);
+		renderer.renderCircle(&tempCirc);	// circles must always be rendered last
+		renderer.renderCircle(&tempCircTwo);	// since they have some transparent fragments
+		renderer.renderLine(&tempLine);
 
 		// TEMPORARY LINE MOVEMENT CODE
 		// ----------------------------

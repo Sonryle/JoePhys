@@ -66,8 +66,9 @@ void Renderer::updateViewMatrix(int new_width, int new_height)
 }
 
 void Renderer::renderCircle(Circle* circle)
-{
+{	
 	circle_shader.use();
+
 	circle_shader.setInt("layer", circle->layer);
 	circle_shader.setFloat("radius", circle->radius);
 	circle_shader.setVec2("position", circle->position);
@@ -79,7 +80,7 @@ void Renderer::renderCircle(Circle* circle)
 void Renderer::renderLine(Line* line)
 {
 	line_shader.use();
-	
+
 	line_shader.setVec2("start_position", line->start_position);
 	line_shader.setVec2("end_position", line->end_position);
 	line_shader.setFloat("thickness", line->thickness);
@@ -95,6 +96,7 @@ void Renderer::renderSquare(Square* square)
 	square_shader.use();
 
 	square_shader.setVec4("colour", square->colour);
+	square_shader.setInt("layer", square->layer);
 	square_shader.setFloat("x_scale", square->x_scale);
 	square_shader.setFloat("y_scale", square->y_scale);
 	square_shader.setVec2("position", square->position);

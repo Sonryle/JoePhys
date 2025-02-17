@@ -7,6 +7,8 @@ uniform vec2 end_position;
 uniform float thickness;
 uniform int layer;
 
+out vec2 frag_position;
+
 void main()
 {
     // variable to store new position of vertices
@@ -41,4 +43,5 @@ void main()
     }
 
     gl_Position = projection_matrix * vec4(updated_position, layer, 1.0);
+    frag_position = vec2(aPos.x, aPos.y);
 }
