@@ -10,6 +10,7 @@
 #include <GLFW/glfw3.h>
 
 // JoePhys Headers
+#include <clock.hpp>
 #include <renderer.hpp>
 #include <shapes.hpp>
 #include <ui.hpp>
@@ -25,6 +26,7 @@ struct Window
 	std::string title = "JoePhys! (Use WASD + Up Down Left & Right)";
 };
 
+Clock jp_clock;
 Window window;
 Renderer renderer;
 
@@ -102,6 +104,10 @@ int main()
 		if (glfwGetKey(window.handle, GLFW_KEY_ESCAPE))
 			glfwSetWindowShouldClose(window.handle, true);
 
+		// Update our clock
+		// ----------------
+		jp_clock.update();
+
 		// myles UI
 		tempUI.position = glm::vec2((window.width / 2.0f) - (tempUI.x_scale / 2.0f), (window.height / 2.0f)- (tempUI.y_scale / 2.0f));
 
@@ -125,25 +131,26 @@ int main()
 		// TEMPORARY LINE MOVEMENT CODE
 		// ----------------------------
 		
+		float speed = 240;
 		if (glfwGetKey(window.handle, GLFW_KEY_UP))
-			tempLine.end_position = glm::vec2(tempLine.end_position.x, tempLine.end_position.y + 2.5f);
+			tempLine.end_position = glm::vec2(tempLine.end_position.x, tempLine.end_position.y + speed * jp_clock.deltaTime);
 		if (glfwGetKey(window.handle, GLFW_KEY_DOWN))
-			tempLine.end_position = glm::vec2(tempLine.end_position.x, tempLine.end_position.y - 2.5f);
+			tempLine.end_position = glm::vec2(tempLine.end_position.x, tempLine.end_position.y - speed * jp_clock.deltaTime);
 
 		if (glfwGetKey(window.handle, GLFW_KEY_LEFT))
-			tempLine.end_position = glm::vec2(tempLine.end_position.x - 2.5f, tempLine.end_position.y);
+			tempLine.end_position = glm::vec2(tempLine.end_position.x - speed * jp_clock.deltaTime, tempLine.end_position.y);
 		if (glfwGetKey(window.handle, GLFW_KEY_RIGHT))
-			tempLine.end_position = glm::vec2(tempLine.end_position.x + 2.5f, tempLine.end_position.y);
+			tempLine.end_position = glm::vec2(tempLine.end_position.x + speed * jp_clock.deltaTime, tempLine.end_position.y);
 
 		if (glfwGetKey(window.handle, GLFW_KEY_W))
-			tempLine.start_position = glm::vec2(tempLine.start_position.x, tempLine.start_position.y + 2.5f);
+			tempLine.start_position = glm::vec2(tempLine.start_position.x, tempLine.start_position.y + speed * jp_clock.deltaTime);
 		if (glfwGetKey(window.handle, GLFW_KEY_S))
-			tempLine.start_position = glm::vec2(tempLine.start_position.x, tempLine.start_position.y - 2.5f);
+			tempLine.start_position = glm::vec2(tempLine.start_position.x, tempLine.start_position.y - speed * jp_clock.deltaTime);
 
 		if (glfwGetKey(window.handle, GLFW_KEY_A))
-			tempLine.start_position = glm::vec2(tempLine.start_position.x - 2.5f, tempLine.start_position.y);
+			tempLine.start_position = glm::vec2(tempLine.start_position.x - speed * jp_clock.deltaTime, tempLine.start_position.y);
 		if (glfwGetKey(window.handle, GLFW_KEY_D))
-			tempLine.start_position = glm::vec2(tempLine.start_position.x + 2.5f, tempLine.start_position.y);
+			tempLine.start_position = glm::vec2(tempLine.start_position.x + speed * jp_clock.deltaTime, tempLine.start_position.y);
 
 		tempCirc.position = tempLine.start_position;
 		tempCircTwo.position = tempLine.end_position;

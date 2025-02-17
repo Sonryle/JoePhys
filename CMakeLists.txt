@@ -8,6 +8,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_executable(
 JoePhys
 src/main.cpp
+src/clock.cpp
+src/clock.hpp
 src/shapes.cpp
 src/shapes.hpp
 src/shader.cpp
