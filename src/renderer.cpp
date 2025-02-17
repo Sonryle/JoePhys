@@ -43,13 +43,16 @@ void Renderer::init()
 
 	// TEXTURE ATLAS SETUP
 	// -------------------
+	
+	// make texture atlas the right way up
+	stbi_set_flip_vertically_on_load(true);
 
-	// load texture using stb
+	// load texture_atlas.png using stb
 	int width, height, nrChannels;
-	unsigned char *data = stbi_load("container.jpg", &width, &height, &nrChannels, 0);
+	unsigned char *data = stbi_load("res/textures/texture_atlas.png", &width, &height, &nrChannels, STBI_rgb_alpha);
 	if (data)
 	{
-    		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
     		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else
@@ -64,7 +67,7 @@ void Renderer::init()
 	glBindTexture(GL_TEXTURE_2D, texture_atlas);
 
 	// attach our loaded texture data to our texture object
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	// free the image memory since it's now stored in our texture object
