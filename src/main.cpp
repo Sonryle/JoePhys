@@ -45,6 +45,7 @@ int main()
 		return -1;
 	}
 	glfwMakeContextCurrent(window.handle);
+	glfwSwapInterval(0); // Disable VSync
 
 	// Assign window resize callback function
 	glfwSetFramebufferSizeCallback(window.handle, windowResizeCallback);
@@ -71,13 +72,15 @@ int main()
 	tempCircTwo.layer = 1;
 	tempCircTwo.position = glm::vec2(0.0f, 0.0f);
 	tempCircTwo.radius = 50;
+	tempCircTwo.radius = 50;
 	tempCircTwo.colour = glm::vec4(0.3f, 1.0f, 0.3f, 1.0f);
 
 	Line tempLine;
 	tempLine.layer = 0;
+	tempLine.layer = 0;
 	tempLine.thickness = 40;
-	tempLine.start_position = glm::vec2(200.0f, -200.0f);
-	tempLine.end_position = glm::vec2(100.0f, 200.0f);
+	tempLine.start_position = glm::vec2(100.0f, -200.0f);
+	tempLine.end_position = glm::vec2(-100.0f, 200.0f);
 	tempLine.colour = glm::vec4(0.3f, 0.3f, 1.0f, 1.0f);
 
 	// myles ui testing
@@ -110,6 +113,10 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// render objects	(objects must be rendered from back to front)
+		renderer.renderSquare(&tempSquare);
+		renderer.renderSquare(&tempSquare2);
+		renderer.renderSquare(&tempSquare3);
+		renderer.renderSquare(&tempSquare4);
 		renderer.renderLine(&tempLine);
 		renderer.renderCircle(&tempCirc);	// circles must always be rendered last
 		renderer.renderCircle(&tempCircTwo);	// since they have some transparent fragments
