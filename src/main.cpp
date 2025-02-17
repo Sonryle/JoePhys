@@ -47,11 +47,10 @@ int main()
 		return -1;
 	}
 	glfwMakeContextCurrent(window.handle);
-	glfwSwapInterval(0); // Disable VSync
+	glfwSwapInterval(1); // Disable VSync
 
 	// Assign window resize callback function
 	glfwSetFramebufferSizeCallback(window.handle, windowResizeCallback);
-
 
 	// Load all openGL functions using glad
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -59,6 +58,10 @@ int main()
 		std::cout << "Failed to initialize GLAD" << std::endl;
 		return -1;
 	}
+
+	glClear(GL_COLOR_BUFFER_BIT);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// Initialise renderer
 	renderer.init();
@@ -88,13 +91,14 @@ int main()
 	// myles ui testing
 	UI tempUI;
 	tempUI.layer = 100;
-	tempUI.x_scale = 300;
-	tempUI.y_scale = 150;
-	tempUI.offset = 20;
-	tempUI.bezel = 0.2;
+	tempUI.x_scale = 400;
+	tempUI.y_scale = 200;
+	tempUI.offset = 30;
+	tempUI.bezel = 30;
+	tempUI.bezelThickness = 10;
 	tempUI.position = glm::vec2((window.width / 2.0f) - (tempUI.x_scale / 2.0f), (window.height / 2.0f)- (tempUI.y_scale / 2.0f));
-	tempUI.colour = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
-	tempUI.bezelColour = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	tempUI.colour = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
+	tempUI.bezelColour = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
 
 	// game loop
 	while (!glfwWindowShouldClose(window.handle))
@@ -119,10 +123,6 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// render objects	(objects must be rendered from back to front)
-		renderer.renderSquare(&tempSquare);
-		renderer.renderSquare(&tempSquare2);
-		renderer.renderSquare(&tempSquare3);
-		renderer.renderSquare(&tempSquare4);
 		renderer.renderLine(&tempLine);
 		renderer.renderCircle(&tempCirc);	// circles must always be rendered last
 		renderer.renderCircle(&tempCircTwo);	// since they have some transparent fragments

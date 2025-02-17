@@ -1,33 +1,29 @@
 #version 330 core
-uniform vec4 colour;
-uniform vec4 bezelColour;
-uniform float bezel;
+const vec4 colour = vec4(1.0, 1.0, 0.0, 1.0);
+const vec4 bezelColour = vec4(1.0, 0.0, 0.0, 1.0);
+const float bezel = 30.0;
+const float bezelThickness = 10.0;
 uniform float x_scale;
 uniform float y_scale;
 uniform vec2 position;
 
-out vec4 FragColor;
-in vec2 fragCoord;
+vec2 scale = vec2(x_scale, y_scale);
+in vec2 texCoord;
+
+float SDF(vec2 p, vec2 b, float r)
+{
+    vec2 d = abs(p) - b + vec2(r);
+    return min(max(d.x, d.y), 0.0) + length(max(d, 0.0)) - r;
+}
 
 void main()
 {
-    // Get the fragment coordinates
-    vec2 fragCoord = gl_FragCoord.xy;
-    // Normalize the fragment coordinates to range from -0.5 to 0.5
-    vec2 normalizedCoord = (fragCoord - position) / vec2(x_scale, y_scale);
+    vec2 pos = scale * texCoord;
 
-    // Calculate the distance from the center of the square
-    float distanceFromCenter = length(normalizedCoord);
+    float distance = SDF(pos-scale/2.0, scale/2.0 - bezelThickness/2.0-1.0, bezel);
+    float blendFactor = smoothstep(-1.0, 1.0, distance);
 
-    // If the distance is within the bezel range
-    if (distanceFromCenter > 0.5 - bezel && distanceFromCenter <= 0.5)
-    {
-        // Bezel area
-        FragColor = bezelColour;
-    }
-    else
-    {
-        // Square area
-        FragColor = colour;
-    }
+    vec4 fromColour = bezelColour;
+    vec4 toColour = vec4(0.0, 0.0, 0.0, 0.0);
+    gl_FragColor = mix(fromColour, toColour, blendFactor);
 }

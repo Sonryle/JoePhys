@@ -14,6 +14,7 @@ public:
 	float y_scale;
     float offset;
 	float bezel;
+	float bezelThickness;
 	glm::vec2 position;
 	glm::vec4 colour;
 	glm::vec4 bezelColour;

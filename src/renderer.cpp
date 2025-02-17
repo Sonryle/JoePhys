@@ -186,6 +186,7 @@ void Renderer::renderUI(UI* ui)
 	ui_shader.setFloat("x_scale", ui->x_scale);
 	ui_shader.setFloat("y_scale", ui->y_scale);
 	ui_shader.setFloat("bezel", ui->bezel);
+	ui_shader.setFloat("bezelThickness", ui->bezelThickness);
 	ui_shader.setFloat("offset", ui->offset);
 	ui_shader.setVec2("position", ui->position);
 
