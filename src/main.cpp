@@ -26,8 +26,8 @@ void windowResizeCallback(GLFWwindow*, int, int);
 struct Window
 {
 	GLFWwindow* handle = nullptr;
-	int width = 800;
-	int height = 800;
+	int width = 1000;
+	int height = 1000;
 	std::string title = "JoePhys! (Use WASD + Up Down Left & Right)";
 };
 Window window;
@@ -86,8 +86,8 @@ int main()
 		// implement frame limit
 		if (jp_clock.currentTime - time_at_last_render > MINIMUM_FRAME_TIME)
 		{
-			// Update our particleManager
-			// --------------------------
+			// Update our physics simulation
+			// -----------------------------
 
 			particle_manager.update();
 
@@ -98,12 +98,9 @@ int main()
 			glClearColor(0.92f, 0.28f, 0.37f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			// render all particles in particle_stack in our particle manager
+			// render all particles in the particle_stack in our particle manager
 			for (int i = 0; i < (int)particle_manager.particle_stack.size(); i++)
-			{
-				std::cout << "rendered particlce number " << i << "!!\n";
 				renderer.renderCircle(&particle_manager.particle_stack[i]->circle);
-			}
 
 			// swap buffers and poll input events
 			// ----------------------------------
