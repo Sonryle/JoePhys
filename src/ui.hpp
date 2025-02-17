@@ -13,12 +13,10 @@ public:
 	float x_scale;
 	float y_scale;
     float offset;
+	float bezel;
 	glm::vec2 position;
-	glm::vec2 top_left_tex_coord;
-	glm::vec2 top_right_tex_coord;
-	glm::vec2 bottom_left_tex_coord;
-	glm::vec2 bottom_right_tex_coord;
 	glm::vec4 colour;
+	glm::vec4 bezelColour;
 
 	UI();
 };

@@ -7,11 +7,8 @@ uniform int layer;
 uniform float x_scale;
 uniform float y_scale;
 uniform float offset;
+uniform float bezel;
 uniform vec2 position;
-uniform vec2 top_left_tex_coord;
-uniform vec2 top_right_tex_coord;
-uniform vec2 bottom_left_tex_coord;
-uniform vec2 bottom_right_tex_coord;
 
 void main()
 {

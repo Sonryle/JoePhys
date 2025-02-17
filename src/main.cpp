@@ -70,26 +70,15 @@ int main()
 	Circle tempCircTwo;
 	tempCircTwo.layer = 1;
 	tempCircTwo.position = glm::vec2(0.0f, 0.0f);
-	tempCircTwo.radius = 500;
+	tempCircTwo.radius = 50;
 	tempCircTwo.colour = glm::vec4(0.3f, 1.0f, 0.3f, 1.0f);
 
 	Line tempLine;
-	tempLine.layer = 5;
+	tempLine.layer = 0;
 	tempLine.thickness = 40;
 	tempLine.start_position = glm::vec2(200.0f, -200.0f);
 	tempLine.end_position = glm::vec2(100.0f, 200.0f);
 	tempLine.colour = glm::vec4(0.3f, 0.3f, 1.0f, 1.0f);
-
-	Square tempSquare;
-	tempSquare.layer = -1;
-	tempSquare.x_scale = 200;
-	tempSquare.y_scale = 100;
-	tempSquare.position = glm::vec2(0.0f, 0.0f);
-	tempSquare.top_left_tex_coord = glm::vec2(0.0f, 0.0f);
-	tempSquare.top_right_tex_coord = glm::vec2(0.0f, 0.0f);
-	tempSquare.bottom_left_tex_coord = glm::vec2(0.0f, 0.0f);
-	tempSquare.bottom_right_tex_coord = glm::vec2(0.0f, 0.0f);
-	tempSquare.colour = glm::vec4(0.4f, 0.8f, 0.1f, 1.0f);
 
 	// myles ui testing
 	UI tempUI;
@@ -97,8 +86,10 @@ int main()
 	tempUI.x_scale = 300;
 	tempUI.y_scale = 150;
 	tempUI.offset = 20;
+	tempUI.bezel = 0.2;
 	tempUI.position = glm::vec2((window.width / 2.0f) - (tempUI.x_scale / 2.0f), (window.height / 2.0f)- (tempUI.y_scale / 2.0f));
-	tempUI.colour = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
+	tempUI.colour = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+	tempUI.bezelColour = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
 	// game loop
 	while (!glfwWindowShouldClose(window.handle))
@@ -119,10 +110,9 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// render objects	(objects must be rendered from back to front)
-		renderer.renderSquare(&tempSquare);
+		renderer.renderLine(&tempLine);
 		renderer.renderCircle(&tempCirc);	// circles must always be rendered last
 		renderer.renderCircle(&tempCircTwo);	// since they have some transparent fragments
-		renderer.renderLine(&tempLine);
 		renderer.renderUI(&tempUI);
 
 		// TEMPORARY LINE MOVEMENT CODE

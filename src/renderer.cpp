@@ -145,15 +145,13 @@ void Renderer::renderUI(UI* ui)
 	ui_shader.use();
 
 	ui_shader.setVec4("colour", ui->colour);
+	ui_shader.setVec4("bezelColour", ui->bezelColour);
 	ui_shader.setInt("layer", ui->layer);
 	ui_shader.setFloat("x_scale", ui->x_scale);
 	ui_shader.setFloat("y_scale", ui->y_scale);
+	ui_shader.setFloat("bezel", ui->bezel);
 	ui_shader.setFloat("offset", ui->offset);
 	ui_shader.setVec2("position", ui->position);
-	ui_shader.setVec2("top_left_tex_coord", ui->top_left_tex_coord);
-	ui_shader.setVec2("top_right_tex_coord", ui->top_right_tex_coord);
-	ui_shader.setVec2("bottom_left_tex_coord", ui->bottom_left_tex_coord);
-	ui_shader.setVec2("bottom_right_tex_coord", ui->bottom_right_tex_coord);
 
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 }
