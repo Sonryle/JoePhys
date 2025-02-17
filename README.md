@@ -1,6 +1,6 @@
 # JoePhys
 
-This is a simple physics engine which I decided to make for my TY physics project. I hope that my teacher will like it :)
+This is a simple physics engine which I decided to make for my TY physics project. NOW WITH MYLES SUPER SICK UI CLASS!!
 
 ## How to Run
 There are no releases to JoePhys yet (I havent even got a window to work yet, i dont know why i'm making this README file right now). You must build from the source code
