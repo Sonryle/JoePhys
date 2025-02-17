@@ -14,6 +14,11 @@
 #include <shapes.hpp>
 #include <particles.hpp>
 
+// variables
+const double FPS_LIMIT = 500;				// the maximum FPS that the program is allowed to reach
+const double MINIMUM_FRAME_TIME = 1.0f / FPS_LIMIT;	// the minimum allowed amount of milliseconds between frames
+double time_at_last_render = 0.0f;			// what the current time WAS when the previous frame was rendered
+
 // functions
 void windowResizeCallback(GLFWwindow*, int, int);
 
@@ -25,16 +30,12 @@ struct Window
 	int height = 800;
 	std::string title = "JoePhys! (Use WASD + Up Down Left & Right)";
 };
-
-// classes & vars
-Clock jp_clock;
 Window window;
-Renderer renderer;
-ParticleManager particle_manager(200);
 
-const double TARGET_FPS = 131;			// desired FPS
-const double FRAME_TIME = 1.0f / TARGET_FPS;	// desired amount of milliseconds between frames
-double time_at_last_render = 0.0f;		// what the current time WAS when the previous frame was rendered
+// classes
+Clock jp_clock;
+Renderer renderer;
+ParticleManager particle_manager(FPS_LIMIT);
 
 int main()
 {
@@ -83,7 +84,7 @@ int main()
 		jp_clock.update();
 		
 		// implement frame limit
-		if (jp_clock.currentTime - time_at_last_render > FRAME_TIME)
+		if (jp_clock.currentTime - time_at_last_render > MINIMUM_FRAME_TIME)
 		{
 			// Update our particleManager
 			// --------------------------
