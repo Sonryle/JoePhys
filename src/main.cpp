@@ -44,6 +44,7 @@ int main()
 		return -1;
 	}
 	glfwMakeContextCurrent(window.handle);
+	glfwSwapInterval(0); // Disable VSync
 
 	// Assign window resize callback function
 	glfwSetFramebufferSizeCallback(window.handle, windowResizeCallback);
