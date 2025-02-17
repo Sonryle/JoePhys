@@ -20,6 +20,7 @@ void Renderer::init()
 	circle_shader.init("res/shaders/circle_shader.vert", "res/shaders/circle_shader.frag");
 	line_shader.init("res/shaders/line_shader.vert", "res/shaders/line_shader.frag");
 	square_shader.init("res/shaders/square_shader.vert", "res/shaders/square_shader.frag");
+	ui_shader.init("res/shaders/ui_shader.vert", "res/shaders/ui_shader.frag");
 
 	// Set up VAO
 
@@ -45,6 +46,8 @@ void Renderer::init()
 	line_shader.setMat4("projection_matrix", projection_matrix);
 	square_shader.use();
 	square_shader.setMat4("projection_matrix", projection_matrix);
+	ui_shader.use();
+	ui_shader.setMat4("projection_matrix", projection_matrix);
 
 	return;
 }
@@ -61,6 +64,8 @@ void Renderer::updateViewMatrix(int new_width, int new_height)
 	line_shader.setMat4("projection_matrix", projection_matrix);
 	square_shader.use();
 	square_shader.setMat4("projection_matrix", projection_matrix);
+	ui_shader.use();
+	ui_shader.setMat4("projection_matrix", projection_matrix);
 
 	return;
 }
@@ -107,4 +112,22 @@ void Renderer::renderSquare(Square* square)
 
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 
+}
+
+void Renderer::renderUI(UI* ui)
+{
+	ui_shader.use();
+
+	ui_shader.setVec4("colour", ui->colour);
+	ui_shader.setInt("layer", ui->layer);
+	ui_shader.setFloat("x_scale", ui->x_scale);
+	ui_shader.setFloat("y_scale", ui->y_scale);
+	ui_shader.setFloat("offset", ui->offset);
+	ui_shader.setVec2("position", ui->position);
+	ui_shader.setVec2("top_left_tex_coord", ui->top_left_tex_coord);
+	ui_shader.setVec2("top_right_tex_coord", ui->top_right_tex_coord);
+	ui_shader.setVec2("bottom_left_tex_coord", ui->bottom_left_tex_coord);
+	ui_shader.setVec2("bottom_right_tex_coord", ui->bottom_right_tex_coord);
+
+	glDrawArrays(GL_TRIANGLES, 0, 6);
 }

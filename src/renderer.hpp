@@ -10,6 +10,9 @@
 // Include shape classes
 #include <shapes.hpp>
 
+//Include UI classes
+#include <ui.hpp>
+
 class Renderer
 {
 public:
@@ -23,6 +26,7 @@ public:
 	Shader circle_shader;
 	Shader line_shader;
 	Shader square_shader;
+	Shader ui_shader;
 
 	// FUNCTIONS
 	// ---------
@@ -36,6 +40,8 @@ public:
 	void renderLine(Line* line);
 	// ----------------------------------------------------
 	void renderSquare(Square* square);
+	// ----------------------------------------------------
+	void renderUI(UI* ui);
 	// ----------------------------------------------------
 };
 

@@ -12,6 +12,7 @@
 // JoePhys Headers
 #include <renderer.hpp>
 #include <shapes.hpp>
+#include <ui.hpp>
 
 // functions
 void windowResizeCallback(GLFWwindow*, int, int);
@@ -96,6 +97,15 @@ int main()
 	tempSquare.bottom_right_tex_coord = glm::vec2(0.0f, 0.0f);
 	tempSquare.colour = glm::vec4(0.4f, 0.8f, 0.1f, 1.0f);
 
+	// myles ui testing
+	UI tempUI;
+	tempUI.layer = 100;
+	tempUI.x_scale = 300;
+	tempUI.y_scale = 150;
+	tempUI.offset = 20;
+	tempUI.position = glm::vec2((window.width / 2.0f) - (tempUI.x_scale / 2.0f), (window.height / 2.0f)- (tempUI.y_scale / 2.0f));
+	tempUI.colour = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
+
 	// game loop
 	while (!glfwWindowShouldClose(window.handle))
 	{
@@ -103,6 +113,9 @@ int main()
 		// --------------------
 		if (glfwGetKey(window.handle, GLFW_KEY_ESCAPE))
 			glfwSetWindowShouldClose(window.handle, true);
+
+		// myles UI
+		tempUI.position = glm::vec2((window.width / 2.0f) - (tempUI.x_scale / 2.0f), (window.height / 2.0f)- (tempUI.y_scale / 2.0f));
 
 		// render scene
 		// ------------
@@ -116,6 +129,7 @@ int main()
 		renderer.renderCircle(&tempCirc);	// circles must always be rendered last
 		renderer.renderCircle(&tempCircTwo);	// since they have some transparent fragments
 		renderer.renderLine(&tempLine);
+		renderer.renderUI(&tempUI);
 
 		// TEMPORARY LINE MOVEMENT CODE
 		// ----------------------------

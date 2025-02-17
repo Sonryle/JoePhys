@@ -14,12 +14,16 @@ src/shader.cpp
 src/shader.hpp
 src/renderer.cpp
 src/renderer.hpp
+src/ui.cpp
+src/ui.hpp
 res/shaders/line_shader.frag
 res/shaders/line_shader.vert
 res/shaders/circle_shader.frag
 res/shaders/circle_shader.vert
 res/shaders/square_shader.frag
 res/shaders/square_shader.vert
+res/shaders/ui_shader.frag
+res/shaders/ui_shader.vert
 )
 
 # add /src as an include directory
