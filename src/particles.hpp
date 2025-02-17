@@ -17,8 +17,10 @@ public:
 	glm::vec2 position;
 	glm::vec2 old_position;
 	glm::vec2 accelleration;
+	float radius;
 
 	Particle(glm::vec2 position, glm::vec2 old_position, glm::vec2 accelleration, glm::vec4 colour, float radius, int layer);
+	void update(double time_step);
 };
 
 class ParticleManager
@@ -26,7 +28,13 @@ class ParticleManager
 public:
 	std::vector<Particle*> particle_stack;
 
-	ParticleManager();
+	// amount of SIMULATED time that the simulation will move forward by every update
+	float time_step_in_seconds;
+	// defines how many times per SIMULATED second the simulation updates (must match framerate for real-time physics)
+	int simulation_hertz;
+
+	ParticleManager(int simulation_hertz);
+	void update();
 };
 
 #endif

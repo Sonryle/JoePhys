@@ -17,7 +17,6 @@
 // functions
 void windowResizeCallback(GLFWwindow*, int, int);
 
-// structs
 struct Window
 {
 	GLFWwindow* handle = nullptr;
@@ -26,15 +25,10 @@ struct Window
 	std::string title = "JoePhys! (Use WASD + Up Down Left & Right)";
 };
 
-// classes & vars
 Clock jp_clock;
 Window window;
 Renderer renderer;
 ParticleManager particle_manager(200);
-
-const double TARGET_FPS = 131;			// desired FPS
-const double FRAME_TIME = 1.0f / TARGET_FPS;	// desired amount of milliseconds between frames
-double time_at_last_render = 0.0f;		// what the current time WAS when the previous frame was rendered
 
 int main()
 {
@@ -76,15 +70,16 @@ int main()
 		// --------------------
 		if (glfwGetKey(window.handle, GLFW_KEY_ESCAPE))
 			glfwSetWindowShouldClose(window.handle, true);
-
-		// Update our clock
-		// ----------------
-	
-		jp_clock.update();
 		
+
 		// implement frame limit
-		if (jp_clock.currentTime - time_at_last_render > FRAME_TIME)
+		if (1)
 		{
+			// Update our clock
+			// ----------------
+	
+			jp_clock.update();
+			
 			// Update our particleManager
 			// --------------------------
 
@@ -108,10 +103,6 @@ int main()
 			// ----------------------------------
 			glfwSwapBuffers(window.handle);
 			glfwPollEvents();
-
-			// update time_at_last_render
-			// --------------------------
-			time_at_last_render = jp_clock.currentTime;
 		}
 	}
 
