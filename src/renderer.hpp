@@ -7,6 +7,9 @@
 // Shader class handles shader compilation
 #include <shader.hpp>
 
+// Image loading class MyClass {
+#include <stb/stb_image.h>
+
 // Include shape classes
 #include <shapes.hpp>
 

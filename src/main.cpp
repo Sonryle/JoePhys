@@ -60,12 +60,6 @@ int main()
 	// Initialise renderer
 	renderer.init();
 
-	// openGL options
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_BLEND);		// allow transparency
-	glDepthFunc(GL_LEQUAL);	// only render if fragments depth is equal to or larger than depth buffer
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 	// TEMPORARY SHAPES
 	Circle tempCirc;
 	tempCirc.layer = 1;

@@ -11,6 +11,9 @@ void main()
     // Home made anti-aliasing
     // -----------------------
 
+    //   This method only affects the left and right edges
+    //   of the line (the top and bottom remain aliased)
+
     //	 keep in mind that frag_position is just aPos from
     // 	 the vertex shader, and so it has not been manipulated
     // 	 into the size or rotation of our line

@@ -15,7 +15,7 @@ void main()
     float dist = length(frag_position); // Distance from center
 
     // How many pixels around the edge should be affected
-    int edge_pixel_thickness = 3;	
+    int edge_pixel_thickness = 2;
 
     float edge_of_circle = (radius - edge_pixel_thickness) / radius;
 
