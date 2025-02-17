@@ -23,6 +23,7 @@ public:
 	glm::mat4 projection_matrix;
 	unsigned int VAO;
 	unsigned int VBO;
+	unsigned int texture_atlas;
 	Shader circle_shader;
 	Shader line_shader;
 	Shader square_shader;

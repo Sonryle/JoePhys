@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 project(stb)
 
-# Add the glad library
-add_library(stb INTERFACE)
+# Create a static library for STB
+add_library(stb STATIC stb/stb_wrapper.cpp)
 
-# Specify include directories for glm
-target_include_directories(stb INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+# Include directory for stb headers
+target_include_directories(stb PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

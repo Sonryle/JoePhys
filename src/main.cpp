@@ -69,7 +69,7 @@ int main()
 	Circle tempCircTwo;
 	tempCircTwo.layer = 1;
 	tempCircTwo.position = glm::vec2(0.0f, 0.0f);
-	tempCircTwo.radius = 500;
+	tempCircTwo.radius = 50;
 	tempCircTwo.colour = glm::vec4(0.3f, 1.0f, 0.3f, 1.0f);
 
 	Line tempLine;
@@ -83,7 +83,7 @@ int main()
 	tempSquare.layer = -1;
 	tempSquare.x_scale = 200;
 	tempSquare.y_scale = 100;
-	tempSquare.position = glm::vec2(0.0f, 0.0f);
+	tempSquare.position = glm::vec2((window.width / 2.0f) - (tempSquare.x_scale / 2.0f), (window.height / 2.0f) - (tempSquare.y_scale / 2));
 	tempSquare.top_left_tex_coord = glm::vec2(0.0f, 0.0f);
 	tempSquare.top_right_tex_coord = glm::vec2(0.0f, 0.0f);
 	tempSquare.bottom_left_tex_coord = glm::vec2(0.0f, 0.0f);
@@ -97,6 +97,9 @@ int main()
 		// --------------------
 		if (glfwGetKey(window.handle, GLFW_KEY_ESCAPE))
 			glfwSetWindowShouldClose(window.handle, true);
+
+		// TEMPORARY FOR MYLES
+		tempSquare.position = glm::vec2((window.width / 2.0f) - (tempSquare.x_scale / 2.0f), (window.height / 2.0f) - (tempSquare.y_scale / 2));
 
 		// render scene
 		// ------------

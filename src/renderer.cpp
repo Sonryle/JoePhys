@@ -1,14 +1,15 @@
 #include "renderer.hpp"
 
 float square_vertex[] = {
-	// first triangle
-	 1.0f,  1.0f, -1.0f,  // top right
-	 1.0f, -1.0f, -1.0f,  // bottom right
-	-1.0f,  1.0f, -1.0f,  // top left
-	// second triangle
-	 1.0f, -1.0f, -1.0f,  // bottom right
-	-1.0f, -1.0f, -1.0f,  // bottom left
-	-1.0f,  1.0f , -1.0f   // top left
+	// positions		// texture coordinates
+	 1.0f,  1.0f, -1.0f,	1.0f, 1.0f,	// top right
+	 1.0f, -1.0f, -1.0f,	1.0f, 0.0f,	// bottom right
+	-1.0f,  1.0f, -1.0f,	0.0f, 1.0f,	// top left
+
+	// positions		// texture coordinates
+	 1.0f, -1.0f, -1.0f,	1.0f, 0.0f,	// bottom right
+	-1.0f, -1.0f, -1.0f,	0.0f, 0.0f,	// bottom left
+	-1.0f,  1.0f, -1.0f,	0.0f, 1.0f	// top left
 };
 
 float texCoords[] = {
@@ -21,49 +22,63 @@ void Renderer::init()
 {
 	std::cout << "initialising renderer!\n";
 
-	// enable depth testing and transparency
+	// OPENGL SETUP
+	// ------------
 
+	// enable depth testing and transparency
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 
 	// tell openGL how depth testing & transparency should behave
-
 	glDepthFunc(GL_LEQUAL);	// only render if fragments depth >= than depth buffer
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// set texture wrapping options
-	
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
 
 	// set texture interpolation options
-	
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	// Set up shaders
+	// TEXTURE ATLAS SETUP
+	// -------------------
 
+	// load texture using stb
+	int width, height, nrChannels;
+	unsigned char *data = stbi_load("container.jpg", &width, &height, &nrChannels, 0);
+	if (data)
+	{
+    		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+    		std::cout << "Failed to load texture" << std::endl;
+	}
+
+	// generate an openGL texture
+	glGenTextures(1, &texture_atlas);
+
+	// bind our texture so openGL knows to use it
+	glBindTexture(GL_TEXTURE_2D, texture_atlas);
+
+	// attach our loaded texture data to our texture object
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	// free the image memory since it's now stored in our texture object
+	stbi_image_free(data);
+
+	// SHADER SETUP
+	// ------------
+
+	// initialise shaders & give shader paths
 	circle_shader.init("res/shaders/circle_shader.vert", "res/shaders/circle_shader.frag");
 	line_shader.init("res/shaders/line_shader.vert", "res/shaders/line_shader.frag");
 	square_shader.init("res/shaders/square_shader.vert", "res/shaders/square_shader.frag");
 
-	// Set up VAO
-
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
-
-	// Set up VBO and attach buffer data
-
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(square_vertex), square_vertex, GL_STATIC_DRAW);
-
-	// Set vertex attributes
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-
-	// Set up view matrix
+	// send view matrix to shaders
 	projection_matrix = glm::ortho(-400.0f, 400.0f, -400.0f, 400.0f, -100.0f, 100.0f);
 	circle_shader.use();
 	circle_shader.setMat4("projection_matrix", projection_matrix);
@@ -71,6 +86,24 @@ void Renderer::init()
 	line_shader.setMat4("projection_matrix", projection_matrix);
 	square_shader.use();
 	square_shader.setMat4("projection_matrix", projection_matrix);
+
+	// VERTEX DATA SETUP
+	// -----------------
+
+	// Set up VAO
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
+
+	// Set up VBO and attach buffer data
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(square_vertex), square_vertex, GL_STATIC_DRAW);
+
+	// Set vertex attributes
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 	return;
 }
