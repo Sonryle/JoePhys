@@ -2,20 +2,20 @@
 
 float square_vertex[] = {
 	// positions		// texture coordinates
-	 1.0f,  1.0f, -1.0f,	1.0f, 1.0f,	// top right
-	 1.0f, -1.0f, -1.0f,	1.0f, 0.0f,	// bottom right
-	-1.0f,  1.0f, -1.0f,	0.0f, 1.0f,	// top left
+	1.0f, 1.0f, -1.0f, 1.0f, 1.0f,	// top right
+	1.0f, -1.0f, -1.0f, 1.0f, 0.0f, // bottom right
+	-1.0f, 1.0f, -1.0f, 0.0f, 1.0f, // top left
 
 	// positions		// texture coordinates
-	 1.0f, -1.0f, -1.0f,	1.0f, 0.0f,	// bottom right
-	-1.0f, -1.0f, -1.0f,	0.0f, 0.0f,	// bottom left
-	-1.0f,  1.0f, -1.0f,	0.0f, 1.0f	// top left
+	1.0f, -1.0f, -1.0f, 1.0f, 0.0f,	 // bottom right
+	-1.0f, -1.0f, -1.0f, 0.0f, 0.0f, // bottom left
+	-1.0f, 1.0f, -1.0f, 0.0f, 1.0f	 // top left
 };
 
 float texCoords[] = {
-    0.0f, 0.0f,  // lower-left corner  
-    1.0f, 0.0f,  // lower-right corner
-    0.5f, 1.0f   // top-center corner
+	0.0f, 0.0f, // lower-left corner
+	1.0f, 0.0f, // lower-right corner
+	0.5f, 1.0f	// top-center corner
 };
 
 void Renderer::init()
@@ -30,7 +30,7 @@ void Renderer::init()
 	glEnable(GL_BLEND);
 
 	// tell openGL how depth testing & transparency should behave
-	glDepthFunc(GL_LEQUAL);	// only render if fragments depth >= than depth buffer
+	glDepthFunc(GL_LEQUAL); // only render if fragments depth >= than depth buffer
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// set texture wrapping options
@@ -43,7 +43,7 @@ void Renderer::init()
 
 	// TEXTURE ATLAS SETUP
 	// -------------------
-	
+
 	// make texture atlas the right way up
 	stbi_set_flip_vertically_on_load(true);
 
@@ -53,11 +53,11 @@ void Renderer::init()
 	if (data)
 	{
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-    		glGenerateMipmap(GL_TEXTURE_2D);
+		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else
 	{
-    		std::cout << "Failed to load texture" << std::endl;
+		std::cout << "Failed to load texture" << std::endl;
 	}
 
 	// generate an openGL texture
@@ -106,9 +106,9 @@ void Renderer::init()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(square_vertex), square_vertex, GL_STATIC_DRAW);
 
 	// Set vertex attributes
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)0);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
 	return;
@@ -132,8 +132,8 @@ void Renderer::updateViewMatrix(int new_width, int new_height)
 	return;
 }
 
-void Renderer::renderCircle(Circle* circle)
-{	
+void Renderer::renderCircle(Circle *circle)
+{
 	circle_shader.use();
 
 	circle_shader.setInt("layer", circle->layer);
@@ -144,7 +144,7 @@ void Renderer::renderCircle(Circle* circle)
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
-void Renderer::renderLine(Line* line)
+void Renderer::renderLine(Line *line)
 {
 	line_shader.use();
 
@@ -157,8 +157,7 @@ void Renderer::renderLine(Line* line)
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
-
-void Renderer::renderSquare(Square* square)
+void Renderer::renderSquare(Square *square)
 {
 	square_shader.use();
 
@@ -173,7 +172,6 @@ void Renderer::renderSquare(Square* square)
 	square_shader.setVec2("bottom_right_tex_coord", square->bottom_right_tex_coord);
 
 	glDrawArrays(GL_TRIANGLES, 0, 6);
-
 }
 
 void Renderer::renderUI(UI* ui)

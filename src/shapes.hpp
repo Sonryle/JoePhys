@@ -8,7 +8,6 @@ class Circle
 {
 public:
 
-	int position_in_stack;
 	int layer;
 	float radius;
 	glm::vec2 position;
@@ -21,7 +20,6 @@ class Line
 {
 public:
 
-	int position_in_stack;
 	int layer;
 	float thickness;
 	glm::vec2 start_position;
@@ -35,7 +33,6 @@ class Square
 {
 public:
 
-	int position_in_stack;
 	int layer;
 	float x_scale;
 	float y_scale;

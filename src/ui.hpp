@@ -20,6 +20,11 @@ public:
 	glm::vec4 bezelColour;
 
 	UI();
+
+	void update(glm::vec2 window)
+	{
+		position = glm::vec2((window.x / 2.0f) - (x_scale / 2.0f), (window.y / 2.0f) - (y_scale / 2.0f));
+	}
 };
 
 #endif

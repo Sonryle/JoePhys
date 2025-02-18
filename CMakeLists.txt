@@ -18,6 +18,8 @@ src/renderer.cpp
 src/renderer.hpp
 src/ui.cpp
 src/ui.hpp
+src/particles.cpp
+src/particles.hpp
 res/shaders/line_shader.frag
 res/shaders/line_shader.vert
 res/shaders/circle_shader.frag

@@ -12,18 +12,11 @@
 #include <clock.hpp>
 #include <renderer.hpp>
 #include <shapes.hpp>
-#include <ui.hpp>
 #include <particles.hpp>
-
-// variables
-const double FPS_LIMIT = 500;				// the maximum FPS that the program is allowed to reach
-const double MINIMUM_FRAME_TIME = 1.0f / FPS_LIMIT;	// the minimum allowed amount of milliseconds between frames
-double time_at_last_render = 0.0f;			// what the current time WAS when the previous frame was rendered
 
 // functions
 void windowResizeCallback(GLFWwindow*, int, int);
 
-// structs
 struct Window
 {
 	GLFWwindow* handle = nullptr;
@@ -31,20 +24,19 @@ struct Window
 	int height = 800;
 	std::string title = "JoePhys! (Use WASD + Up Down Left & Right)";
 };
-Window window;
 
-// classes
 Clock jp_clock;
+Window window;
 Renderer renderer;
-ParticleManager particle_manager(FPS_LIMIT);
+ParticleManager particle_manager(200);
 
 int main()
 {
 	// Initialise GLFW
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// Create window using GLFW
 	window.handle = glfwCreateWindow(window.width, window.height, window.title.c_str(), NULL, NULL);
@@ -55,10 +47,11 @@ int main()
 		return -1;
 	}
 	glfwMakeContextCurrent(window.handle);
-	glfwSwapInterval(1); // Disable VSync
+	glfwSwapInterval(0); // Disable VSync
 
 	// Assign window resize callback function
 	glfwSetFramebufferSizeCallback(window.handle, windowResizeCallback);
+
 
 	// Load all openGL functions using glad
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -67,70 +60,26 @@ int main()
 		return -1;
 	}
 
-	glClear(GL_COLOR_BUFFER_BIT);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 	// Initialise renderer
 	renderer.init();
-
-	// myles ui testing
-	UI testUI;
-	testUI.layer = 100;
-	testUI.colour = glm::vec4(0.313f, 0.286f, 0.270f, 1.0f);
-	testUI.bezelColour = glm::vec4(0.156f, 0.156f, 0.156f, 1.0f);
-	testUI.position = glm::vec2(0.0f, 0.0f);
-	testUI.offset = 20;
-	testUI.bezel = 30;
-	testUI.bezelThickness = 10;
-	
-	// create window dimensions vec2
-	glm::vec2 windowDimensions = glm::vec2(window.width, window.height);
-
-	// get framebuffer size and set to viewport
-    int framebufferWidth, framebufferHeight;
-    glfwGetFramebufferSize(window.handle, &framebufferWidth, &framebufferHeight);
-    glViewport(0, 0, framebufferWidth, framebufferHeight);
-
-    // update window width/height variables
-    window.width = framebufferWidth;
-    window.height = framebufferHeight;
-
-    // update viewport in renderer
-    renderer.updateViewMatrix(window.width, window.height);
 
 	// game loop
 	while (!glfwWindowShouldClose(window.handle))
 	{
-		// myles ui persistence
-		// --------------------
-		testUI.update(windowDimensions);
-		renderer.renderUI(&testUI);
-
 		// should close window?
 		// --------------------
 		if (glfwGetKey(window.handle, GLFW_KEY_ESCAPE))
 			glfwSetWindowShouldClose(window.handle, true);
-
-		/* should fullscren?
-		// --------------------
-		if (glfwGetKey(window.handle, GLFW_KEY_F11))
-			glfwMaximizeWindow(window.handle);
-			glfwSetWindowMonitor(window.handle, glfwGetPrimaryMonitor(), 0, 0, window.width, window.height, 60);*/
-
-		// should maximize?
-		// --------------------
-		if (glfwGetKey(window.handle, GLFW_KEY_F10))
-			glfwMaximizeWindow(window.handle);
 		
-		// Update our clock
-		// ----------------
-	
-		jp_clock.update();
-		
+
 		// implement frame limit
-		if (jp_clock.currentTime - time_at_last_render > MINIMUM_FRAME_TIME)
+		if (1)
 		{
+			// Update our clock
+			// ----------------
+	
+			jp_clock.update();
+			
 			// Update our particleManager
 			// --------------------------
 
@@ -154,10 +103,6 @@ int main()
 			// ----------------------------------
 			glfwSwapBuffers(window.handle);
 			glfwPollEvents();
-
-			// update time_at_last_render
-			// --------------------------
-			time_at_last_render = jp_clock.currentTime;
 		}
 	}
 

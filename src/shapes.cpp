@@ -1,7 +1,6 @@
 #include "shapes.hpp"
 
 Circle::Circle() :
-position_in_stack(-1),
 layer(1),
 radius(50),
 position(0),
@@ -11,7 +10,6 @@ colour(0)
 }
 
 Line::Line() :
-position_in_stack(-1),
 layer(1),
 thickness(10),
 start_position(0),
@@ -22,7 +20,6 @@ colour(0)
 }
 
 Square::Square() :
-position_in_stack(-1),
 layer(1),
 x_scale(50),
 y_scale(50),
