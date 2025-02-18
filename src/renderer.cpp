@@ -18,7 +18,7 @@ float texCoords[] = {
 	0.5f, 1.0f	// top-center corner
 };
 
-void Renderer::init()
+void Renderer::init(int window_width, int window_height)
 {
 	std::cout << "initialising renderer!\n";
 
@@ -82,16 +82,10 @@ void Renderer::init()
 	square_shader.init("res/shaders/square_shader.vert", "res/shaders/square_shader.frag");
 	ui_shader.init("res/shaders/ui_shader.vert", "res/shaders/ui_shader.frag");
 
-	// send view matrix to shaders
-	projection_matrix = glm::ortho(-400.0f, 400.0f, -400.0f, 400.0f, -100.0f, 100.0f);
-	circle_shader.use();
-	circle_shader.setMat4("projection_matrix", projection_matrix);
-	line_shader.use();
-	line_shader.setMat4("projection_matrix", projection_matrix);
-	square_shader.use();
-	square_shader.setMat4("projection_matrix", projection_matrix);
-	ui_shader.use();
-	ui_shader.setMat4("projection_matrix", projection_matrix);
+	// Update view matrix
+	// ------------------
+	
+	updateViewMatrix(window_width, window_height);
 
 	// VERTEX DATA SETUP
 	// -----------------
