@@ -68,7 +68,7 @@ int main()
 	}
 
 	// Initialise renderer
-	renderer.init();
+	renderer.init(window.width, window.height);
 
 	// game loop
 	while (!glfwWindowShouldClose(window.handle))

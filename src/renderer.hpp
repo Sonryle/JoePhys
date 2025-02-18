@@ -31,7 +31,7 @@ public:
 	// FUNCTIONS
 	// ---------
 
-	void init();
+	void init(int window_width, int window_height);
 	// ----------------------------------------------------
 	void updateViewMatrix(int new_width, int new_height);
 	// ----------------------------------------------------
