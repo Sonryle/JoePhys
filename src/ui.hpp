@@ -3,6 +3,7 @@
 
 // vector & matrices
 #include <glm/glm.hpp>
+#include <string>
 
 class UI
 {
@@ -18,12 +19,32 @@ public:
 	glm::vec2 position;
 	glm::vec4 colour;
 	glm::vec4 bezelColour;
+	std::string alignment = "topRight";
 
 	UI();
 
-	void update(glm::vec2 window)
+	void updateUI(glm::vec2 window)
 	{
-		position = glm::vec2((window.x / 2.0f) - (x_scale / 2.0f), (window.y / 2.0f) - (y_scale / 2.0f));
+		if (alignment == "topRight")
+		{
+			position = glm::vec2((window.x / 2.0f) - (x_scale / 2.0f) - offset, (window.y / 2.0f) - (y_scale / 2.0f) - offset);
+		}
+		if (alignment == "topLeft")
+		{
+			position = glm::vec2(-(window.x / 2.0f) + (x_scale / 2.0f) + offset, (window.y / 2.0f) - (y_scale / 2.0f) - offset);
+		}
+		if (alignment == "bottomLeft")
+		{
+			position = glm::vec2(-(window.x / 2.0f) + (x_scale / 2.0f) + offset, -(window.y / 2.0f) + (y_scale / 2.0f) + offset);
+		}
+		if (alignment == "bottomRight")
+		{
+			position = glm::vec2((window.x / 2.0f) - (x_scale / 2.0f) - offset, -(window.y / 2.0f) + (y_scale / 2.0f) + offset);
+		}
+		if (alignment == "centered")
+		{
+			position = glm::vec2(0, 0);
+		}
 	}
 };
 

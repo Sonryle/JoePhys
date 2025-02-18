@@ -1,6 +1,7 @@
 // C++ libraries
 #include <stdio.h>
 #include <string.h>
+#include <vector>
 
 // OpenGL function loader
 #include <glad/glad.h>
@@ -19,6 +20,10 @@
 const double FPS_LIMIT = 500;				// the maximum FPS that the program is allowed to reach
 const double MINIMUM_FRAME_TIME = 1.0f / FPS_LIMIT;	// the minimum allowed amount of milliseconds between frames
 double time_at_last_render = 0.0f;			// what the current time WAS when the previous frame was rendered
+bool fullscreen = false; // is the window fullscreen?
+bool maximized = false; // is the window maximized?
+bool wasF11Pressed = false; // was the F11 key pressed last frame?
+bool wasF10Pressed = false; // was the F10 key pressed last frame?
 
 // functions
 void windowResizeCallback(GLFWwindow*, int, int);
@@ -79,15 +84,14 @@ int main()
 	// myles ui testing
 	UI testUI;
 	testUI.layer = 100;
+	testUI.x_scale = 400;
+	testUI.y_scale = 200;
 	testUI.colour = glm::vec4(0.313f, 0.286f, 0.270f, 1.0f);
 	testUI.bezelColour = glm::vec4(0.156f, 0.156f, 0.156f, 1.0f);
-	testUI.position = glm::vec2(0.0f, 0.0f);
 	testUI.offset = 20;
 	testUI.bezel = 30;
 	testUI.bezelThickness = 10;
-	
-	// create window dimensions vec2
-	glm::vec2 windowDimensions = glm::vec2(window.width, window.height);
+	testUI.alignment = "topRight";
 
 	// set window viewport resolution to window resolution
     int framebufferWidth, framebufferHeight;
@@ -97,18 +101,11 @@ int main()
     window.height = framebufferHeight;
     renderer.updateViewMatrix(window.width, window.height);
 
-	// set up variables
-	bool fullscreen = false;
-	bool wasF11Pressed = false;
-
 	// game loop
 	while (!glfwWindowShouldClose(window.handle))
 	{
-		// myles ui persistence
-		// --------------------
-		testUI.update(windowDimensions);
-		renderer.renderUI(&testUI);
-
+		// fetch window dimensions every frame
+		glm::vec2 windowDimensions = glm::vec2(window.width, window.height);
 		// should close window?
 		// --------------------
 		if (glfwGetKey(window.handle, GLFW_KEY_ESCAPE))
@@ -135,14 +132,27 @@ int main()
 			}
 		}
 		wasF11Pressed = isF11Pressed;
+		
 		// should maximize?
 		// --------------------
-		if (glfwGetKey(window.handle, GLFW_KEY_F10))
-			glfwMaximizeWindow(window.handle);
+		bool (isF10Pressed) = glfwGetKey(window.handle, GLFW_KEY_F10) == GLFW_PRESS;
+		if (isF10Pressed && !wasF10Pressed)
+		{
+			if (maximized)
+			{
+				glfwRestoreWindow(window.handle);
+				maximized = false;
+			}
+			else
+			{
+				glfwMaximizeWindow(window.handle);
+				maximized = true;
+			}
+		}
+		wasF10Pressed = isF10Pressed;
 		
 		// Update our clock
 		// ----------------
-	
 		jp_clock.update();
 		
 		// implement frame limit
@@ -164,6 +174,10 @@ int main()
 			for (int i = 0; i < (int)particle_manager.particle_stack.size(); i++)
 				renderer.renderCircle(&particle_manager.particle_stack[i]->circle);
 
+			// render stack
+			renderer.renderUI(&testUI);
+			testUI.updateUI(windowDimensions);
+			
 			// swap buffers and poll input events
 			// ----------------------------------
 			glfwSwapBuffers(window.handle);

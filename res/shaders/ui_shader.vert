@@ -18,20 +18,20 @@ void main()
     // detect which vertice we are looking at, and move it to the correct position
     if (aPos.x == 1 && aPos.y == 1) // top right vertice
     {
-        updated_position = vec2(position.x + (x_scale / 2), position.y + (y_scale / 2)) - offset;
+        updated_position = vec2(position.x + (x_scale / 2), position.y + (y_scale / 2));
     }
     if (aPos.x == 1 && aPos.y == -1) // bottom right vertice
     {
-        updated_position = vec2(position.x + (x_scale / 2), position.y - (y_scale / 2)) - offset;
+        updated_position = vec2(position.x + (x_scale / 2), position.y - (y_scale / 2));
     }
     // detect which vertice we are looking at, and move it to the correct position
     if (aPos.x == -1 && aPos.y == 1) // top left vertice
     {
-        updated_position = vec2(position.x - (x_scale / 2), position.y + (y_scale / 2)) - offset;
+        updated_position = vec2(position.x - (x_scale / 2), position.y + (y_scale / 2));
     }
     if (aPos.x == -1 && aPos.y == -1) // bottom left vertice
     {
-        updated_position = vec2(position.x - (x_scale / 2), position.y - (y_scale / 2)) - offset;
+        updated_position = vec2(position.x - (x_scale / 2), position.y - (y_scale / 2));
     }
 
     gl_Position = projection_matrix * vec4(updated_position, layer, 1.0);
