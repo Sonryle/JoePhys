@@ -24,6 +24,9 @@ void Renderer::init(int window_width, int window_height)
 
 	// OPENGL SETUP
 	// ------------
+	
+	// Set gl viewport to be the same resolution as our window
+	glViewport(0, 0, window_width, window_height);
 
 	// enable depth testing and transparency
 	glEnable(GL_DEPTH_TEST);
