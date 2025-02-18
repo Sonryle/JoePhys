@@ -36,7 +36,7 @@ Window window;
 // JoePhys classes
 Clock jp_clock;
 Renderer renderer;
-ParticleManager particle_manager(FPS_LIMIT * 10);	// Slow down time by 10
+ParticleManager particle_manager(FPS_LIMIT);
 
 int main()
 {

@@ -37,8 +37,7 @@ public:
 
 	std::vector<Particle*>* pointer_to_particle_stack;
 
-	Clock spawner_clock;
-	double time_at_last_spawn;
+	double time_since_last_spawn;
 	float particles_per_second;
 	int max_particle_count;
 	float particle_radius;

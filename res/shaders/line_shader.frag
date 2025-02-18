@@ -21,7 +21,7 @@ void main()
     // distance from center of line (on x axis)
     float dist = (frag_position.x > 0)? frag_position.x : -frag_position.x;
 
-    int edge_pixel_thickness = 3;	// the amount of pixels at the edge that will be faded away
+    int edge_pixel_thickness = 1;	// the amount of pixels at the edge that will be faded away
     float edge_of_line = ((thickness / 2) - edge_pixel_thickness) / (thickness / 2);
 
     float alpha = smoothstep(1.0, edge_of_line, dist);

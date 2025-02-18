@@ -40,7 +40,7 @@ void Particle::accelerate(glm::vec2 force)
 }
 
 Spawner::Spawner(std::vector<Particle*>* pointer_to_particle_stack) :
-time_since_last_spawn(0.0f),
+time_at_last_spawn(0.0f),
 particles_per_second(3),
 max_particle_count(100),
 particle_radius(50.0f)
@@ -85,12 +85,12 @@ void Spawner::setPosition(glm::vec2 position)
 
 void Spawner::update(double time_step)
 {
-	time_since_last_spawn += time_step;
+	spawner_clock.update();
 	
 	if (pointer_to_particle_stack->size() < max_particle_count)
 	{
 		// if its time to make a new particle
-		if (time_since_last_spawn >= 1 / particles_per_second)
+		if (time_at_last_spawn + (1.0f / particles_per_second) < spawner_clock.currentTime)
 		{
 			// Create new particle and push it onto the stack
 			Particle* new_particle = new Particle(position, particle_colour, particle_radius);
@@ -100,8 +100,8 @@ void Spawner::update(double time_step)
 			// add the initial velocity to the particle
 			new_particle->old_position = new_particle->position - (initial_velocity * glm::vec2(time_step));
 
-			// reset elapsed time
-			time_since_last_spawn = 0;
+			// update time_at_last_spawn
+			time_at_last_spawn = spawner_clock.currentTime;
 		}
 	}
 }
@@ -113,10 +113,10 @@ ParticleManager::ParticleManager(int simulation_hertz) : spawner(&particle_stack
 	time_step_in_seconds = 1.0f / (float)simulation_hertz;
 
 	// Set up spawner
-	spawner.setParticlesPerSecond(1);
+	spawner.setParticlesPerSecond(9);
 	spawner.setMaxParticleCount(300);
 	spawner.setParticleRadius(34.25f);
-	spawner.setParticleColour(glm::vec4(0.3f, 0.55f, 0.17f, 1.0f));
+	spawner.setParticleColour(glm::vec4(1.0f, 0.3f, 0.3f, 1.0f));
 	spawner.setParticleInitialVelocity(glm::vec2(1000.0f, 0.0f));
 	spawner.setPosition(glm::vec2(-350.0f, 400.0f));
 
