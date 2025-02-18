@@ -1,4 +1,5 @@
 // C++ libraries
+#include "glm/detail/type_vec.hpp"
 #include <stdio.h>
 #include <string.h>
 
@@ -70,6 +71,30 @@ int main()
 	// Initialise renderer
 	renderer.init(window.width, window.height);
 
+	// Create background objects
+	Square graph_top;
+	graph_top.layer = 0;
+	graph_top.x_scale = 125;
+	graph_top.y_scale = 500;
+	graph_top.position = glm::vec2(437.5f, 250);
+	graph_top.top_right_tex_coord = glm::vec2(0.1875f, 1.0f);
+	graph_top.top_left_tex_coord = glm::vec2(0.125f, 1.0f);
+	graph_top.bottom_right_tex_coord = glm::vec2(0.1875f, 0.0f);
+	graph_top.bottom_left_tex_coord = glm::vec2(0.125f, 0.0f);
+
+
+	Square graph_bottom;
+	graph_bottom.layer = 0;
+	graph_bottom.x_scale = 125;
+	graph_bottom.y_scale = 500;
+	graph_bottom.position = glm::vec2(437.5f, -250);
+	graph_bottom.top_right_tex_coord = glm::vec2(0.25f, 1.0f);
+	graph_bottom.top_left_tex_coord = glm::vec2(0.1875f, 1.0f);
+	graph_bottom.bottom_right_tex_coord = glm::vec2(0.25f, 0.0f);
+	graph_bottom.bottom_left_tex_coord = glm::vec2(0.1875f, 0.0f);
+
+
+
 	// game loop
 	while (!glfwWindowShouldClose(window.handle))
 	{
@@ -95,8 +120,12 @@ int main()
 			// ------------
 
 			// set background to be red
-			glClearColor(0.92f, 0.28f, 0.37f, 1.0f);
+			glClearColor(1.0f, 0.94f, 0.67f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+			// render background objects
+			renderer.renderSquare(&graph_top);
+			renderer.renderSquare(&graph_bottom);
 
 			// render all particles in the particle_stack in our particle manager
 			for (int i = 0; i < (int)particle_manager.particle_stack.size(); i++)
