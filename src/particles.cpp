@@ -15,12 +15,13 @@ radius(radius)
 void Particle::update(double time_step)
 {
 	const glm::vec2 velocity = position - old_position;
+	const glm::vec2 time_step_vec = glm::vec2(time_step);
 
 	// update old position
 	old_position = position;
 
 	// perform verlet integration
-	position = position + velocity + acceleration * glm::vec2(time_step * time_step, time_step * time_step);
+	position = position + velocity + acceleration * (time_step_vec * time_step_vec);
 
 	// reset acceleration
 	acceleration = glm::vec2(0.0f, 0.0f);
@@ -97,8 +98,7 @@ void Spawner::update(double time_step)
 			pointer_to_particle_stack->push_back(new_particle);
 
 			// add the initial velocity to the particle
-			glm::vec2 time_step_vector = glm::vec2(time_step, time_step);
-			new_particle->accelerate(initial_velocity * time_step_vector);
+			new_particle->old_position = new_particle->position - (initial_velocity * glm::vec2(time_step));
 
 			// update time_at_last_spawn
 			time_at_last_spawn = spawner_clock.currentTime;
@@ -117,7 +117,7 @@ ParticleManager::ParticleManager(int simulation_hertz) : spawner(&particle_stack
 	spawner.setMaxParticleCount(1);
 	spawner.setParticleRadius(34.25f);
 	spawner.setParticleColour(glm::vec4(1.0f, 0.3f, 0.3f, 1.0f));
-	spawner.setParticleInitialVelocity(glm::vec2(-200000.0f, 0.0f));
+	spawner.setParticleInitialVelocity(glm::vec2(-1000.0f, 0.0f));
 	spawner.setPosition(glm::vec2(-350.0f, 400.0f));
 
 	// Set up default constraint vars
