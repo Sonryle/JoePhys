@@ -127,4 +127,6 @@ void windowResizeCallback(GLFWwindow* window_handle, int width, int height)
 	window.height = height;
 	// Update renderer's projection matrix so that coordinate system matches window dimensions
 	renderer.updateViewMatrix(width, height);
+	// Update particle constraint to be the same size as the window
+	particle_manager.setConstraint(glm::vec2(0.0f, 0.0f), width, height);
 }
