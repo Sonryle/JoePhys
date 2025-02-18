@@ -3,7 +3,6 @@
 
 // C++ libraries
 #include <vector>
-#include <iostream>
 
 // glm for vectors and matrices
 #include <glm/glm.hpp>
@@ -31,12 +30,41 @@ public:
 	// --------------------------------------------------------
 };
 
+class Spawner
+{
+public:
+
+	std::vector<Particle*>* pointer_to_particle_stack;
+
+	Clock spawner_clock;
+	double time_at_last_spawn;
+	float particles_per_second;
+	float particle_radius;
+	glm::vec2 position;
+	glm::vec4 particle_colour;
+
+	Spawner(std::vector<Particle*>* pointer_to_particle_stack);
+	// ---------------------------------------------------
+	void setParticlesPerSecond(float particles_per_second);
+	// ---------------------------------------------------
+	void setParticleRadius(float radius);
+	// ---------------------------------------------------
+	void setParticleColour(glm::vec4 colour);
+	// ---------------------------------------------------
+	void setPosition(glm::vec2 position);
+	// ---------------------------------------------------
+	void update();
+	// ---------------------------------------------------
+};
+
 class ParticleManager
 {
 public:
 
 	std::vector<Particle*> particle_stack;
 	glm::vec2 gravity;
+
+	Spawner spawner;
 
 	// amount of SIMULATED time that the simulation will move forward by every update
 	float time_step_in_seconds;
