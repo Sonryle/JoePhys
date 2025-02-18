@@ -3,6 +3,7 @@
 
 // C++ libraries
 #include <vector>
+#include <iostream>
 
 // glm for vectors and matrices
 #include <glm/glm.hpp>
@@ -59,7 +60,7 @@ public:
 	// ---------------------------------------------------
 	void setPosition(glm::vec2 position);
 	// ---------------------------------------------------
-	void update();
+	void update(double time_step);
 	// ---------------------------------------------------
 };
 

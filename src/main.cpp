@@ -36,7 +36,7 @@ Window window;
 // JoePhys classes
 Clock jp_clock;
 Renderer renderer;
-ParticleManager particle_manager(FPS_LIMIT);
+ParticleManager particle_manager(FPS_LIMIT * 10);	// Slow down time by 10
 
 int main()
 {
@@ -72,28 +72,15 @@ int main()
 	renderer.init(window.width, window.height);
 
 	// Create background objects
-	Square graph_top;
-	graph_top.layer = 0;
-	graph_top.x_scale = 125;
-	graph_top.y_scale = 500;
-	graph_top.position = glm::vec2(437.5f, 250);
-	graph_top.top_right_tex_coord = glm::vec2(0.1875f, 1.0f);
-	graph_top.top_left_tex_coord = glm::vec2(0.125f, 1.0f);
-	graph_top.bottom_right_tex_coord = glm::vec2(0.1875f, 0.0f);
-	graph_top.bottom_left_tex_coord = glm::vec2(0.125f, 0.0f);
-
-
-	Square graph_bottom;
-	graph_bottom.layer = 0;
-	graph_bottom.x_scale = 125;
-	graph_bottom.y_scale = 500;
-	graph_bottom.position = glm::vec2(437.5f, -250);
-	graph_bottom.top_right_tex_coord = glm::vec2(0.25f, 1.0f);
-	graph_bottom.top_left_tex_coord = glm::vec2(0.1875f, 1.0f);
-	graph_bottom.bottom_right_tex_coord = glm::vec2(0.25f, 0.0f);
-	graph_bottom.bottom_left_tex_coord = glm::vec2(0.1875f, 0.0f);
-
-
+	Square graph;
+	graph.layer = 0;
+	graph.x_scale = 1000;
+	graph.y_scale = 1000;
+	graph.position = glm::vec2(0.0f, 0.0f);
+	graph.top_right_tex_coord = glm::vec2(1.0f, 1.0f);
+	graph.top_left_tex_coord = glm::vec2(0.0f, 1.0f);
+	graph.bottom_right_tex_coord = glm::vec2(1.0f, 0.0f);
+	graph.bottom_left_tex_coord = glm::vec2(0.0f, 0.0f);
 
 	// game loop
 	while (!glfwWindowShouldClose(window.handle))
@@ -124,8 +111,7 @@ int main()
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			// render background objects
-			renderer.renderSquare(&graph_top);
-			renderer.renderSquare(&graph_bottom);
+			renderer.renderSquare(&graph);
 
 			// render all particles in the particle_stack in our particle manager
 			for (int i = 0; i < (int)particle_manager.particle_stack.size(); i++)
@@ -156,6 +142,4 @@ void windowResizeCallback(GLFWwindow* window_handle, int width, int height)
 	window.height = height;
 	// Update renderer's projection matrix so that coordinate system matches window dimensions
 	renderer.updateViewMatrix(width, height);
-	// Update particle constraint to be the same size as the window
-	particle_manager.setConstraint(glm::vec2(0.0f, 0.0f), width, height);
 }
