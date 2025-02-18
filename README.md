@@ -51,7 +51,7 @@ The resulting JoePhys executable will be in JoePhys/build/JoePhys
 
 ## Other Useful Information
 
-### Resource ("JoePhys/res") directory
+### Resource directory ("JoePhys/res")
 If you want to make changes to this code, it is important that I warn you about how the resource directory ("JoePhys/res") is handled.
 
 * All of the resources in this folder are needed during runtime and NOT during the compilation of JoePhys. Whenever the project is compiled,
