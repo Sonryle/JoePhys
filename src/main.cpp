@@ -87,17 +87,16 @@ int main()
 	// create window dimensions vec2
 	glm::vec2 windowDimensions = glm::vec2(window.width, window.height);
 
-	// get framebuffer size and set to viewport
+	// set window viewport resolution to window resolution
     int framebufferWidth, framebufferHeight;
     glfwGetFramebufferSize(window.handle, &framebufferWidth, &framebufferHeight);
     glViewport(0, 0, framebufferWidth, framebufferHeight);
-
-    // update window width/height variables
     window.width = framebufferWidth;
     window.height = framebufferHeight;
-
-    // update viewport in renderer
     renderer.updateViewMatrix(window.width, window.height);
+
+	// set up variables
+	bool fullscreen = false;
 
 	// game loop
 	while (!glfwWindowShouldClose(window.handle))
@@ -112,12 +111,17 @@ int main()
 		if (glfwGetKey(window.handle, GLFW_KEY_ESCAPE))
 			glfwSetWindowShouldClose(window.handle, true);
 
-		/* should fullscren?
+		// should fullscren?
 		// --------------------
 		if (glfwGetKey(window.handle, GLFW_KEY_F11))
-			glfwMaximizeWindow(window.handle);
-			glfwSetWindowMonitor(window.handle, glfwGetPrimaryMonitor(), 0, 0, window.width, window.height, 60);*/
-
+		{
+			if(!fullscreen)
+				glfwSetWindowMonitor(window.handle, glfwGetPrimaryMonitor(), 0, 0, window.width, window.height, 60);
+				fullscreen = true;
+			if(fullscreen)
+				glfwSetWindowMonitor(window.handle, NULL, 0, 0, window.width, window.height, 60);
+				fullscreen = false;
+		}
 		// should maximize?
 		// --------------------
 		if (glfwGetKey(window.handle, GLFW_KEY_F10))
