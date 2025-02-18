@@ -84,11 +84,11 @@ int main()
 	// myles ui testing
 	UI testUI;
 	testUI.layer = 100;
-	testUI.x_scale = 400;
-	testUI.y_scale = 200;
-	testUI.colour = glm::vec4(0.313f, 0.286f, 0.270f, 1.0f);
+	testUI.x_scale = 350;
+	testUI.y_scale = 175;
+	testUI.colour = glm::vec4(0.156f, 0.156f, 0.156f, 1.0f);
 	testUI.bezelColour = glm::vec4(0.156f, 0.156f, 0.156f, 1.0f);
-	testUI.offset = 20;
+	testUI.offset = 10;
 	testUI.bezel = 30;
 	testUI.bezelThickness = 10;
 	testUI.alignment = "topRight";
@@ -154,7 +154,7 @@ int main()
 		// Update our clock
 		// ----------------
 		jp_clock.update();
-		
+				
 		// implement frame limit
 		if (jp_clock.currentTime - time_at_last_render > MINIMUM_FRAME_TIME)
 		{
@@ -162,12 +162,13 @@ int main()
 			// -----------------------------
 
 			particle_manager.update();
+			//particle_manager.setConstraint(glm::vec2(0.0f, 0.0f), window.width, window.height);
 
 			// render scene
 			// ------------
 
 			// set background to be red
-			glClearColor(0.92f, 0.28f, 0.37f, 1.0f);
+			glClearColor(0.313f, 0.286f, 0.270f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			// render all particles in the particle_stack in our particle manager

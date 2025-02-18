@@ -111,10 +111,10 @@ ParticleManager::ParticleManager(int simulation_hertz) : spawner(&particle_stack
 	time_step_in_seconds = 1.0f / (float)simulation_hertz;
 
 	// Set up spawner
-	spawner.setParticlesPerSecond(3);
+	spawner.setParticlesPerSecond(5);
 	spawner.setMaxParticleCount(300);
-	spawner.setParticleRadius(50.0f);
-	spawner.setParticleColour(glm::vec4(0.3f, 1.0f, 0.3f, 1.0f));
+	spawner.setParticleRadius(25.0f);
+	spawner.setParticleColour(glm::vec4(0.984f, 0.286f, 0.203f, 1.0f));
 	spawner.setParticleInitialVelocity(glm::vec2(200000.0f, 0.0f));
 	spawner.setPosition(glm::vec2(-350.0f, 350.0f));
 
