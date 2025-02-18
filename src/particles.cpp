@@ -47,6 +47,7 @@ particles_per_second(3),
 particle_radius(50.0f)
 {
 	position = glm::vec2(0.0f, 0.0f);
+	initial_velocity = glm::vec2(0.0f, 0.0f);
 	particle_colour = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
 	this->pointer_to_particle_stack = pointer_to_particle_stack;
 
@@ -68,6 +69,11 @@ void Spawner::setParticleColour(glm::vec4 colour)
 	this->particle_colour = colour;
 }
 
+void Spawner::setParticleInitialVelocity(glm::vec2 velocity)
+{
+	initial_velocity = velocity;
+}
+
 void Spawner::setPosition(glm::vec2 position)
 {
 	this->position = position;
@@ -83,6 +89,9 @@ void Spawner::update()
 		Particle* new_particle = new Particle(position, particle_colour, particle_radius);
 
 		pointer_to_particle_stack->push_back(new_particle);
+
+		// add the initial velocity to the particle
+		new_particle->accelerate(initial_velocity);
 
 		// update time_at_last_spawn
 		time_at_last_spawn = spawner_clock.currentTime;
@@ -100,7 +109,8 @@ ParticleManager::ParticleManager(int simulation_hertz) : spawner(&particle_stack
 	spawner.setParticlesPerSecond(3);
 	spawner.setParticleRadius(50.0f);
 	spawner.setParticleColour(glm::vec4(0.3f, 1.0f, 0.3f, 1.0f));
-	spawner.setPosition(glm::vec2(0.0f, 0.0f));
+	spawner.setParticleInitialVelocity(glm::vec2(200000.0f, 0.0f));
+	spawner.setPosition(glm::vec2(-450.0f, 450.0f));
 
 	// Set up gravity
 	gravity = glm::vec2(0.0f, -800.0f);

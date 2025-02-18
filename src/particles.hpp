@@ -41,6 +41,7 @@ public:
 	float particles_per_second;
 	float particle_radius;
 	glm::vec2 position;
+	glm::vec2 initial_velocity;
 	glm::vec4 particle_colour;
 
 	Spawner(std::vector<Particle*>* pointer_to_particle_stack);
@@ -50,6 +51,8 @@ public:
 	void setParticleRadius(float radius);
 	// ---------------------------------------------------
 	void setParticleColour(glm::vec4 colour);
+	// ---------------------------------------------------
+	void setParticleInitialVelocity(glm::vec2 velocity);
 	// ---------------------------------------------------
 	void setPosition(glm::vec2 position);
 	// ---------------------------------------------------

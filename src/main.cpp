@@ -28,7 +28,7 @@ struct Window
 	GLFWwindow* handle = nullptr;
 	int width = 1000;
 	int height = 1000;
-	std::string title = "JoePhys! (Use WASD + Up Down Left & Right)";
+	std::string title = "JoePhys!";
 };
 Window window;
 
