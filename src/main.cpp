@@ -22,7 +22,7 @@ double time_at_last_render = 0.0f;			// what the current time WAS when the previ
 // functions
 void windowResizeCallback(GLFWwindow*, int, int);
 
-// structs
+// Structs
 struct Window
 {
 	GLFWwindow* handle = nullptr;
@@ -32,7 +32,7 @@ struct Window
 };
 Window window;
 
-// classes
+// JoePhys classes
 Clock jp_clock;
 Renderer renderer;
 ParticleManager particle_manager(FPS_LIMIT);

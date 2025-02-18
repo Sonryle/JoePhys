@@ -39,6 +39,7 @@ public:
 	Clock spawner_clock;
 	double time_at_last_spawn;
 	float particles_per_second;
+	int max_particle_count;
 	float particle_radius;
 	glm::vec2 position;
 	glm::vec2 initial_velocity;
@@ -47,6 +48,8 @@ public:
 	Spawner(std::vector<Particle*>* pointer_to_particle_stack);
 	// ---------------------------------------------------
 	void setParticlesPerSecond(float particles_per_second);
+	// ---------------------------------------------------
+	void setMaxParticleCount(int max_particle_count);
 	// ---------------------------------------------------
 	void setParticleRadius(float radius);
 	// ---------------------------------------------------
@@ -89,6 +92,8 @@ private:
 	void updateParticles();
 	// -----------------------------------------
 	void constrainParticles();
+	// -----------------------------------------
+	void solveCollisions();
 	// -----------------------------------------
 };
 
