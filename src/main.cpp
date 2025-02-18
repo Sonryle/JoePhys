@@ -27,8 +27,10 @@ void windowResizeCallback(GLFWwindow*, int, int);
 struct Window
 {
 	GLFWwindow* handle = nullptr;
-	int width = 1000;
-	int height = 1000;
+	int width = 600;
+	int height = 600;
+	int posX = 0;
+	int posY = 0;
 	std::string title = "JoePhys!";
 };
 Window window;
@@ -55,7 +57,7 @@ int main()
 		return -1;
 	}
 	glfwMakeContextCurrent(window.handle);
-	glfwSwapInterval(1); // Disable VSync
+	glfwSwapInterval(0); // Disable VSync
 
 	// Assign window resize callback function
 	glfwSetFramebufferSizeCallback(window.handle, windowResizeCallback);
@@ -97,6 +99,7 @@ int main()
 
 	// set up variables
 	bool fullscreen = false;
+	bool wasF11Pressed = false;
 
 	// game loop
 	while (!glfwWindowShouldClose(window.handle))
@@ -111,17 +114,27 @@ int main()
 		if (glfwGetKey(window.handle, GLFW_KEY_ESCAPE))
 			glfwSetWindowShouldClose(window.handle, true);
 
-		// should fullscren?
+		// should fullscreen?
 		// --------------------
-		if (glfwGetKey(window.handle, GLFW_KEY_F11))
+		bool isF11Pressed = glfwGetKey(window.handle, GLFW_KEY_F11) == GLFW_PRESS;
+		if (isF11Pressed && !wasF11Pressed)
 		{
-			if(!fullscreen)
-				glfwSetWindowMonitor(window.handle, glfwGetPrimaryMonitor(), 0, 0, window.width, window.height, 60);
-				fullscreen = true;
-			if(fullscreen)
-				glfwSetWindowMonitor(window.handle, NULL, 0, 0, window.width, window.height, 60);
+			if (fullscreen)
+			{
+				glfwSetWindowMonitor(window.handle, nullptr, 0, 0, window.width, window.height, 0);
 				fullscreen = false;
+			}
+			else
+			{
+				glfwGetWindowSize(window.handle, &window.width, &window.height);
+				GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+				const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+
+				glfwSetWindowMonitor(window.handle, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+				fullscreen = true;
+			}
 		}
+		wasF11Pressed = isF11Pressed;
 		// should maximize?
 		// --------------------
 		if (glfwGetKey(window.handle, GLFW_KEY_F10))

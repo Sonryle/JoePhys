@@ -84,7 +84,7 @@ void Renderer::init(int window_width, int window_height)
 
 	// Update view matrix
 	// ------------------
-	
+
 	updateViewMatrix(window_width, window_height);
 
 	// VERTEX DATA SETUP
