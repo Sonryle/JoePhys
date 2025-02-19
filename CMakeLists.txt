@@ -16,8 +16,12 @@ src/shader.cpp
 src/shader.hpp
 src/renderer.cpp
 src/renderer.hpp
-src/particles.cpp
-src/particles.hpp
+src/particle.cpp
+src/particle.hpp
+src/particle_spawner.cpp
+src/particle_spawner.hpp
+src/particle_manager.cpp
+src/particle_manager.hpp
 res/shaders/line_shader.frag
 res/shaders/line_shader.vert
 res/shaders/circle_shader.frag

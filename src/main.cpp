@@ -13,7 +13,7 @@
 #include <clock.hpp>
 #include <renderer.hpp>
 #include <shapes.hpp>
-#include <particles.hpp>
+#include <particle_manager.hpp>
 
 // variables
 const double FPS_LIMIT = 500;				// the maximum FPS that the program is allowed to reach
