@@ -93,17 +93,6 @@ int main()
 	graph.bottom_right_tex_coord = glm::vec2(1.0f, 0.0f);
 	graph.bottom_left_tex_coord = glm::vec2(0.0f, 0.0f);
 
-	// Create background objects
-	Square graph;
-	graph.layer = 0;
-	graph.x_scale = 1000;
-	graph.y_scale = 1000;
-	graph.position = glm::vec2(0.0f, 0.0f);
-	graph.top_right_tex_coord = glm::vec2(1.0f, 1.0f);
-	graph.top_left_tex_coord = glm::vec2(0.0f, 1.0f);
-	graph.bottom_right_tex_coord = glm::vec2(1.0f, 0.0f);
-	graph.bottom_left_tex_coord = glm::vec2(0.0f, 0.0f);
-
 	// myles ui testing
 	UI testUI;
 	testUI.layer = 100;
