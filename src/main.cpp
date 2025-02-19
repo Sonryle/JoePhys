@@ -90,7 +90,7 @@ int main()
 	testUI.bezelColour = glm::vec4(0.156f, 0.156f, 0.156f, 1.0f);
 	testUI.offset = 10;
 	testUI.bezel = 30;
-	testUI.bezelThickness = 10;
+	testUI.bezelThickness = 0;
 	testUI.alignment = "topRight";
 
 	// set window viewport resolution to window resolution
