@@ -3,6 +3,7 @@
 
 // C++ libraries
 #include <vector>
+#include <iostream>
 
 // glm for vectors and matrices
 #include <glm/glm.hpp>
@@ -36,8 +37,7 @@ public:
 
 	std::vector<Particle*>* pointer_to_particle_stack;
 
-	Clock spawner_clock;
-	double time_at_last_spawn;
+	double time_since_last_spawn;
 	float particles_per_second;
 	int max_particle_count;
 	float particle_radius;
@@ -59,7 +59,7 @@ public:
 	// ---------------------------------------------------
 	void setPosition(glm::vec2 position);
 	// ---------------------------------------------------
-	void update();
+	void update(double time_step);
 	// ---------------------------------------------------
 };
 

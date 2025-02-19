@@ -1,4 +1,4 @@
-#include "glm/detail/func_common.hpp"
+#include "glm/detail/type_vec.hpp"
 #include <particles.hpp>
 
 Particle::Particle(glm::vec2 position, glm::vec4 colour, float radius) :
@@ -15,12 +15,13 @@ radius(radius)
 void Particle::update(double time_step)
 {
 	const glm::vec2 velocity = position - old_position;
+	const glm::vec2 time_step_vec = glm::vec2(time_step);
 
 	// update old position
 	old_position = position;
 
 	// perform verlet integration
-	position = position + velocity + acceleration * glm::vec2(time_step * time_step, time_step * time_step);
+	position = position + velocity + acceleration * (time_step_vec * time_step_vec);
 
 	// reset acceleration
 	acceleration = glm::vec2(0.0f, 0.0f);
@@ -39,7 +40,7 @@ void Particle::accelerate(glm::vec2 force)
 }
 
 Spawner::Spawner(std::vector<Particle*>* pointer_to_particle_stack) :
-time_at_last_spawn(0.0f),
+time_since_last_spawn(0.0f),
 particles_per_second(3),
 max_particle_count(100),
 particle_radius(50.0f)
@@ -82,13 +83,14 @@ void Spawner::setPosition(glm::vec2 position)
 	this->position = position;
 }
 
-void Spawner::update()
+void Spawner::update(double time_step)
 {
-	spawner_clock.update();
+	time_since_last_spawn += time_step;
 	
 	if (pointer_to_particle_stack->size() < max_particle_count)
 	{
-		if (time_at_last_spawn + (1.0f / particles_per_second) < spawner_clock.currentTime)
+		// if its time to make a new particle
+		if (time_since_last_spawn >= 1 / particles_per_second)
 		{
 			// Create new particle and push it onto the stack
 			Particle* new_particle = new Particle(position, particle_colour, particle_radius);
@@ -96,10 +98,10 @@ void Spawner::update()
 			pointer_to_particle_stack->push_back(new_particle);
 
 			// add the initial velocity to the particle
-			new_particle->accelerate(initial_velocity);
+			new_particle->old_position = new_particle->position - (initial_velocity * glm::vec2(time_step));
 
-			// update time_at_last_spawn
-			time_at_last_spawn = spawner_clock.currentTime;
+			// reset elapsed time
+			time_since_last_spawn = 0;
 		}
 	}
 }
@@ -124,14 +126,14 @@ ParticleManager::ParticleManager(int simulation_hertz) : spawner(&particle_stack
 	constraint_y_scale = 1000;
 
 	// Set up gravity
-	gravity = glm::vec2(0.0f, -800.0f);
+	gravity = glm::vec2(0.0f, -9806.65f);
 
 	return;
 }
 
 void ParticleManager::update()
 {
-	spawner.update();
+	spawner.update(time_step_in_seconds);
 	updateParticles();
 	constrainParticles();
 	solveCollisions();
@@ -190,35 +192,37 @@ void ParticleManager::constrainParticles()
 			float edge_of_particle = particle->position.y - particle->radius;
 			particle->position -= glm::vec2(0.0f, 2 * (edge_of_particle - bottom_wall));
 
-			// flip set old_position to be position + velocity (switches the Y velocity around)
+			// flip set old_position to be position + velocity (switches the y velocity around)
 			particle->old_position = glm::vec2(particle->old_position.x, particle->position.y + velocity);
 		}
-		
+
 		if (particle->position.x - particle->radius < left_wall)
 		{
-			// get distance between new_pos.x and old_pos.x
+			// get distance between new_pos.y and old_pos.y
 			float velocity = particle->position.x - particle->old_position.x;
 
 			// flip edge of circle around the bottom wall
 			float edge_of_particle = particle->position.x - particle->radius;
 			particle->position -= glm::vec2(2 * (edge_of_particle - left_wall), 0.0f);
 
-			// flip set old_position to be position + velocity (switches the Y velocity around)
-			particle->old_position = glm::vec2(particle->old_position.x + velocity, particle->old_position.y);
+			// flip set old_position to be position + velocity (switches the x velocity around)
+			particle->old_position = glm::vec2(particle->position.x + velocity, particle->old_position.y);
 		}
 
 		if (particle->position.x + particle->radius > right_wall)
 		{
-			// get distance between new_pos.x and old_pos.x
+			// get distance between new_pos.y and old_pos.y
 			float velocity = particle->position.x - particle->old_position.x;
 
 			// flip edge of circle around the bottom wall
 			float edge_of_particle = particle->position.x + particle->radius;
-			particle->position -= glm::vec2(2 * (edge_of_particle + left_wall), 0.0f);
+			particle->position -= glm::vec2(2 * (edge_of_particle - right_wall), 0.0f);
 
 			// flip set old_position to be position + velocity (switches the Y velocity around)
-			particle->old_position = glm::vec2(particle->old_position.x + velocity, particle->old_position.y);
+			particle->old_position = glm::vec2(particle->position.x + velocity, particle->old_position.y);
 		}
+
+
 
 		// update the position of the circle which reprisents our particle
 		particle->circle.position = particle->position;

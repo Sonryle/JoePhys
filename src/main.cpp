@@ -1,4 +1,5 @@
 // C++ libraries
+#include "glm/detail/type_vec.hpp"
 #include <stdio.h>
 #include <string.h>
 #include <vector>
@@ -80,6 +81,28 @@ int main()
 
 	// Initialise renderer
 	renderer.init(window.width, window.height);
+
+	// Create background objects
+	Square graph;
+	graph.layer = 0;
+	graph.x_scale = 1000;
+	graph.y_scale = 1000;
+	graph.position = glm::vec2(0.0f, 0.0f);
+	graph.top_right_tex_coord = glm::vec2(1.0f, 1.0f);
+	graph.top_left_tex_coord = glm::vec2(0.0f, 1.0f);
+	graph.bottom_right_tex_coord = glm::vec2(1.0f, 0.0f);
+	graph.bottom_left_tex_coord = glm::vec2(0.0f, 0.0f);
+
+	// Create background objects
+	Square graph;
+	graph.layer = 0;
+	graph.x_scale = 1000;
+	graph.y_scale = 1000;
+	graph.position = glm::vec2(0.0f, 0.0f);
+	graph.top_right_tex_coord = glm::vec2(1.0f, 1.0f);
+	graph.top_left_tex_coord = glm::vec2(0.0f, 1.0f);
+	graph.bottom_right_tex_coord = glm::vec2(1.0f, 0.0f);
+	graph.bottom_left_tex_coord = glm::vec2(0.0f, 0.0f);
 
 	// myles ui testing
 	UI testUI;
@@ -171,6 +194,9 @@ int main()
 			glClearColor(0.313f, 0.286f, 0.270f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+			// render background objects
+			renderer.renderSquare(&graph);
+
 			// render all particles in the particle_stack in our particle manager
 			for (int i = 0; i < (int)particle_manager.particle_stack.size(); i++)
 				renderer.renderCircle(&particle_manager.particle_stack[i]->circle);
@@ -204,6 +230,4 @@ void windowResizeCallback(GLFWwindow* window_handle, int width, int height)
 	window.height = height;
 	// Update renderer's projection matrix so that coordinate system matches window dimensions
 	renderer.updateViewMatrix(width, height);
-	// Update particle constraint to be the same size as the window
-	particle_manager.setConstraint(glm::vec2(0.0f, 0.0f), width, height);
 }
