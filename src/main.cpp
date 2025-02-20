@@ -16,7 +16,7 @@
 #include <particle_manager.hpp>
 
 // variables
-const double FPS_LIMIT = 15;				// the maximum FPS that the program is allowed to reach
+const double FPS_LIMIT = 500;				// the maximum FPS that the program is allowed to reach
 const double MINIMUM_FRAME_TIME = 1.0f / FPS_LIMIT;	// the minimum allowed amount of milliseconds between frames
 double time_at_last_render = 0.0f;			// what the current time WAS when the previous frame was rendered
 
@@ -36,7 +36,7 @@ Window window;
 // JoePhys classes
 Clock jp_clock;
 Renderer renderer;
-ParticleManager particle_manager(FPS_LIMIT);
+ParticleManager particle_manager(FPS_LIMIT * 2);
 
 int main()
 {
