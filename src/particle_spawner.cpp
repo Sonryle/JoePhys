@@ -63,13 +63,13 @@ void Spawner::update(double time_step)
 			// Create new particle and push it onto the stack
 			
 			// TEMPORARY CODE TO MAKE THE FIRST PARTICLE RED AND THE SECOND ONE BLUE
-			/* glm::vec4 temp_col = particle_colour; */
-			/* if ((int)pointer_to_particle_stack->size() == 0) */
-			/* 	temp_col = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f); */
-			/* if ((int)pointer_to_particle_stack->size() == 1) */
-			/* 	temp_col = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f); */
+			glm::vec4 temp_col = particle_colour;
+			if ((int)pointer_to_particle_stack->size() == 0)
+				temp_col = glm::vec4(0.7f, 0.5f, 0.5f, 1.0f);
+			if ((int)pointer_to_particle_stack->size() == 1)
+				temp_col = glm::vec4(0.5f, 0.5f, 0.7f, 1.0f);
 
-			Particle* new_particle = new Particle(position, particle_colour, particle_elasticity, particle_radius);
+			Particle* new_particle = new Particle(position, temp_col, particle_elasticity, particle_radius);
 
 			pointer_to_particle_stack->push_back(new_particle);
 

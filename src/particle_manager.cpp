@@ -12,12 +12,12 @@ ParticleManager::ParticleManager(int simulation_hertz) : spawner(&particle_stack
 	// Set up spawner
 	spawner.setParticlesPerSecond(1);
 	spawner.setMaxParticleCount(2);
-	spawner.setParticleElasticity(1.0f);
-	/* spawner.setParticleRadius(34.25f); */
+	/* spawner.setParticleElasticity(1.0f); */
+	spawner.setParticleRadius(34.25f);
 	spawner.setParticleRadius(100.0f);
 	/* spawner.setParticleColour(glm::vec4(0.3f, 0.55f, 0.17f, 1.0f)); */
 	spawner.setParticleColour(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
-	spawner.setParticleInitialVelocity(glm::vec2(1000.0f, 150.0f));
+	spawner.setParticleInitialVelocity(glm::vec2(1000.0f, 180.0f));
 	spawner.setPosition(glm::vec2(-350.0f, 400.0f));
 
 	// Set up default constraint vars
@@ -191,8 +191,17 @@ void ParticleManager::solveCollisions()
 
 				const glm::vec2 axis_of_collision = normalize(particle_one->position - particle_two->position);
 				
+				// Project the velocities of the particles onto the axis of collision
 				const glm::vec2 p1_projection = axis_of_collision * (dot(particle_one_initial_velocity, axis_of_collision) / dot(axis_of_collision, axis_of_collision));
 				const glm::vec2 p2_projection = axis_of_collision * (dot(particle_two_initial_velocity, axis_of_collision) / dot(axis_of_collision, axis_of_collision));
+
+				// Get the 
+				const glm::vec2 p1_perpendicular = particle_one_initial_velocity - p1_projection;
+				const glm::vec2 p2_perpendicular = particle_two_initial_velocity - p2_projection;
+
+				// Create the new velocities
+				const glm::vec2 particle_one_new_velocity = p2_projection + p1_perpendicular;
+				const glm::vec2 particle_two_new_velocity = p1_projection + p2_perpendicular;
 
 				/* const glm::vec2 p1_projection_line = (dot()) */
 
@@ -210,15 +219,41 @@ void ParticleManager::solveCollisions()
 						p1v_line->end_position = particle_one->position + particle_one_initial_velocity;
 						p1v_line->thickness = 10;
 						p1v_line->layer = 2;
-						p1v_line->colour = glm::vec4(1.0f, 0.4f, 0.4f, 1.0f);
+						p1v_line->colour = glm::vec4(6.0f, 0.0f, 0.0f, 1.0f);
 	
 						// Create a debug line for the projection of particle 1
-						Line* p1p_line = new Line();
-						p1p_line->start_position = particle_one->position;
-						p1p_line->end_position = particle_one->position + p1_projection;
-						p1p_line->thickness = 10;
-						p1p_line->layer = 2;
-						p1p_line->colour = glm::vec4(1.0f, 0.4f, 0.4f, 1.0f);
+						Line* p1prog_line = new Line();
+						p1prog_line->start_position = particle_one->position;
+						p1prog_line->end_position = particle_one->position + p1_projection;
+						p1prog_line->thickness = 10;
+						p1prog_line->layer = 2;
+						p1prog_line->colour = glm::vec4(1.0f, 0.4f, 0.4f, 1.0f);
+
+						// Create a debug line for the vector perpendicular to the axis of collision for particle 1
+						Line* p1perp_line = new Line();
+						p1perp_line->start_position = particle_one->position + p1_projection;
+						p1perp_line->end_position = particle_one->position + p1_projection + p1_perpendicular;
+						p1perp_line->thickness = 10;
+						p1perp_line->layer = 2;
+						p1perp_line->colour = glm::vec4(1.0f, 0.4f, 0.4f, 1.0f);
+
+						// Create a debug line to visualize the INHERITED projected velocity from the othe particle
+						Line* p1inherited_line = new Line();
+						p1inherited_line->start_position = particle_one->position;
+						p1inherited_line->end_position = particle_one->position + p2_projection;
+						p1inherited_line->thickness = 10;
+						p1inherited_line->layer = 2;
+						p1inherited_line->colour = glm::vec4(0.6f, 0.6f, 1.0f, 1.0f);
+
+						// Create a debug line for the NEW velocity of particle 1
+						Line* p1n_line = new Line();
+						p1n_line->start_position = particle_one->position;
+						p1n_line->end_position = particle_one->position + particle_one_new_velocity;
+						p1n_line->thickness = 10;
+						p1n_line->layer = 2;
+						p1n_line->colour = glm::vec4(0.93f, 0.74f, 0.01f, 1.0f);
+	
+						// ----------------------------------------------------------------------------------------------
 
 						// Create a debug line for the velocity of particle 2
 						Line* p2v_line = new Line();
@@ -226,23 +261,52 @@ void ParticleManager::solveCollisions()
 						p2v_line->end_position = particle_two->position + particle_two_initial_velocity;
 						p2v_line->thickness = 10;
 						p2v_line->layer = 2;
-						p2v_line->colour = glm::vec4(0.6f, 0.6f, 1.0f, 1.0f);
+						p2v_line->colour = glm::vec4(0.2f, 0.2f, 0.5f, 1.0f);
 	
-						// Create a debug line for the projection of particle 1
-						Line* p2p_line = new Line();
-						p2p_line->start_position = particle_two->position;
-						p2p_line->end_position = particle_two->position + p2_projection;
-						p2p_line->thickness = 10;
-						p2p_line->layer = 2;
-						p2p_line->colour = glm::vec4(0.6f, 0.6f, 1.0f, 1.0f);
+						// Create a debug line for the projection of particle 2
+						Line* p2prog_line = new Line();
+						p2prog_line->start_position = particle_two->position;
+						p2prog_line->end_position = particle_two->position + p2_projection;
+						p2prog_line->thickness = 10;
+						p2prog_line->layer = 2;
+						p2prog_line->colour = glm::vec4(0.6f, 0.6f, 1.0f, 1.0f);
 
-		
+						// Create a debug line for the vector perpendicular to the axis of collision for particle 2
+						Line* p2perp_line = new Line();
+						p2perp_line->start_position = particle_two->position + p2_projection;
+						p2perp_line->end_position = particle_two->position + p2_projection + p2_perpendicular;
+						p2perp_line->thickness = 10;
+						p2perp_line->layer = 2;
+						p2perp_line->colour = glm::vec4(0.6f, 0.6f, 1.0f, 1.0f);
+
+						// Create a debug line to visualize the INHERITED projected velocity from the other particle
+						Line* p2inherited_line = new Line();
+						p2inherited_line->start_position = particle_two->position;
+						p2inherited_line->end_position = particle_two->position + p1_projection;
+						p2inherited_line->thickness = 10;
+						p2inherited_line->layer = 2;
+						p2inherited_line->colour = glm::vec4(1.0f, 0.4f, 0.4f, 1.0f);
+
+						// Create a debug line for the NEW velocity of particle 2
+						Line* p2n_line = new Line();
+						p2n_line->start_position = particle_two->position;
+						p2n_line->end_position = particle_two->position + particle_two_new_velocity;
+						p2n_line->thickness = 10;
+						p2n_line->layer = 2;
+						p2n_line->colour = glm::vec4(0.93f, 0.74f, 0.01f, 1.0f);
+	
 						// Render all debug lines
 						temp_line_stack.push_back(aoc_line);
+						temp_line_stack.push_back(p1prog_line);
+						temp_line_stack.push_back(p1perp_line);
+						temp_line_stack.push_back(p1inherited_line);
 						temp_line_stack.push_back(p1v_line);
-						temp_line_stack.push_back(p1p_line);
+						temp_line_stack.push_back(p1n_line);
+						temp_line_stack.push_back(p2prog_line);
+						temp_line_stack.push_back(p2perp_line);
+						temp_line_stack.push_back(p2inherited_line);
 						temp_line_stack.push_back(p2v_line);
-						temp_line_stack.push_back(p2p_line);
+						temp_line_stack.push_back(p2n_line);
 
 
 				// ------------------------------------------------------------
