@@ -1,8 +1,9 @@
 #include <particle.hpp>
 
-Particle::Particle(glm::vec2 position, glm::vec4 colour, float radius) :
+Particle::Particle(glm::vec2 position, glm::vec4 colour, float elasticity, float radius) :
 position(position),
 old_position(position),
+elasticity(elasticity),
 radius(radius)
 {
 	circle.colour = colour;

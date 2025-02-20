@@ -19,6 +19,7 @@ public:
 	double time_since_last_spawn;
 	float particles_per_second;
 	int max_particle_count;
+	float particle_elasticity;
 	float particle_radius;
 	glm::vec2 position;
 	glm::vec2 initial_velocity;
@@ -29,6 +30,8 @@ public:
 	void setParticlesPerSecond(float particles_per_second);
 	// ---------------------------------------------------
 	void setMaxParticleCount(int max_particle_count);
+	// ---------------------------------------------------
+	void setParticleElasticity(float elasticity);
 	// ---------------------------------------------------
 	void setParticleRadius(float radius);
 	// ---------------------------------------------------

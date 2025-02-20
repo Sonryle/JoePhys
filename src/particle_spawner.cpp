@@ -1,9 +1,11 @@
+#include "glm/detail/type_vec.hpp"
 #include <particle_spawner.hpp>
 
 Spawner::Spawner(std::vector<Particle*>* pointer_to_particle_stack) :
 time_since_last_spawn(0.0f),
 particles_per_second(3),
 max_particle_count(100),
+particle_elasticity(0.5),
 particle_radius(50.0f)
 {
 	position = glm::vec2(0.0f, 0.0f);
@@ -22,6 +24,11 @@ void Spawner::setParticlesPerSecond(float particles_per_second)
 void Spawner::setMaxParticleCount(int max_particle_count)
 {
 	this->max_particle_count = max_particle_count;
+}
+
+void Spawner::setParticleElasticity(float elasticity)
+{
+	this->particle_elasticity = elasticity;
 }
 
 void Spawner::setParticleRadius(float radius)
@@ -54,7 +61,15 @@ void Spawner::update(double time_step)
 		if (time_since_last_spawn >= 1 / particles_per_second)
 		{
 			// Create new particle and push it onto the stack
-			Particle* new_particle = new Particle(position, particle_colour, particle_radius);
+			
+			// TEMPORARY CODE TO MAKE THE FIRST PARTICLE RED AND THE SECOND ONE BLUE
+			/* glm::vec4 temp_col = particle_colour; */
+			/* if ((int)pointer_to_particle_stack->size() == 0) */
+			/* 	temp_col = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f); */
+			/* if ((int)pointer_to_particle_stack->size() == 1) */
+			/* 	temp_col = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f); */
+
+			Particle* new_particle = new Particle(position, particle_colour, particle_elasticity, particle_radius);
 
 			pointer_to_particle_stack->push_back(new_particle);
 

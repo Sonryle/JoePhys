@@ -16,7 +16,7 @@
 #include <particle_manager.hpp>
 
 // variables
-const double FPS_LIMIT = 500;				// the maximum FPS that the program is allowed to reach
+const double FPS_LIMIT = 14;				// the maximum FPS that the program is allowed to reach
 const double MINIMUM_FRAME_TIME = 1.0f / FPS_LIMIT;	// the minimum allowed amount of milliseconds between frames
 double time_at_last_render = 0.0f;			// what the current time WAS when the previous frame was rendered
 
@@ -107,7 +107,8 @@ int main()
 			// ------------
 
 			// set background to be red
-			glClearColor(1.0f, 0.94f, 0.67f, 1.0f);
+			/* glClearColor(1.0f, 0.94f, 0.67f, 1.0f);	// cream */
+			glClearColor(0.21f, 0.22f, 0.23f, 1.0f);	// grey
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			// render background objects
@@ -116,6 +117,10 @@ int main()
 			// render all particles in the particle_stack in our particle manager
 			for (int i = 0; i < (int)particle_manager.particle_stack.size(); i++)
 				renderer.renderCircle(&particle_manager.particle_stack[i]->circle);
+
+			// TEMPORARILY RENDER ALL LINES IN PARTICLE MANAGER
+			for (int i = 0; i < (int)particle_manager.temp_line_stack.size(); i++)
+				renderer.renderLine(particle_manager.temp_line_stack[i]);
 
 			// swap buffers and poll input events
 			// ----------------------------------

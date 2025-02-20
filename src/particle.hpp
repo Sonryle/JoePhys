@@ -14,9 +14,10 @@ public:
 	glm::vec2 position;
 	glm::vec2 old_position;
 	glm::vec2 acceleration;
+	float elasticity;
 	float radius;
 
-	Particle(glm::vec2 position, glm::vec4 colour, float radius);
+	Particle(glm::vec2 position, glm::vec4 colour, float elasticity, float radius);
 	// --------------------------------------------------------
 	void update(double time_step);
 	// --------------------------------------------------------

@@ -2,6 +2,7 @@
 #define JP_PARTICLE_MANAGER
 
 // C++ libraries
+#include <iostream>
 #include <vector>
 
 // glm for vectors and matrices
@@ -11,11 +12,16 @@
 #include <particle.hpp>
 #include <particle_spawner.hpp>
 
+// TEMPORARILY INCLUDE LINE
+// ------------------------
+#include <shapes.hpp>
+
 class ParticleManager
 {
 public:
 
 	std::vector<Particle*> particle_stack;
+	std::vector<Line*> temp_line_stack;
 
 	ParticleManager(int simulation_hertz);
 	// -----------------------------------------

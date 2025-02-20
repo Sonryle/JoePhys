@@ -1,3 +1,6 @@
+#include "glm/detail/type_vec.hpp"
+#include "shapes.hpp"
+#include <cmath>
 #include <particle_manager.hpp>
 
 ParticleManager::ParticleManager(int simulation_hertz) : spawner(&particle_stack)
@@ -9,9 +12,12 @@ ParticleManager::ParticleManager(int simulation_hertz) : spawner(&particle_stack
 	// Set up spawner
 	spawner.setParticlesPerSecond(1);
 	spawner.setMaxParticleCount(2);
-	spawner.setParticleRadius(34.25f);
-	spawner.setParticleColour(glm::vec4(0.3f, 0.55f, 0.17f, 1.0f));
-	spawner.setParticleInitialVelocity(glm::vec2(1000.0f, 0.0f));
+	spawner.setParticleElasticity(1.0f);
+	/* spawner.setParticleRadius(34.25f); */
+	spawner.setParticleRadius(100.0f);
+	/* spawner.setParticleColour(glm::vec4(0.3f, 0.55f, 0.17f, 1.0f)); */
+	spawner.setParticleColour(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
+	spawner.setParticleInitialVelocity(glm::vec2(1000.0f, 150.0f));
 	spawner.setPosition(glm::vec2(-350.0f, 400.0f));
 
 	// Set up default constraint vars
@@ -30,8 +36,8 @@ void ParticleManager::update()
 {
 	spawner.update(time_step_in_seconds);
 	updateParticles();
-	constrainParticles();
 	solveCollisions();
+	constrainParticles();
 
 	return;
 }
@@ -74,8 +80,8 @@ void ParticleManager::constrainParticles()
 			float edge_of_particle = particle->position.y + particle->radius;
 			particle->position -= glm::vec2(0.0f, 2 * (edge_of_particle - top_wall));
 
-			// flip set old_position to be position + velocity (switches the Y velocity around)
-			particle->old_position = glm::vec2(particle->old_position.x, particle->position.y + velocity);
+			// apply old velocity to particle (but inverted). Also multiply velocity by elasticity
+			particle->old_position = glm::vec2(particle->old_position.x, particle->position.y + velocity * particle->elasticity);
 		}
 
 		if (particle->position.y - particle->radius < bottom_wall)
@@ -87,8 +93,8 @@ void ParticleManager::constrainParticles()
 			float edge_of_particle = particle->position.y - particle->radius;
 			particle->position -= glm::vec2(0.0f, 2 * (edge_of_particle - bottom_wall));
 
-			// flip set old_position to be position + velocity (switches the y velocity around)
-			particle->old_position = glm::vec2(particle->old_position.x, particle->position.y + velocity);
+			// apply old velocity to particle (but inverted). Also multiply velocity by elasticity
+			particle->old_position = glm::vec2(particle->old_position.x, particle->position.y + velocity * particle->elasticity);
 		}
 
 		if (particle->position.x - particle->radius < left_wall)
@@ -100,8 +106,8 @@ void ParticleManager::constrainParticles()
 			float edge_of_particle = particle->position.x - particle->radius;
 			particle->position -= glm::vec2(2 * (edge_of_particle - left_wall), 0.0f);
 
-			// flip set old_position to be position + velocity (switches the x velocity around)
-			particle->old_position = glm::vec2(particle->position.x + velocity, particle->old_position.y);
+			// apply old velocity to particle (but inverted). Also multiply velocity by elasticity
+			particle->old_position = glm::vec2(particle->position.x + velocity * particle->elasticity, particle->old_position.y);
 		}
 
 		if (particle->position.x + particle->radius > right_wall)
@@ -113,8 +119,8 @@ void ParticleManager::constrainParticles()
 			float edge_of_particle = particle->position.x + particle->radius;
 			particle->position -= glm::vec2(2 * (edge_of_particle - right_wall), 0.0f);
 
-			// flip set old_position to be position + velocity (switches the Y velocity around)
-			particle->old_position = glm::vec2(particle->position.x + velocity, particle->old_position.y);
+			// apply old velocity to particle (but inverted). Also multiply velocity by elasticity
+			particle->old_position = glm::vec2(particle->position.x + velocity * particle->elasticity, particle->old_position.y);
 		}
 
 
@@ -126,21 +132,108 @@ void ParticleManager::constrainParticles()
 void ParticleManager::solveCollisions()
 {
 	int particle_count = (int)particle_stack.size();
+
+	// loop over every particle
 	for (int n = 0; n < particle_count; n++)
 	{
+		// compair this particle with every other particle in the particle stack
 		Particle* particle_one = particle_stack[n];
 		for (int i = n+1; i < particle_count; i++)
 		{
 			Particle* particle_two = particle_stack[i];
-			glm::vec2 collision_axis = particle_one->position - particle_two->position;
-			float distance = length(collision_axis);
+			glm::vec2 initial_collision_axis = particle_one->position - particle_two->position;
+			float initial_distance = length(initial_collision_axis);
 
-			if (distance < particle_one->radius + particle_two->radius)
+			// if particles overlap
+			if (initial_distance < particle_one->radius + particle_two->radius)
 			{
-				glm::vec2 n = normalize(collision_axis);
-				float delta = particle_one->radius + particle_two->radius - distance;
-				particle_one->position += n * delta / 2.0f;
-				particle_two->position -= n * delta / 2.0f;
+				// Oh no, the particles collided???
+				
+				// store our particle's initial velocities
+				const glm::vec2 particle_one_initial_velocity = particle_one->position - particle_one->old_position;
+				const glm::vec2 particle_two_initial_velocity = particle_two->position - particle_two->old_position;
+
+				// ------------------------------------------------------------
+				// step 1: move particles backwards along their velocities
+				// 	   until they reach the point where they first collided
+				// ------------------------------------------------------------
+				
+				// the distance apart that we want our particles to reach
+				float target_distance = particle_one->radius + particle_two->radius;
+
+				float dx = particle_one->position.x - particle_two->position.x;
+				float dy = particle_one->position.y - particle_two->position.y;
+
+				float vx = particle_one_initial_velocity.x - particle_two_initial_velocity.x;
+				float vy = particle_one_initial_velocity.y - particle_two_initial_velocity.y;
+
+				float a = (vx * vx) + (vy * vy);
+				float b = (2 * dx * vx) + (2 * dy * vy);
+				float c = (dx * dx) + (dy * dy) - (target_distance * target_distance);
+
+				// get the offset to move them by
+				float offset = (-b - sqrt((b * b) - (4.0f * a * c))) / (2.0f * a);
+
+				// update their positions by that offset
+				particle_one->position += particle_one_initial_velocity * (offset);
+				particle_two->position += particle_two_initial_velocity * (offset);
+
+				// cancel any velocity (we will be updating the velocity later)
+				particle_one->old_position = particle_one->position;
+				particle_two->old_position = particle_two->position;
+
+
+				// --------------------------------------------------------------
+				// step 2: Find the velocities of each particle perpendicular to
+				//         their axis of collision and swap them around (only the
+				//         perpendicular velocities get swapped)
+				// --------------------------------------------------------------
+
+				glm::vec2 axis_of_collision = normalize(particle_one->position - particle_two->position);
+
+						// Create a debug line along the axis of collision
+						Line* aoc_line = new Line();
+						aoc_line->start_position = particle_two->position - axis_of_collision * glm::vec2(150);
+						aoc_line->end_position = particle_one->position + axis_of_collision * glm::vec2(150);
+						aoc_line->thickness = 3;
+						aoc_line->layer = 2;
+						aoc_line->colour = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+
+						// Create a debug line for the velocity of particle 1
+						Line* p1v_line = new Line();
+						p1v_line->start_position = particle_one->position;
+						p1v_line->end_position = particle_one->position + particle_one_initial_velocity;
+						p1v_line->thickness = 10;
+						p1v_line->layer = 2;
+						p1v_line->colour = glm::vec4(1.0f, 0.4f, 0.4f, 1.0f);
+	
+						// Create a debug line for the velocity of particle 2
+						Line* p2v_line = new Line();
+						p2v_line->start_position = particle_two->position;
+						p2v_line->end_position = particle_two->position + particle_two_initial_velocity;
+						p2v_line->thickness = 10;
+						p2v_line->layer = 2;
+						p2v_line->colour = glm::vec4(0.6f, 0.6f, 1.0f, 1.0f);
+				
+			
+						// Render all debug lines
+						temp_line_stack.push_back(aoc_line);
+						temp_line_stack.push_back(p1v_line);
+						temp_line_stack.push_back(p2v_line);
+
+
+				// ------------------------------------------------------------
+				// step 3: Shift particles along their new velocity by the same
+				//         amount that we offset them by in step 1
+				// ------------------------------------------------------------
+
+				/* // move particles by the offset amount */
+				/* particle_one->position += particle_one_new_velocity * offset; */
+				/* particle_two->position += particle_two_new_velocity * offset; */
+
+				/* // also update old_pos so that the velocity isnt affected */
+				/* particle_one->old_position += particle_one_new_velocity * offset; */
+				/* particle_two->old_position += particle_two_new_velocity * offset; */
 			}
 		}
 	}
