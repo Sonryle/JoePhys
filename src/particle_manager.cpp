@@ -131,7 +131,7 @@ void ParticleManager::constrainParticles()
 
 void ParticleManager::solveCollisions()
 {
-	int particle_count = (int)particle_stack.size();
+	const int particle_count = (int)particle_stack.size();
 
 	// loop over every particle
 	for (int n = 0; n < particle_count; n++)
@@ -141,8 +141,8 @@ void ParticleManager::solveCollisions()
 		for (int i = n+1; i < particle_count; i++)
 		{
 			Particle* particle_two = particle_stack[i];
-			glm::vec2 initial_collision_axis = particle_one->position - particle_two->position;
-			float initial_distance = length(initial_collision_axis);
+			const glm::vec2 initial_collision_axis = particle_one->position - particle_two->position;
+			const float initial_distance = length(initial_collision_axis);
 
 			// if particles overlap
 			if (initial_distance < particle_one->radius + particle_two->radius)
@@ -159,20 +159,20 @@ void ParticleManager::solveCollisions()
 				// ------------------------------------------------------------
 				
 				// the distance apart that we want our particles to reach
-				float target_distance = particle_one->radius + particle_two->radius;
+				const float target_distance = particle_one->radius + particle_two->radius;
 
-				float dx = particle_one->position.x - particle_two->position.x;
-				float dy = particle_one->position.y - particle_two->position.y;
+				const float dx = particle_one->position.x - particle_two->position.x;
+				const float dy = particle_one->position.y - particle_two->position.y;
 
-				float vx = particle_one_initial_velocity.x - particle_two_initial_velocity.x;
-				float vy = particle_one_initial_velocity.y - particle_two_initial_velocity.y;
+				const float vx = particle_one_initial_velocity.x - particle_two_initial_velocity.x;
+				const float vy = particle_one_initial_velocity.y - particle_two_initial_velocity.y;
 
-				float a = (vx * vx) + (vy * vy);
-				float b = (2 * dx * vx) + (2 * dy * vy);
-				float c = (dx * dx) + (dy * dy) - (target_distance * target_distance);
+				const float a = (vx * vx) + (vy * vy);
+				const float b = (2 * dx * vx) + (2 * dy * vy);
+				const float c = (dx * dx) + (dy * dy) - (target_distance * target_distance);
 
 				// get the offset to move them by
-				float offset = (-b - sqrt((b * b) - (4.0f * a * c))) / (2.0f * a);
+				const float offset = (-b - sqrt((b * b) - (4.0f * a * c))) / (2.0f * a);
 
 				// update their positions by that offset
 				particle_one->position += particle_one_initial_velocity * (offset);
@@ -189,7 +189,12 @@ void ParticleManager::solveCollisions()
 				//         perpendicular velocities get swapped)
 				// --------------------------------------------------------------
 
-				glm::vec2 axis_of_collision = normalize(particle_one->position - particle_two->position);
+				const glm::vec2 axis_of_collision = normalize(particle_one->position - particle_two->position);
+				
+				const glm::vec2 p1_projection = axis_of_collision * (dot(particle_one_initial_velocity, axis_of_collision) / dot(axis_of_collision, axis_of_collision));
+				const glm::vec2 p2_projection = axis_of_collision * (dot(particle_two_initial_velocity, axis_of_collision) / dot(axis_of_collision, axis_of_collision));
+
+				/* const glm::vec2 p1_projection_line = (dot()) */
 
 						// Create a debug line along the axis of collision
 						Line* aoc_line = new Line();
@@ -207,6 +212,14 @@ void ParticleManager::solveCollisions()
 						p1v_line->layer = 2;
 						p1v_line->colour = glm::vec4(1.0f, 0.4f, 0.4f, 1.0f);
 	
+						// Create a debug line for the projection of particle 1
+						Line* p1p_line = new Line();
+						p1p_line->start_position = particle_one->position;
+						p1p_line->end_position = particle_one->position + p1_projection;
+						p1p_line->thickness = 10;
+						p1p_line->layer = 2;
+						p1p_line->colour = glm::vec4(1.0f, 0.4f, 0.4f, 1.0f);
+
 						// Create a debug line for the velocity of particle 2
 						Line* p2v_line = new Line();
 						p2v_line->start_position = particle_two->position;
@@ -214,12 +227,22 @@ void ParticleManager::solveCollisions()
 						p2v_line->thickness = 10;
 						p2v_line->layer = 2;
 						p2v_line->colour = glm::vec4(0.6f, 0.6f, 1.0f, 1.0f);
-				
-			
+	
+						// Create a debug line for the projection of particle 1
+						Line* p2p_line = new Line();
+						p2p_line->start_position = particle_two->position;
+						p2p_line->end_position = particle_two->position + p2_projection;
+						p2p_line->thickness = 10;
+						p2p_line->layer = 2;
+						p2p_line->colour = glm::vec4(0.6f, 0.6f, 1.0f, 1.0f);
+
+		
 						// Render all debug lines
 						temp_line_stack.push_back(aoc_line);
 						temp_line_stack.push_back(p1v_line);
+						temp_line_stack.push_back(p1p_line);
 						temp_line_stack.push_back(p2v_line);
+						temp_line_stack.push_back(p2p_line);
 
 
 				// ------------------------------------------------------------
