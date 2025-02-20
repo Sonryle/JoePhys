@@ -36,6 +36,8 @@ private:
 	float time_step_in_seconds;
 	// defines how many times per SIMULATED second the simulation updates (must match framerate for real-time physics)
 	int simulation_hertz;
+	// amount of elapsed SIMULATED time
+	float elapsed_time;
 
 	void updateParticles();
 	// -----------------------------------------

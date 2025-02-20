@@ -18,23 +18,23 @@
 #include <particle_manager.hpp>
 
 // variables
-const double FPS_LIMIT = 500;				// the maximum FPS that the program is allowed to reach
-const double MINIMUM_FRAME_TIME = 1.0f / FPS_LIMIT;	// the minimum allowed amount of milliseconds between frames
-double time_at_last_render = 0.0f;			// what the current time WAS when the previous frame was rendered
-bool fullscreen = false; // is the window fullscreen?
-bool maximized = false; // is the window maximized?
-bool wasF11Pressed = false; // was the F11 key pressed last frame?
-bool wasF10Pressed = false; // was the F10 key pressed last frame?
+const double FPS_LIMIT = 500;						// the maximum FPS that the program is allowed to reach
+const double MINIMUM_FRAME_TIME = 1.0f / FPS_LIMIT; // the minimum allowed amount of milliseconds between frames
+double time_at_last_render = 0.0f;					// what the current time WAS when the previous frame was rendered
+bool fullscreen = false;							// is the window fullscreen?
+bool maximized = false;								// is the window maximized?
+bool wasF11Pressed = false;							// was the F11 key pressed last frame?
+bool wasF10Pressed = false;							// was the F10 key pressed last frame?
 
 // functions
-void windowResizeCallback(GLFWwindow*, int, int);
+void windowResizeCallback(GLFWwindow *, int, int);
 
 // Structs
 struct Window
 {
-	GLFWwindow* handle = nullptr;
-	int width = 600;
-	int height = 600;
+	GLFWwindow *handle = nullptr;
+	int width = 800;
+	int height = 800;
 	int posX = 0;
 	int posY = 0;
 	std::string title = "JoePhys!";
@@ -51,8 +51,8 @@ int main()
 	// Initialise GLFW
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// Create window using GLFW
 	window.handle = glfwCreateWindow(window.width, window.height, window.title.c_str(), NULL, NULL);
@@ -76,8 +76,8 @@ int main()
 	}
 
 	glClear(GL_COLOR_BUFFER_BIT);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// Initialise renderer
 	renderer.init(window.width, window.height);
@@ -98,20 +98,31 @@ int main()
 	testUI.layer = 100;
 	testUI.x_scale = 350;
 	testUI.y_scale = 175;
-	testUI.colour = glm::vec4(0.156f, 0.156f, 0.156f, 1.0f);
+	testUI.colour = glm::vec4(0.235f, 0.219f, 0.211f, 1.0f);
 	testUI.bezelColour = glm::vec4(0.156f, 0.156f, 0.156f, 1.0f);
 	testUI.offset = 10;
-	testUI.bezel = 30;
-	testUI.bezelThickness = 0;
+	testUI.bezel = 20;
+	testUI.bezelThickness = 10;
 	testUI.alignment = "topRight";
 
+	UI particleCounter;
+	particleCounter.layer = 100;
+	particleCounter.x_scale = 80;
+	particleCounter.y_scale = 80;
+	particleCounter.colour = glm::vec4(0.235f, 0.219f, 0.211f, 1.0f);
+	particleCounter.bezelColour = glm::vec4(0.156f, 0.156f, 0.156f, 1.0f);
+	particleCounter.offset = 10;
+	particleCounter.bezel = 20;
+	particleCounter.bezelThickness = 10;
+	particleCounter.alignment = "topLeft";
+
 	// set window viewport resolution to window resolution
-    int framebufferWidth, framebufferHeight;
-    glfwGetFramebufferSize(window.handle, &framebufferWidth, &framebufferHeight);
-    glViewport(0, 0, framebufferWidth, framebufferHeight);
-    window.width = framebufferWidth;
-    window.height = framebufferHeight;
-    renderer.updateViewMatrix(window.width, window.height);
+	int framebufferWidth, framebufferHeight;
+	glfwGetFramebufferSize(window.handle, &framebufferWidth, &framebufferHeight);
+	glViewport(0, 0, framebufferWidth, framebufferHeight);
+	window.width = framebufferWidth;
+	window.height = framebufferHeight;
+	renderer.updateViewMatrix(window.width, window.height);
 
 	// game loop
 	while (!glfwWindowShouldClose(window.handle))
@@ -136,18 +147,18 @@ int main()
 			else
 			{
 				glfwGetWindowSize(window.handle, &window.width, &window.height);
-				GLFWmonitor* monitor = glfwGetPrimaryMonitor();
-				const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+				GLFWmonitor *monitor = glfwGetPrimaryMonitor();
+				const GLFWvidmode *mode = glfwGetVideoMode(monitor);
 
 				glfwSetWindowMonitor(window.handle, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
 				fullscreen = true;
 			}
 		}
 		wasF11Pressed = isF11Pressed;
-		
+
 		// should maximize?
 		// --------------------
-		bool (isF10Pressed) = glfwGetKey(window.handle, GLFW_KEY_F10) == GLFW_PRESS;
+		bool(isF10Pressed) = glfwGetKey(window.handle, GLFW_KEY_F10) == GLFW_PRESS;
 		if (isF10Pressed && !wasF10Pressed)
 		{
 			if (maximized)
@@ -162,11 +173,11 @@ int main()
 			}
 		}
 		wasF10Pressed = isF10Pressed;
-		
+
 		// Update our clock
 		// ----------------
 		jp_clock.update();
-				
+
 		// implement frame limit
 		if (jp_clock.currentTime - time_at_last_render > MINIMUM_FRAME_TIME)
 		{
@@ -174,7 +185,7 @@ int main()
 			// -----------------------------
 
 			particle_manager.update();
-			//particle_manager.setConstraint(glm::vec2(0.0f, 0.0f), window.width, window.height);
+			// particle_manager.setConstraint(glm::vec2(0.0f, 0.0f), window.width, window.height);
 
 			// render scene
 			// ------------
@@ -192,8 +203,10 @@ int main()
 
 			// render stack
 			renderer.renderUI(&testUI);
+			renderer.renderUI(&particleCounter);
 			testUI.updateUI(windowDimensions);
-			
+			particleCounter.updateUI(windowDimensions);
+
 			// swap buffers and poll input events
 			// ----------------------------------
 			glfwSwapBuffers(window.handle);
@@ -210,7 +223,7 @@ int main()
 }
 
 // This function is called by GLFW every time the window is resized
-void windowResizeCallback(GLFWwindow* window_handle, int width, int height)
+void windowResizeCallback(GLFWwindow *window_handle, int width, int height)
 {
 	// Set gl viewport to be the same resolution as our window
 	glViewport(0, 0, width, height);

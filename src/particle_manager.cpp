@@ -7,20 +7,12 @@ ParticleManager::ParticleManager(int simulation_hertz) : spawner(&particle_stack
 	time_step_in_seconds = 1.0f / (float)simulation_hertz;
 
 	// Set up spawner
-	spawner.setParticlesPerSecond(1);
-<<<<<<< HEAD:src/particles.cpp
+	spawner.setParticlesPerSecond(6);
 	spawner.setMaxParticleCount(300);
-	spawner.setParticleRadius(40.0f);
-	spawner.setParticleColour(glm::vec4(0.984f, 0.286f, 0.203f, 1.0f));
-	spawner.setParticleInitialVelocity(glm::vec2(200000.0f, 0.0f));
-	spawner.setPosition(glm::vec2(-350.0f, 350.0f));
-=======
-	spawner.setMaxParticleCount(2);
-	spawner.setParticleRadius(34.25f);
+	spawner.setParticleRadius(30.0f);
 	spawner.setParticleColour(glm::vec4(0.3f, 0.55f, 0.17f, 1.0f));
-	spawner.setParticleInitialVelocity(glm::vec2(1000.0f, 0.0f));
-	spawner.setPosition(glm::vec2(-350.0f, 400.0f));
->>>>>>> origin:src/particle_manager.cpp
+	spawner.setParticleInitialVelocity(glm::vec2(sin(elapsed_time) * 1000.0f, 0.0f));
+	spawner.setPosition(glm::vec2(0, 400.0f));
 
 	// Set up default constraint vars
 	constraint_pos = glm::vec2(0.0f, 0.0f);
@@ -28,14 +20,17 @@ ParticleManager::ParticleManager(int simulation_hertz) : spawner(&particle_stack
 	constraint_y_scale = 1000;
 
 	// Set up gravity
-	/* gravity = glm::vec2(0.0f, -9806.65f); */
-	gravity = glm::vec2(0.0f, 0.0f);
+	gravity = glm::vec2(0.0f, -9806.65f);
+	//gravity = glm::vec2(0.0f, 0.0f);
 
 	return;
 }
 
 void ParticleManager::update()
 {
+	elapsed_time += time_step_in_seconds;
+	spawner.setParticleInitialVelocity(glm::vec2(sin(elapsed_time) * 1000.0f, 0.0f));
+
 	spawner.update(time_step_in_seconds);
 	updateParticles();
 	constrainParticles();
