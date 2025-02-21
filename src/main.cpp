@@ -36,7 +36,7 @@ Window window;
 // JoePhys classes
 Clock jp_clock;
 Renderer renderer;
-ParticleManager particle_manager(FPS_LIMIT * 2);
+ParticleManager particle_manager(FPS_LIMIT);
 
 int main()
 {

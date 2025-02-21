@@ -189,7 +189,7 @@ void ParticleManager::solveCollisions()
 				const glm::vec2 possibility_1 = particle_one->position + particle_one_initial_velocity * (offset_1);
 				const glm::vec2 possibility_2 = particle_one->position + particle_one_initial_velocity * (offset_2);
 
-				if (length(possibility_1 - particle_one->old_position) < length(possibility_2 - particle_one->old_position))
+				if (length(possibility_1 - particle_two->old_position) < length(possibility_2 - particle_two->old_position))
 					offset = offset_1;
 				else
 					offset = offset_2;
