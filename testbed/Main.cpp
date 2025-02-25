@@ -3,7 +3,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "Settings.h"
+#include "Renderer.hpp"
+#include "Settings.hpp"
 
 GLFWwindow* window = nullptr;
 Settings settings;
@@ -88,16 +89,25 @@ static void initGlad()
 	}
 }
 
+void step()
+{
+	
+}
+
 int main()
 {
 	initGLFW();
 	initGlad();
+
+	renderer.Create();
 
 	glClearColor(0.9f, 0.3f, 0.3f, 1.0f);
 
 	while(!glfwWindowShouldClose(window))
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		step();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
