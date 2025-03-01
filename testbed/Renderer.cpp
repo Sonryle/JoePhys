@@ -369,7 +369,7 @@ Renderer::Renderer()
 Renderer::~Renderer()
 {
 	if (lines != nullptr || triangles != nullptr)
-		fprintf(stderr, "ERROR::RENDERER\nYou forgot to call renderer.Destroy() before renderer destructor was called\n");
+		Destroy();
 }
 
 void Renderer::Create()
