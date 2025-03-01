@@ -360,6 +360,18 @@ struct GLRenderTriangles
 	int vertice_count;
 };
 
+Renderer::Renderer()
+{
+	lines = nullptr;
+	triangles = nullptr;
+}
+
+Renderer::~Renderer()
+{
+	if (lines != nullptr || triangles != nullptr)
+		fprintf(stderr, "ERROR::RENDERER\nYou forgot to call renderer.Destroy() before renderer destructor was called\n");
+}
+
 void Renderer::Create()
 {
 	lines = new GLRenderLines;
@@ -392,28 +404,28 @@ void Renderer::RenderDefaultTriangle()
 	colour tri_col(0.3f, 0.9f, 0.3f, 0.5f);
 	vec2 tri_p1(-200.0f, -200.0f);
 	vec2 tri_p2( 200.0f, -200.0f);
-	vec2 tri_p3( 0.0f,    0.2f);
+	vec2 tri_p3( 0.0f,    200.0f);
 
-	/* colour line_col(0.2f, 0.2f, 0.2f, 1.0f); */
-	/* vec2 line1_p1(-0.2f, -0.2f); */
-	/* vec2 line1_p2( 0.2f, -0.2f); */
-	/* vec2 line2_p2( 0.2f, -0.2f); */
-	/* vec2 line2_p1( 0.0f,  0.2f); */
-	/* vec2 line3_p1( 0.0f,  0.2f); */
-	/* vec2 line3_p2(-0.2f, -0.2f); */
+	colour line_col(0.2f, 0.2f, 0.2f, 1.0f);
+	vec2 line1_p1(-200.0f, -200.0f);
+	vec2 line1_p2( 200.0f, -200.0f);
+	vec2 line2_p2( 200.0f, -200.0f);
+	vec2 line2_p1( 0.0f,  200.0f);
+	vec2 line3_p1( 0.0f,  200.0f);
+	vec2 line3_p2(-200.0f, -200.0f);
 	
 	triangles->AddVertice(tri_p1, tri_col);
 	triangles->AddVertice(tri_p2, tri_col);
 	triangles->AddVertice(tri_p3, tri_col);
 
-	/* lines->AddVertice(line1_p1, line_col); */
-	/* lines->AddVertice(line1_p2, line_col); */
+	lines->AddVertice(line1_p1, line_col);
+	lines->AddVertice(line1_p2, line_col);
 
-	/* lines->AddVertice(line2_p1, line_col); */
-	/* lines->AddVertice(line2_p2, line_col); */
+	lines->AddVertice(line2_p1, line_col);
+	lines->AddVertice(line2_p2, line_col);
 
-	/* lines->AddVertice(line3_p1, line_col); */
-	/* lines->AddVertice(line3_p2, line_col); */
+	lines->AddVertice(line3_p1, line_col);
+	lines->AddVertice(line3_p2, line_col);
 }
 
 void Renderer::Flush()

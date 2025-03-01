@@ -30,8 +30,8 @@ struct Camera
 
 struct Renderer
 {
-	/* Renderer(); */
-	/* ~Renderer(); */
+	Renderer();
+	~Renderer();
 
 	void Create();
 	void Destroy();

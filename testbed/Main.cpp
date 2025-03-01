@@ -120,6 +120,7 @@ int main()
 		glfwPollEvents();
 	}
 
+	renderer.Destroy();
 	glfwTerminate();
 
 	return 1;
