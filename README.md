@@ -48,19 +48,6 @@ cmake ..
 make
 ```
 The resulting JoePhys executable will be in JoePhys/build/JoePhys
-
-## Other Useful Information
-
-### Resource directory ("JoePhys/res")
-If you want to make changes to this code, it is important that I warn you about how the resource directory ("JoePhys/res") is handled.
-
-* All of the resources in this folder are needed during runtime and NOT during the compilation of JoePhys. Whenever the project is compiled,
-the resource folder is copied to "${CMAKE_SOURCE_DIR}/res" and "${CMAKE_BINARY_DIR}/res.
-
-  * This is so that the resulting JoePhys executable will always have a copy of the resource folder. The annoying part is that the build commands
-which copy the resource directory are ONLY triggered when a file in JoePhys gets compiled.
-
-* "Make" on Linux and "Build" in Visual Studio will only recompile and link the files which have been modified, and if no files have been modified
 then they won't do anything and the build commands responsible for copying the resource folder will not be triggered.
 
   * So when you make any changes to the resource folder, you either have to make a change to a source file so that the file gets recompiled and
