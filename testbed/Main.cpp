@@ -1,9 +1,5 @@
 #include <cstdio>	// for "stderr" file path constant
 
-#ifdef DEBUG
-#include <iostream>
-#endif
-
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -21,6 +17,8 @@ static void glfwErrorCallback(int error, const char* description)
 static void framebufferResizeCallback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
+	camera.window_width = width;
+	camera.window_height = height;
 }
 
 static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -104,6 +102,9 @@ int main()
 {
 	initGLFW();
 	initGlad();
+
+	camera.window_width = settings.initial_window_width;
+	camera.window_height = settings.initial_window_height;
 
 	renderer.Create();
 
