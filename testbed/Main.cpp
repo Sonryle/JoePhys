@@ -1,5 +1,9 @@
 #include <cstdio>	// for "stderr" file path constant
 
+#ifdef DEBUG
+#include <iostream>
+#endif
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -91,7 +95,9 @@ static void initGlad()
 
 void step()
 {
-	
+	// TEMPORARY RENDER TRIANGLE FUNCTION
+	renderer.RenderDefaultTriangle();
+	renderer.Flush();
 }
 
 int main()

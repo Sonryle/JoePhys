@@ -21,5 +21,13 @@ add_subdirectory(dependencies)
 target_link_libraries(JoePhys PUBLIC glfw)
 target_link_libraries(JoePhys PUBLIC glad)
 
+# set up definitions
+target_compile_definitions(JoePhys PRIVATE 
+    $<$<CONFIG:Debug>:DEBUG>
+    $<$<CONFIG:Release>:NDEBUG>
+    $<$<CONFIG:RelWithDebInfo>:NDEBUG>
+    $<$<CONFIG:MinSizeRel>:NDEBUG>
+)
+
 # Set our project as the Visual Studio startup project
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${CMAKE_PROJECT_NAME})

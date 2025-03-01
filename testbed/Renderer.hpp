@@ -7,6 +7,9 @@
 
 #include "JoePhys/Vec2.hpp"
 
+struct GLRenderLines;
+struct GLRenderTriangles;
+
 struct Camera
 {
 	Camera()
@@ -16,6 +19,8 @@ struct Camera
 		window_width = 0;
 		window_height = 0;
 	}
+
+	void GenerateProjectionMatrix(float p[16]);
 
 	vec2 center;
 	unsigned int window_width;
@@ -29,9 +34,17 @@ struct Renderer
 	/* ~Renderer(); */
 
 	void Create();
-	/* void Destroy(); */
+	void Destroy();
+
+	void RenderDefaultTriangle();
+
+	void Flush();
+
+	GLRenderLines* lines = nullptr;
+	GLRenderTriangles* triangles = nullptr;
 };
 
+extern Camera camera;
 extern Renderer renderer;
 
 #endif
