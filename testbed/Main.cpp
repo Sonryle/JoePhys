@@ -3,6 +3,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <imgui.h>
+#include <imgui_impl_opengl3.h>
+#include <imgui_impl_glfw.h>
+
 #include "Renderer.hpp"
 #include "Settings.hpp"
 
@@ -42,14 +46,15 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 static void mousePosCallback(GLFWwindow* window, double dx, double dy)
 {
 	// Update Camera Position
-	if (!first_cursor_movement) {
+	// (if ImGui window is not focused, and it is not the first frame
+	//  that the cursor is moving over the screen)
+	if (first_cursor_movement == 0 && ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow) == 0)
 		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 			camera.center += vec2(cursor_x - dx, dy - cursor_y);
-	} else
-		first_cursor_movement = 0;
 
 	cursor_x = dx;
 	cursor_y = dy;
+	first_cursor_movement = 0;
 		
 	return;
 }
@@ -114,6 +119,26 @@ static void initGlad()
 	}
 }
 
+static void initImGui()
+{
+	ImGui::CreateContext();	
+
+	ImGui_ImplGlfw_InitForOpenGL(window, 1);
+	ImGui_ImplOpenGL3_Init();
+}
+
+static void updateImGui()
+{
+	ImGui_ImplGlfw_NewFrame();
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui::NewFrame();
+
+	ImGui::ShowDemoWindow();
+
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
 void step()
 {
 	// TEMPORARY RENDER TRIANGLE FUNCTION
@@ -128,15 +153,13 @@ void step()
 	colour t2col(0.3f, 0.1f, 0.4f, 1.0f);
 	renderer.RenderTriangle(t1p1, t1p2, t1p3, t1col);
 	renderer.RenderTriangle(t2p1, t2p2, t2p3, t2col);
-
-	// Render Scene
-	renderer.Flush();
 }
 
 int main()
 {
 	initGLFW();
 	initGlad();
+	initImGui();
 
 	camera.Create(settings.initial_window_width, settings.initial_window_height);
 	renderer.Create();
@@ -145,11 +168,18 @@ int main()
 
 	while(!glfwWindowShouldClose(window))
 	{
+		// Clear Screen
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		// Update Physics Sim
 		step();
 
+		// Render Frame
+		renderer.Flush();
+		updateImGui();
 		glfwSwapBuffers(window);
+
+		// Poll Window Events
 		glfwPollEvents();
 	}
 

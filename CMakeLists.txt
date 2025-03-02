@@ -20,6 +20,7 @@ add_subdirectory(dependencies)
 # link our libraries into JoePhyss
 target_link_libraries(JoePhys PUBLIC glfw)
 target_link_libraries(JoePhys PUBLIC glad)
+target_link_libraries(JoePhys PUBLIC imgui)
 
 # set up definitions
 target_compile_definitions(JoePhys PRIVATE 
