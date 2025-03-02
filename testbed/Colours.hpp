@@ -10,9 +10,9 @@ typedef float real;
 struct colour
 {
 	colour() {}
-	colour(real rIn, real gIn, real bIn, real aIn) : r(rIn), g(gIn), b(bIn), a(aIn) {}
-	void Set(real rIn, real gIn, real bIn, real aIn) {
-		r = rIn; g = gIn; b = bIn; a = aIn;
+	colour(real r_in, real g_in, real b_in, real a_in) : r(r_in), g(g_in), b(b_in), a(a_in) {}
+	void Set(real r_in, real g_in, real b_in, real a_in) {
+		r = r_in; g = g_in; b = b_in; a = a_in;
 	}
 	float r, g, b, a;
 };

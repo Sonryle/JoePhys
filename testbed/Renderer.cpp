@@ -14,8 +14,7 @@ static GLuint createShaderFromString(const char* source, GLenum type)
 	GLint success;
 	char error_message[512];
 	glGetShaderiv(handle, GL_COMPILE_STATUS, &success);
-
-	if (!success) {
+if (!success) {
 		glGetShaderInfoLog(handle, 512, nullptr, error_message);
 		glDeleteShader(handle);
 
@@ -399,33 +398,17 @@ void Renderer::Destroy()
 	}
 }
 
-void Renderer::RenderDefaultTriangle()
+void Renderer::RenderTriangle(const vec2 p1, const vec2 p2, const vec2 p3, const colour col)
 {
-	colour tri_col(0.3f, 0.9f, 0.3f, 0.5f);
-	vec2 tri_p1(-200.0f, -200.0f);
-	vec2 tri_p2( 200.0f, -200.0f);
-	vec2 tri_p3( 0.0f,    200.0f);
+	triangles->AddVertice(p1, col);
+	triangles->AddVertice(p2, col);
+	triangles->AddVertice(p3, col);
+}
 
-	colour line_col(0.2f, 0.2f, 0.2f, 1.0f);
-	vec2 line1_p1(-200.0f, -200.0f);
-	vec2 line1_p2( 200.0f, -200.0f);
-	vec2 line2_p2( 200.0f, -200.0f);
-	vec2 line2_p1( 0.0f,  200.0f);
-	vec2 line3_p1( 0.0f,  200.0f);
-	vec2 line3_p2(-200.0f, -200.0f);
-	
-	triangles->AddVertice(tri_p1, tri_col);
-	triangles->AddVertice(tri_p2, tri_col);
-	triangles->AddVertice(tri_p3, tri_col);
-
-	lines->AddVertice(line1_p1, line_col);
-	lines->AddVertice(line1_p2, line_col);
-
-	lines->AddVertice(line2_p1, line_col);
-	lines->AddVertice(line2_p2, line_col);
-
-	lines->AddVertice(line3_p1, line_col);
-	lines->AddVertice(line3_p2, line_col);
+void Renderer::RenderLine(const vec2 p1, const vec2 p2, const colour col)
+{
+	lines->AddVertice(p1, col);
+	lines->AddVertice(p2, col);
 }
 
 void Renderer::Flush()
@@ -436,22 +419,32 @@ void Renderer::Flush()
 
 void Camera::GenerateProjectionMatrix(float p[16])
 {
-	// bottom and left will be -top and -right
-	const real top = (float)camera.window_height / 2;
-	const real right = (float)camera.window_width / 2;
+	real right = window_width / 2;
+	real left = window_width / -2;
+	real top = window_height / 2;
+	real bottom = window_height / -2;
+	real far = 1;
+	real near = -1;
 
-	const real near = -1;
-	const real far = 1;
+	right += center.x;
+	left += center.x;
+	top += center.y;
+	bottom += center.y;
+
+	right *= zoom;
+	left *= zoom;
+	top *= zoom;
+	bottom *= zoom;
 
 	// Row 1
-	p[0] = 1.0f / right;
+	p[0] = 2.0f / (right - left);
 	p[1] = 0.0f;
 	p[2] = 0.0f;
 	p[3] = 0.0f;
 
 	// Row 3
 	p[4] = 0.0f;
-	p[5] = 1.0f / top;
+	p[5] = 2.0f / (top - bottom);
 	p[6] = 0.0f;
 	p[7] = 0.0f;
 
@@ -462,8 +455,8 @@ void Camera::GenerateProjectionMatrix(float p[16])
 	p[11] = 0.0f;
 
 	// Row 4
-	p[12] = 0.0f;
-	p[13] = 0.0f;
-	p[14] = -( (far + near) / ((far - near)) );
+	p[12] = -( (right + left) / (right - left) );
+	p[13] = -( (top + bottom) / (top - bottom) );
+	p[14] = -( (far + near) / (far - near) );
 	p[15] = 1.0f;
 }

@@ -6,8 +6,16 @@
 #include "Renderer.hpp"
 #include "Settings.hpp"
 
+// TEMPORARY
+#include "JoePhys/Vec2.hpp"
+#include "Colours.hpp"
+
 GLFWwindow* window = nullptr;
 Settings settings;
+
+double cursor_x = 0;
+double cursor_y = 0;
+bool first_cursor_movement = 1;
 
 static void glfwErrorCallback(int error, const char* description)
 {
@@ -31,8 +39,18 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 	}
 }
 
-static void mouseMotionCallback(GLFWwindow* window, double dx, double dy)
+static void mousePosCallback(GLFWwindow* window, double dx, double dy)
 {
+	// Update Camera Position
+	if (!first_cursor_movement) {
+		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+			camera.center += vec2(cursor_x - dx, dy - cursor_y);
+	} else
+		first_cursor_movement = 0;
+
+	cursor_x = dx;
+	cursor_y = dy;
+		
 	return;
 }
 
@@ -43,6 +61,11 @@ static void mouseButtonCallback(GLFWwindow*, signed int button, signed int actio
 
 static void scrollCallback(GLFWwindow*, double dx, double dy)
 {
+	if (dy < 0)
+		camera.zoom = std::max(camera.zoom * 0.95f, 0.1f);
+	else if (dy > 0)
+		camera.zoom = std::min(camera.zoom * 1.05f, 10.0f);
+
 	return;
 }
 
@@ -78,7 +101,7 @@ static void initGLFW()
 	glfwSetFramebufferSizeCallback(window, framebufferResizeCallback);
 	glfwSetKeyCallback(window, keyCallback);
 	glfwSetMouseButtonCallback(window, mouseButtonCallback);
-	glfwSetCursorPosCallback(window, mouseMotionCallback);
+	glfwSetCursorPosCallback(window, mousePosCallback);
 	glfwSetScrollCallback(window, scrollCallback);
 }
 
@@ -94,7 +117,19 @@ static void initGlad()
 void step()
 {
 	// TEMPORARY RENDER TRIANGLE FUNCTION
-	renderer.RenderDefaultTriangle();
+	vec2 t1p1( 200.0f, -150.0f  );
+	vec2 t1p2(-200.0f, -150.0f);
+	vec2 t1p3(   0.0f,  150.0f );
+	colour t1col(0.3f, 0.4f, 1.0f, 1.0f);
+
+	vec2 t2p1( 295.0f, -940.0f  );
+	vec2 t2p2( 194.0f,  048.0f);
+	vec2 t2p3(   0.0f,  190.0f );
+	colour t2col(0.3f, 0.1f, 0.4f, 1.0f);
+	renderer.RenderTriangle(t1p1, t1p2, t1p3, t1col);
+	renderer.RenderTriangle(t2p1, t2p2, t2p3, t2col);
+
+	// Render Scene
 	renderer.Flush();
 }
 
@@ -103,9 +138,7 @@ int main()
 	initGLFW();
 	initGlad();
 
-	camera.window_width = settings.initial_window_width;
-	camera.window_height = settings.initial_window_height;
-
+	camera.Create(settings.initial_window_width, settings.initial_window_height);
 	renderer.Create();
 
 	glClearColor(0.9f, 0.3f, 0.3f, 1.0f);

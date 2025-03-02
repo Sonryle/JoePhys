@@ -7,25 +7,36 @@
 
 #include "JoePhys/Vec2.hpp"
 
+struct colour;
 struct GLRenderLines;
 struct GLRenderTriangles;
 
 struct Camera
 {
+
 	Camera()
 	{
 		center.set(0.0f, 0.0f);
 		zoom = 1.0f;
-		window_width = 0;
-		window_height = 0;
 	}
 
+	void Create(float width, float height)
+	{
+		window_width = width;
+		window_height = height;
+	}
+
+	void UpdateScale(double dy);
+	void UpdatePos(GLFWwindow* window, double new_x, double new_y, double old_x, double old_y);
+	void WindowResize(int width, int height);
 	void GenerateProjectionMatrix(float p[16]);
 
 	vec2 center;
-	unsigned int window_width;
-	unsigned int window_height;
 	float zoom;
+	float window_width;
+	float window_height;
+
+private:
 };
 
 struct Renderer
@@ -36,7 +47,8 @@ struct Renderer
 	void Create();
 	void Destroy();
 
-	void RenderDefaultTriangle();
+	void RenderTriangle(const vec2 p1, const vec2 p2, const vec2 p3, const colour col);
+	void RenderLine(const vec2 p1, const vec2 p2, const colour col);
 
 	void Flush();
 
