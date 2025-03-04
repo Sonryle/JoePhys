@@ -48,7 +48,3 @@ cmake ..
 make
 ```
 The resulting JoePhys executable will be in JoePhys/build/JoePhys
-then they won't do anything and the build commands responsible for copying the resource folder will not be triggered.
-
-  * So when you make any changes to the resource folder, you either have to make a change to a source file so that the file gets recompiled and
-the build commands are triggered, OR you have to rebuild the whole project. ("make -B" on Linux, and "Rebuild" on Visual Studio)
