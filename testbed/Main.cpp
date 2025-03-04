@@ -1,16 +1,14 @@
-#include <cstdio>		// for "stderr" file path constant
+#include <cstdio>	// for "stderr" file path constant
 #include <algorithm>	// for std::max & std::min
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include "JoePhys/Circle.hpp"
+
 #include "Renderer.hpp"
 #include "Settings.hpp"
 #include "GUI.hpp"
-
-// TEMPORARY
-#include "JoePhys/Vec2.hpp"
-#include "Colours.hpp"
 
 GLFWwindow* window = nullptr;
 Settings settings;
@@ -38,6 +36,9 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 	case GLFW_KEY_ESCAPE:
 		glfwSetWindowShouldClose(window, GL_TRUE);
 		break;
+	case GLFW_KEY_A:
+		if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) && action == GLFW_PRESS)
+			appearanceWindowShown = (appearanceWindowShown == 1)? 0 : 1;
 	}
 }
 
@@ -123,112 +124,10 @@ static void initGlad()
 
 void step()
 {
-	// TOP ROW OF TRIANGLES
-	// --------------------
-	
-	// tri 1
-	vec2 tt1p1( -390,  0 );
-	vec2 tt1p2( -310,  0 );
-	vec2 tt1p3( -350, 65 );
-	colour tt1col(palette.dark_gray);
-	// tri 2
-	vec2 tt2p1( -290,  0 );
-	vec2 tt2p2( -210,  0 );
-	vec2 tt2p3( -250, 65 );
-	colour tt2col(palette.dark_red);
-	// tri 3
-	vec2 tt3p1( -190,   0 );
-	vec2 tt3p2( -110,   0 );
-	vec2 tt3p3( -150,  65 );
-	colour tt3col(palette.dark_green);
-	// tri 4
-	vec2 tt4p1( -90,   0 );
-	vec2 tt4p2( -10,   0 );
-	vec2 tt4p3( -50,  65 );
-	colour tt4col(palette.dark_yellow);
-	// tri 5
-	vec2 tt5p1(  10,   0 );
-	vec2 tt5p2(  90,   0 );
-	vec2 tt5p3(  50,   65 );
-	colour tt5col(palette.dark_blue);
-	// tri 6
-	vec2 tt6p1( 110,   0 );
-	vec2 tt6p2( 190,   0 );
-	vec2 tt6p3( 150,  65 );
-	colour tt6col(palette.dark_purple);
-	// tri 7
-	vec2 tt7p1( 210,   0 );
-	vec2 tt7p2( 290,   0 );
-	vec2 tt7p3( 250,  65 );
-	colour tt7col(palette.dark_aqua);
-	// tri 8
-	vec2 tt8p1( 310,   0 );
-	vec2 tt8p2( 390,   0 );
-	vec2 tt8p3( 350,  65 );
-	colour tt8col(palette.dark_white);
+	// TEMPORARILY CREATE CIRCLES
+	Circle sun(100.0f);
 
-	// BOTTOM ROW OF TRIANGLES
-	// --------------------
-	
-	// tri 1
-	vec2 bt1p1( -390, -100 );
-	vec2 bt1p2( -310, -100 );
-	vec2 bt1p3( -350,  -35 );
-	colour bt1col(palette.gray);
-	// tri 2
-	vec2 bt2p1( -290, -100 );
-	vec2 bt2p2( -210, -100 );
-	vec2 bt2p3( -250,  -35 );
-	colour bt2col(palette.red);
-	// tri 3
-	vec2 bt3p1( -190, -100 );
-	vec2 bt3p2( -110, -100 );
-	vec2 bt3p3( -150, -35 );
-	colour bt3col(palette.green);
-	// tri 4
-	vec2 bt4p1(  -90, -100 );
-	vec2 bt4p2(  -10, -100 );
-	vec2 bt4p3(  -50, -35 );
-	colour bt4col(palette.yellow);
-	// tri 5
-	vec2 bt5p1(  10, -100 );
-	vec2 bt5p2(  90, -100 );
-	vec2 bt5p3(  50, -35 );
-	colour bt5col(palette.blue);
-	// tri 6
-	vec2 bt6p1( 110, -100 );
-	vec2 bt6p2( 190, -100 );
-	vec2 bt6p3( 150, -35 );
-	colour bt6col(palette.purple);
-	// tri 7
-	vec2 bt7p1( 210, -100 );
-	vec2 bt7p2( 290, -100 );
-	vec2 bt7p3( 250, -35 );
-	colour bt7col(palette.aqua);
-	// tri 8
-	vec2 bt8p1( 310, -100 );
-	vec2 bt8p2( 390, -100 );
-	vec2 bt8p3( 350, -35 );
-	colour bt8col(palette.white);
-
-	// RENDER TOP TRIANGLES
-	renderer.RenderTriangle(tt1p1, tt1p2, tt1p3, tt1col);
-	renderer.RenderTriangle(tt2p1, tt2p2, tt2p3, tt2col);
-	renderer.RenderTriangle(tt3p1, tt3p2, tt3p3, tt3col);
-	renderer.RenderTriangle(tt4p1, tt4p2, tt4p3, tt4col);
-	renderer.RenderTriangle(tt5p1, tt5p2, tt5p3, tt5col);
-	renderer.RenderTriangle(tt6p1, tt6p2, tt6p3, tt6col);
-	renderer.RenderTriangle(tt7p1, tt7p2, tt7p3, tt7col);
-	renderer.RenderTriangle(tt8p1, tt8p2, tt8p3, tt8col);
-	// RENDER BOTTOM TRIANGLES
-	renderer.RenderTriangle(bt1p1, bt1p2, bt1p3, bt1col);
-	renderer.RenderTriangle(bt2p1, bt2p2, bt2p3, bt2col);
-	renderer.RenderTriangle(bt3p1, bt3p2, bt3p3, bt3col);
-	renderer.RenderTriangle(bt4p1, bt4p2, bt4p3, bt4col);
-	renderer.RenderTriangle(bt5p1, bt5p2, bt5p3, bt5col);
-	renderer.RenderTriangle(bt6p1, bt6p2, bt6p3, bt6col);
-	renderer.RenderTriangle(bt7p1, bt7p2, bt7p3, bt7col);
-	renderer.RenderTriangle(bt8p1, bt8p2, bt8p3, bt8col);
+	renderer.AddCircle(vec2(0.0f, 0.0f), sun.radius, settings.circle_segments, palette.green);
 }
 
 int main()

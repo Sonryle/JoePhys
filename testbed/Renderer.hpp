@@ -6,6 +6,7 @@
 #include <GLFW/glfw3.h>
 
 #include "JoePhys/Vec2.hpp"
+#include "JoePhys/Circle.hpp"
 
 struct colour;
 struct GLRenderLines;
@@ -47,8 +48,9 @@ struct Renderer
 	void Create();
 	void Destroy();
 
-	void RenderTriangle(const vec2 p1, const vec2 p2, const vec2 p3, const colour col);
-	void RenderLine(const vec2 p1, const vec2 p2, const colour col);
+	void AddTriangle(const vec2 p1, const vec2 p2, const vec2 p3, const colour col);
+	void AddLine(const vec2 p1, const vec2 p2, const colour col);
+	void AddCircle(const vec2 position, const float radius, const unsigned int segments, const colour col);
 
 	void Flush();
 

@@ -5,6 +5,7 @@
 #include <imgui_impl_opengl3.h>
 #include <imgui_impl_glfw.h>
 
+#include "GLFW/glfw3.h"
 #include "Settings.hpp"
 
 static bool appearanceWindowShown = 0;
@@ -30,7 +31,7 @@ static void updateImGui()
 	{
 		if (ImGui::BeginMenu("Settings"))
 		{
-			if (ImGui::MenuItem("Appearance", NULL, appearanceWindowShown))
+			if (ImGui::MenuItem("Appearance", "\tCtrl+A", appearanceWindowShown))
 			{ 
 				appearanceWindowShown = (appearanceWindowShown == 1)? 0 : 1;
 			}
@@ -40,15 +41,23 @@ static void updateImGui()
 		{
 			if (ImGui::MenuItem("Newton's Cradle", NULL, appearanceWindowShown))
 			{
-				appearanceWindowShown = (appearanceWindowShown == 1)? 0 : 1;
+
 			}
 			if (ImGui::MenuItem("Colour Testing", NULL, appearanceWindowShown))
 			{
-				appearanceWindowShown = (appearanceWindowShown == 1)? 0 : 1;
+			
 			}
 			if (ImGui::MenuItem("Angry Birds", NULL, appearanceWindowShown))
 			{
-				appearanceWindowShown = (appearanceWindowShown == 1)? 0 : 1;
+
+			}
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Help"))
+		{
+			if (ImGui::MenuItem("idk what to put here sorry"))
+			{
+
 			}
 			ImGui::EndMenu();
 		}
@@ -81,7 +90,7 @@ static void AppearanceWindow()
 			const char* items[] = { "Gray", "Red", "Green", "Yellow", "Blue", "Purple", "Aqua", "White",
 						"Dark Gray", "Dark Red", "Dark Green", "Dark Yellow", "Dark Blue",
 						"Dark Purple", "Dark Aqua", "Dark White" };
-			static int item_selected = 0;
+			static int item_selected = 8;
 			const char* combo_preview_value = items[item_selected];
 			if (ImGui::BeginCombo("Background", combo_preview_value, 0))
 			{
@@ -175,16 +184,24 @@ static void AppearanceWindow()
 				ImGui::ColorEdit4("Dark Aqua", palette.dark_aqua);
 				ImGui::ColorEdit4("Dark White", palette.dark_white);
 			}
-			if(ImGui::Button("Set Gruvbox"))
-			{
-				palette.SetGruvbox();
-			}
 			if(ImGui::Button("Set Purpbox"))
 			{
 				palette.SetPurpbox();
 			}
+			if(ImGui::Button("Set Gruvbox"))
+			{
+				palette.SetGruvbox();
+			}
+			if(ImGui::Button("Set Pastel"))
+			{
+				palette.SetPastel();
+			}
 			ImGui::Separator();
 		}
+	}
+	if (ImGui::CollapsingHeader("Renderer"))
+	{
+		ImGui::SliderInt("Circle Segment Count", &settings.circle_segments, 1, 32);
 	}
 	ImGui::End();
 }

@@ -20,15 +20,23 @@ struct Settings
 
 	void Reset()
 	{
+		scene_colours.background = &palette.dark_gray;
+
 		initial_window_width = 1500;
 		initial_window_height = 900;
 
-		scene_colours.background = &palette.dark_gray;
+		circle_segments = 10;
 	}
 
+	// Colours
 	SceneColours scene_colours;
+
+	// Window
 	unsigned int initial_window_width;
 	unsigned int initial_window_height;
+
+	// Renderer
+	int circle_segments;
 };
 
 extern Settings settings;
