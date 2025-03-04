@@ -10,3 +10,4 @@ add_library(imgui STATIC ${SRC_FILES} ${HEADER_FILES})
 
 # Specify include directories for imgui
 target_include_directories(imgui PUBLIC .)
+target_include_directories(imgui PUBLIC ../GLFW/include)

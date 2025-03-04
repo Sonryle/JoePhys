@@ -1,4 +1,5 @@
-#include <cstdio>	// for "stderr" file path constant
+#include <cstdio>		// for "stderr" file path constant
+#include <algorithm>	// for std::max & std::min
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -26,8 +27,8 @@ static void glfwErrorCallback(int error, const char* description)
 static void framebufferResizeCallback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
-	camera.window_width = width;
-	camera.window_height = height;
+	camera.window_width = (float)width;
+	camera.window_height = (float)height;
 }
 
 static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -46,7 +47,7 @@ static void mousePosCallback(GLFWwindow* window, double dx, double dy)
 	// (if it is not the first frame that the cursor is moving
 	//  over the screen and ImGui window is not being interacted with)
 	ImGuiIO& io = ImGui::GetIO();
-	if (first_cursor_movement == 0 && io.WantCaptureMouse == 0)
+	if ( !(first_cursor_movement || io.WantCaptureMouse) )
 		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 			camera.center += vec2(cursor_x - dx, dy - cursor_y);
 

@@ -66,13 +66,13 @@ static void AppearanceWindow()
 	if (!appearanceWindowShown)
 		return;
 
-	ImGui::Begin("Appearance", NULL, ImGuiWindowFlags_None);
+	ImGui::Begin("Appearance", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 
 	ImGuiIO& io = ImGui::GetIO();
 	ImVec2 initial_size(300, 500);
-	ImVec2 initial_pos(io.DisplaySize.x - ImGui::GetWindowWidth(), 30);
-	ImGui::SetWindowSize(initial_size, ImGuiCond_FirstUseEver);
-	ImGui::SetWindowPos(initial_pos, ImGuiCond_FirstUseEver);
+	ImVec2 initial_pos(io.DisplaySize.x - ImGui::GetWindowWidth() - 10, 30);
+	ImGui::SetWindowSize(initial_size, ImGuiCond_None);
+	ImGui::SetWindowPos(initial_pos, ImGuiCond_None);
 
 	if (ImGui::CollapsingHeader("Colour"))
 	{

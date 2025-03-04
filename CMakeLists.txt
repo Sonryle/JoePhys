@@ -17,7 +17,7 @@ target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC include)
 # add all of our libraries
 add_subdirectory(dependencies)
 
-# link our libraries into JoePhyss
+# link our libraries into the project
 target_link_libraries(JoePhys PUBLIC glfw)
 target_link_libraries(JoePhys PUBLIC glad)
 target_link_libraries(JoePhys PUBLIC imgui)
