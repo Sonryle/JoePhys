@@ -127,7 +127,8 @@ void step()
 	// TEMPORARILY CREATE CIRCLES
 	Circle sun(100.0f);
 
-	renderer.AddCircle(vec2(0.0f, 0.0f), sun.radius, settings.circle_segments, palette.green);
+	renderer.AddCircle(vec2(-125.0f, 0.0f), sun.radius, settings.circle_res, palette.dark_yellow);
+	renderer.AddSolidCircle(vec2(125.0f, 0.0f), sun.radius, settings.circle_res, palette.yellow, palette.dark_yellow);
 }
 
 int main()

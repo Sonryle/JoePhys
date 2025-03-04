@@ -25,7 +25,7 @@ struct Settings
 		initial_window_width = 1500;
 		initial_window_height = 900;
 
-		circle_segments = 10;
+		circle_res = 32;
 	}
 
 	// Colours
@@ -36,7 +36,7 @@ struct Settings
 	unsigned int initial_window_height;
 
 	// Renderer
-	int circle_segments;
+	int circle_res;
 };
 
 extern Settings settings;

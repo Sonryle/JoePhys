@@ -449,6 +449,49 @@ void Renderer::AddCircle(const vec2 position, const float radius, const unsigned
 	}
 }
 
+// This will draw a circle out of triangles & outline it with lines
+void Renderer::AddSolidCircle(const vec2 position, const float radius, const unsigned int segments, const colour fill_col, const colour outline_col)
+{
+	// rotation increment between points in circle
+	const real rotation_increment = 2.0f * PI / segments;
+
+	// sin & cos of rotation increment
+	const real sin_increment = sinf(rotation_increment);
+	const real cos_increment = cosf(rotation_increment);
+
+	// vector which will store the current rotation
+	vec2 rotation(1.0f, 0.0f);
+	// vector which stores the position of first point
+	vec2 point_pos(position + radius * rotation);
+
+	// loop for the amount of segments that there are
+	for (int i = 0; i < segments; i++)
+	{
+		// this will be our new rotation
+		vec2 new_rotation;
+		
+		// find the new rotation
+		new_rotation.x = cos_increment * rotation.x - sin_increment * rotation.y;
+		new_rotation.y = sin_increment * rotation.x + cos_increment * rotation.y;
+
+		// get the position of the new point
+		vec2 new_point_pos = position + radius * new_rotation;
+
+		// draw a line connecting the two points
+		lines->AddVertice(point_pos, outline_col);
+		lines->AddVertice(new_point_pos, outline_col);
+
+		// draw a triangle connecting the center to the two points;
+		triangles->AddVertice(point_pos, fill_col);
+		triangles->AddVertice(new_point_pos, fill_col);
+		triangles->AddVertice(position, fill_col);
+
+		// set the old point & rotation to the most recent
+		rotation = new_rotation;
+		point_pos = new_point_pos;
+	}
+}
+
 void Renderer::Flush()
 {
 	triangles->Flush();

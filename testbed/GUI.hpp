@@ -78,14 +78,15 @@ static void AppearanceWindow()
 	ImGui::Begin("Appearance", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 
 	ImGuiIO& io = ImGui::GetIO();
-	ImVec2 initial_size(300, 500);
+	ImVec2 initial_size(500, 500);
 	ImVec2 initial_pos(io.DisplaySize.x - ImGui::GetWindowWidth() - 10, 30);
 	ImGui::SetWindowSize(initial_size, ImGuiCond_None);
 	ImGui::SetWindowPos(initial_pos, ImGuiCond_None);
 
 	if (ImGui::CollapsingHeader("Colour"))
 	{
-		if (ImGui::CollapsingHeader("Scene Colours"))
+		/* if (ImGui::CollapsingHeader("Scene Colours")) */
+		if (ImGui::TreeNode("Scene Colours"))
 		{
 			const char* items[] = { "Gray", "Red", "Green", "Yellow", "Blue", "Purple", "Aqua", "White",
 						"Dark Gray", "Dark Red", "Dark Green", "Dark Yellow", "Dark Blue",
@@ -158,32 +159,36 @@ static void AppearanceWindow()
 				}
 				ImGui::EndCombo();
 			}
+			ImGui::TreePop();
 		}
-		if (ImGui::CollapsingHeader("Palette"))
+		/* if (ImGui::CollapsingHeader("Palette")) */
+		if (ImGui::TreeNode("Palette"))
 		{
 			ImGui::Separator();
-			if (ImGui::CollapsingHeader("Colours"))
-			{
-				ImGui::ColorEdit4("Gray", palette.gray);
-				ImGui::ColorEdit4("Red", palette.red);
-				ImGui::ColorEdit4("Green", palette.green);
-				ImGui::ColorEdit4("Yellow", palette.yellow);
-				ImGui::ColorEdit4("Blue", palette.blue);
-				ImGui::ColorEdit4("Purple", palette.purple);
-				ImGui::ColorEdit4("Aqua", palette.aqua);
-				ImGui::ColorEdit4("White", palette.white);
-			}
-			if (ImGui::CollapsingHeader("Dark Variants"))
-			{
-				ImGui::ColorEdit4("Dark Gray", palette.dark_gray);
-				ImGui::ColorEdit4("Dark Red", palette.dark_red);
-				ImGui::ColorEdit4("Dark Green", palette.dark_green);
-				ImGui::ColorEdit4("Dark Yellow", palette.dark_yellow);
-				ImGui::ColorEdit4("Dark Blue", palette.dark_blue);
-				ImGui::ColorEdit4("Dark Purple", palette.dark_purple);
-				ImGui::ColorEdit4("Dark Aqua", palette.dark_aqua);
-				ImGui::ColorEdit4("Dark White", palette.dark_white);
-			}
+			/* if (ImGui::TreeNode("Colours")) */
+			/* { */
+			/* 	ImGui::ColorEdit4("Gray", palette.gray); */
+			/* 	ImGui::ColorEdit4("Red", palette.red); */
+			/* 	ImGui::ColorEdit4("Green", palette.green); */
+			/* 	ImGui::ColorEdit4("Yellow", palette.yellow); */
+			/* 	ImGui::ColorEdit4("Blue", palette.blue); */
+			/* 	ImGui::ColorEdit4("Purple", palette.purple); */
+			/* 	ImGui::ColorEdit4("Aqua", palette.aqua); */
+			/* 	ImGui::ColorEdit4("White", palette.white); */
+			/* 	ImGui::TreePop(); */
+			/* } */
+			/* if (ImGui::TreeNode("Dark Variants")) */
+			/* { */
+			/* 	ImGui::ColorEdit4("Dark Gray", palette.dark_gray); */
+			/* 	ImGui::ColorEdit4("Dark Red", palette.dark_red); */
+			/* 	ImGui::ColorEdit4("Dark Green", palette.dark_green); */
+			/* 	ImGui::ColorEdit4("Dark Yellow", palette.dark_yellow); */
+			/* 	ImGui::ColorEdit4("Dark Blue", palette.dark_blue); */
+			/* 	ImGui::ColorEdit4("Dark Purple", palette.dark_purple); */
+			/* 	ImGui::ColorEdit4("Dark Aqua", palette.dark_aqua); */
+			/* 	ImGui::ColorEdit4("Dark White", palette.dark_white); */
+			/* 	ImGui::TreePop(); */
+			/* } */
 			if(ImGui::Button("Set Purpbox"))
 			{
 				palette.SetPurpbox();
@@ -197,11 +202,22 @@ static void AppearanceWindow()
 				palette.SetPastel();
 			}
 			ImGui::Separator();
+			ImGui::TreePop();
 		}
 	}
 	if (ImGui::CollapsingHeader("Renderer"))
 	{
-		ImGui::SliderInt("Circle Segment Count", &settings.circle_segments, 1, 32);
+		ImGui::SliderInt("Circle Resolution", &settings.circle_res, 3, 32);
+		// Add a (?) button with a tooltip
+		ImGui::SameLine();
+		ImGui::TextDisabled("(?)");
+    		if (ImGui::IsItemHovered(ImGuiHoveredFlags_DelayShort))
+		{
+			const char* desc = "Controls how many vertices make up the circles which are rendered.\n"
+					   "The higher the resolution, the smoother the circles appear, and the\n"
+					   "lower the resolution, the more sharp and polygonal the circles appear.\n";
+        		ImGui::SetTooltip("%s", desc);
+		}
 	}
 	ImGui::End();
 }
