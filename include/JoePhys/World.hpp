@@ -10,8 +10,9 @@ class World
 public:
 	World();
 
-	void addPhysObject(PhysObject* obj);
-	void removePhysObject(PhysObject* obj);
+	void AddPhysObject(PhysObject* obj);
+	void RemovePhysObject(PhysObject* obj);
+	void RemoveAllPhysObjects();
 
 	std::vector<PhysObject*> getPhysObjects();
 

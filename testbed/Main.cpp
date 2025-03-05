@@ -44,11 +44,13 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 	case GLFW_KEY_A:
 		if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) && action == GLFW_PRESS)
 			appearanceWindowShown = (appearanceWindowShown == 1)? 0 : 1;
+		else if (action == GLFW_PRESS)
+			world->RemoveAllPhysObjects();
 		break;
 	case GLFW_KEY_D:
 		if (action == GLFW_PRESS)
 			if (world->getPhysObjects().size() > 0)
-				world->removePhysObject(world->getPhysObjects()[0]);
+				world->RemovePhysObject(world->getPhysObjects()[0]);
 		break;
 	}
 }
@@ -155,24 +157,24 @@ int main()
 	// TEMPORARY CODE
 	world = new World();
 	Circle c(50.0f);
-	PhysObject one(&c, vec2(300.0f, 300.0f), 1.0f);
-	PhysObject two(&c, vec2(300.0f, 0.0f), 1.0f);
-	PhysObject thr(&c, vec2(300.0f, -300.0f), 1.0f);
-	PhysObject one1(&c, vec2(0.0f, 300.0f), 1.0f);
-	PhysObject two1(&c, vec2(0.0f, 0.0f), 1.0f);
-	PhysObject thr1(&c, vec2(0.0f, -300.0f), 1.0f);
-	PhysObject one11(&c, vec2(-300.0f, 300.0f), 1.0f);
-	PhysObject two11(&c, vec2(-300.0f, 0.0f), 1.0f);
-	PhysObject thr11(&c, vec2(-300.0f, -300.0f), 1.0f);
-	world->addPhysObject(&one);
-	world->addPhysObject(&two);
-	world->addPhysObject(&thr);
-	world->addPhysObject(&one1);
-	world->addPhysObject(&two1);
-	world->addPhysObject(&thr1);
-	world->addPhysObject(&one11);
-	world->addPhysObject(&two11);
-	world->addPhysObject(&thr11);
+	PhysObject* one = new PhysObject(&c, vec2(300.0f, 300.0f), 1.0f);
+	PhysObject* two = new PhysObject(&c, vec2(300.0f, 0.0f), 1.0f);
+	PhysObject* thr = new PhysObject(&c, vec2(300.0f, -300.0f), 1.0f);
+	PhysObject* one1 = new PhysObject(&c, vec2(0.0f, 300.0f), 1.0f);
+	PhysObject* two1 = new PhysObject(&c, vec2(0.0f, 0.0f), 1.0f);
+	PhysObject* thr1 = new PhysObject(&c, vec2(0.0f, -300.0f), 1.0f);
+	PhysObject* one11 = new PhysObject(&c, vec2(-300.0f, 300.0f), 1.0f);
+	PhysObject* two11 = new PhysObject(&c, vec2(-300.0f, 0.0f), 1.0f);
+	PhysObject* thr11 = new PhysObject(&c, vec2(-300.0f, -300.0f), 1.0f);
+	world->AddPhysObject(one);
+	world->AddPhysObject(two);
+	world->AddPhysObject(thr);
+	world->AddPhysObject(one1);
+	world->AddPhysObject(two1);
+	world->AddPhysObject(thr1);
+	world->AddPhysObject(one11);
+	world->AddPhysObject(two11);
+	world->AddPhysObject(thr11);
 
 	camera.Create(settings.initial_window_width, settings.initial_window_height);
 	renderer.Create();
