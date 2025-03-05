@@ -49,15 +49,11 @@ static void updateImGui()
 				settings.scene_has_changed = 1;
 				settings.scene_number = 1;
 			}
-			if (ImGui::MenuItem("Angry Birds", NULL, appearanceWindowShown))
-			{
-
-			}
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Help"))
 		{
-			if (ImGui::MenuItem("idk what to put here sorry"))
+			if (ImGui::MenuItem("Help Is Coming Soon (But Not Yet!!!)"))
 			{
 
 			}

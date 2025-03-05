@@ -37,7 +37,10 @@ public:
 	}
 	void ResetSceneColours() override
 	{
-		settings.scene_colours.background = &palette.purple;
+		settings.ResetSceneColours();
+		settings.scene_colours.background = &palette.green;
+		settings.scene_colours.circles = &palette.red;
+		settings.scene_colours.circle_outlines = &palette.dark_gray;
 	}
 
 };

@@ -1,2 +1,2 @@
-#include "scenes/test_scene.hpp"
-#include "scenes/test_scene_two.hpp"
+#include "scenes/TestScene.hpp"
+#include "scenes/TestScene_two.hpp"

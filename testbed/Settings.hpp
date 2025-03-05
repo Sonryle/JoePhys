@@ -20,14 +20,19 @@ struct Settings
 
 	void Reset()
 	{
-		scene_colours.background = &palette.dark_gray;
-		scene_colours.circles = &palette.red;
-		scene_colours.circle_outlines = & palette.dark_red;
+		ResetSceneColours();
 
 		initial_window_width = 1500;
 		initial_window_height = 900;
 
 		circle_res = 32;
+	}
+
+	void ResetSceneColours()
+	{
+		scene_colours.background = &palette.dark_gray;
+		scene_colours.circles = &palette.red;
+		scene_colours.circle_outlines = & palette.dark_red;
 	}
 
 	// Colours

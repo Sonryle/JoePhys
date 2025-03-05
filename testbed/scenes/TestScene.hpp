@@ -35,9 +35,13 @@ public:
 		camera.center.set(vec2(0.0f, 0.0f));
 		camera.zoom = 1.0f;
 	}
+
 	void ResetSceneColours() override
 	{
+		settings.ResetSceneColours();
 		settings.scene_colours.background = &palette.aqua;
+		settings.scene_colours.circles = &palette.purple;
+		settings.scene_colours.circle_outlines = &palette.dark_gray;
 	}
 
 };
