@@ -4,10 +4,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "JoePhys/Circle.hpp"
-#include "JoePhys/PhysObject.hpp"
-#include "JoePhys/World.hpp"
-
+#include "Scene.hpp"
+#include "AllSceneHeaders.hpp"
 #include "Renderer.hpp"
 #include "Settings.hpp"
 #include "GUI.hpp"
@@ -19,8 +17,25 @@ double cursor_x = 0;
 double cursor_y = 0;
 bool first_cursor_movement = 1;
 
-// TEMPORARY CODE HERE DO NOT THINK THAT I WILL LET THIS SLIDE
-World* world;
+Scene* current_scene = nullptr;
+
+void switchScene(unsigned int i)
+{
+	delete current_scene;
+	current_scene = nullptr;
+
+	switch(i)
+	{
+	case (0):
+		current_scene = new TestScene();
+		break;
+	case (1):
+		current_scene = new TestSceneTwo();
+		break;
+	default:
+		current_scene = new TestScene();
+	}
+}
 
 static void glfwErrorCallback(int error, const char* description)
 {
@@ -30,8 +45,7 @@ static void glfwErrorCallback(int error, const char* description)
 static void framebufferResizeCallback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
-	camera.window_width = (float)width;
-	camera.window_height = (float)height;
+	camera.WindowResize(width, height);
 }
 
 static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -44,13 +58,6 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 	case GLFW_KEY_A:
 		if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) && action == GLFW_PRESS)
 			appearanceWindowShown = (appearanceWindowShown == 1)? 0 : 1;
-		else if (action == GLFW_PRESS)
-			world->RemoveAllPhysObjects();
-		break;
-	case GLFW_KEY_D:
-		if (action == GLFW_PRESS)
-			if (world->getPhysObjects().size() > 0)
-				world->RemovePhysObject(world->getPhysObjects()[0]);
 		break;
 	}
 }
@@ -137,15 +144,14 @@ static void initGlad()
 
 void step()
 {
-	// TEMPORARILY CREATE CIRCLES
-	std::vector<PhysObject*> v = world->getPhysObjects();
-
-	// loop over objects in world and draw them
-	for (int i = 0; i < (int)v.size(); i++)
+	// Switch Scene if settings say we must
+	if (settings.scene_has_changed)
 	{
-		Circle* c = (Circle*)v[i]->shape;
-		renderer.AddSolidCircle(v[i]->position, c->radius, settings.circle_res, palette.yellow, palette.dark_yellow);
+		switchScene(settings.scene_number);
+		settings.scene_has_changed = 0;
 	}
+
+	current_scene->Render();
 }
 
 int main()
@@ -154,30 +160,10 @@ int main()
 	initGlad();
 	initImGui(window);
 
-	// TEMPORARY CODE
-	world = new World();
-	Circle c(50.0f);
-	PhysObject* one = new PhysObject(&c, vec2(300.0f, 300.0f), 1.0f);
-	PhysObject* two = new PhysObject(&c, vec2(300.0f, 0.0f), 1.0f);
-	PhysObject* thr = new PhysObject(&c, vec2(300.0f, -300.0f), 1.0f);
-	PhysObject* one1 = new PhysObject(&c, vec2(0.0f, 300.0f), 1.0f);
-	PhysObject* two1 = new PhysObject(&c, vec2(0.0f, 0.0f), 1.0f);
-	PhysObject* thr1 = new PhysObject(&c, vec2(0.0f, -300.0f), 1.0f);
-	PhysObject* one11 = new PhysObject(&c, vec2(-300.0f, 300.0f), 1.0f);
-	PhysObject* two11 = new PhysObject(&c, vec2(-300.0f, 0.0f), 1.0f);
-	PhysObject* thr11 = new PhysObject(&c, vec2(-300.0f, -300.0f), 1.0f);
-	world->AddPhysObject(one);
-	world->AddPhysObject(two);
-	world->AddPhysObject(thr);
-	world->AddPhysObject(one1);
-	world->AddPhysObject(two1);
-	world->AddPhysObject(thr1);
-	world->AddPhysObject(one11);
-	world->AddPhysObject(two11);
-	world->AddPhysObject(thr11);
-
 	camera.Create(settings.initial_window_width, settings.initial_window_height);
 	renderer.Create();
+
+	switchScene(0);
 
 	while(!glfwWindowShouldClose(window))
 	{

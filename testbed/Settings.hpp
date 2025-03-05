@@ -6,8 +6,8 @@
 struct SceneColours
 {
 	colour* background;
-	colour* triangles;
-	colour* lines;
+	colour* circles;
+	colour* circle_outlines;
 };
 
 struct Settings
@@ -21,6 +21,8 @@ struct Settings
 	void Reset()
 	{
 		scene_colours.background = &palette.dark_gray;
+		scene_colours.circles = &palette.red;
+		scene_colours.circle_outlines = & palette.dark_red;
 
 		initial_window_width = 1500;
 		initial_window_height = 900;
@@ -37,6 +39,10 @@ struct Settings
 
 	// Renderer
 	int circle_res;
+
+	// Scenes
+	bool scene_has_changed;
+	unsigned int scene_number;
 };
 
 extern Settings settings;

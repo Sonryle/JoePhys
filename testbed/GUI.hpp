@@ -39,13 +39,15 @@ static void updateImGui()
 		}
 		if (ImGui::BeginMenu("Scenes"))
 		{
-			if (ImGui::MenuItem("Newton's Cradle", NULL, appearanceWindowShown))
+			if (ImGui::MenuItem("Test Scene", NULL, (settings.scene_number == 0)))
 			{
-
+				settings.scene_has_changed = 1;
+				settings.scene_number = 0;
 			}
-			if (ImGui::MenuItem("Colour Testing", NULL, appearanceWindowShown))
+			if (ImGui::MenuItem("Test Scene Two", NULL, (settings.scene_number == 1)))
 			{
-			
+				settings.scene_has_changed = 1;
+				settings.scene_number = 1;
 			}
 			if (ImGui::MenuItem("Angry Birds", NULL, appearanceWindowShown))
 			{

@@ -6,7 +6,6 @@
 #include <GLFW/glfw3.h>
 
 #include "JoePhys/Vec2.hpp"
-#include "JoePhys/Circle.hpp"
 
 struct colour;
 struct GLRenderLines;
@@ -14,6 +13,7 @@ struct GLRenderTriangles;
 
 struct Camera
 {
+public:
 
 	Camera()
 	{
@@ -23,17 +23,20 @@ struct Camera
 
 	void Create(float width, float height)
 	{
+		WindowResize(width, height);
+	}
+
+	void WindowResize(int width, int height)
+	{
 		window_width = width;
 		window_height = height;
 	}
-
-	void UpdateScale(double dy);
-	void UpdatePos(GLFWwindow* window, double new_x, double new_y, double old_x, double old_y);
-	void WindowResize(int width, int height);
 	void GenerateProjectionMatrix(float p[16]);
 
 	vec2 center;
 	float zoom;
+
+private:
 	float window_width;
 	float window_height;
 

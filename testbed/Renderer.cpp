@@ -148,7 +148,7 @@ struct GLRenderLines
 
 	void AddVertice(const vec2 v, const colour c)
 	{
-		if (vertice_count == MAX_VERTICE_COUNT)
+		if (vertice_count >= MAX_VERTICE_COUNT)
 			Flush();
 
 		vertices[vertice_count] = v;
@@ -293,7 +293,7 @@ struct GLRenderTriangles
 
 	void AddVertice(const vec2 v, const colour c)
 	{
-		if (vertice_count == MAX_VERTICE_COUNT)
+		if (vertice_count >= MAX_VERTICE_COUNT)
 			Flush();
 
 		vertices[vertice_count] = v;
@@ -400,6 +400,8 @@ void Renderer::Destroy()
 
 void Renderer::AddTriangle(const vec2 p1, const vec2 p2, const vec2 p3, const colour col)
 {
+	if (triangles->vertice_count + 3 >= triangles->MAX_VERTICE_COUNT)
+		Flush();
 	triangles->AddVertice(p1, col);
 	triangles->AddVertice(p2, col);
 	triangles->AddVertice(p3, col);
@@ -407,6 +409,8 @@ void Renderer::AddTriangle(const vec2 p1, const vec2 p2, const vec2 p3, const co
 
 void Renderer::AddLine(const vec2 p1, const vec2 p2, const colour col)
 {
+	if (lines->vertice_count + 2 >= lines->MAX_VERTICE_COUNT)
+		Flush();
 	lines->AddVertice(p1, col);
 	lines->AddVertice(p2, col);
 }
@@ -440,8 +444,7 @@ void Renderer::AddCircle(const vec2 position, const float radius, const unsigned
 		vec2 new_point_pos = position + radius * new_rotation;
 
 		// draw a line connecting the two points
-		lines->AddVertice(point_pos, col);
-		lines->AddVertice(new_point_pos, col);
+		AddLine(point_pos, new_point_pos, col);
 
 		// set the old point & rotation to the most recent
 		rotation = new_rotation;
@@ -478,13 +481,10 @@ void Renderer::AddSolidCircle(const vec2 position, const float radius, const uns
 		vec2 new_point_pos = position + radius * new_rotation;
 
 		// draw a line connecting the two points
-		lines->AddVertice(point_pos, outline_col);
-		lines->AddVertice(new_point_pos, outline_col);
+		AddLine(point_pos, new_point_pos, outline_col);
 
 		// draw a triangle connecting the center to the two points;
-		triangles->AddVertice(point_pos, fill_col);
-		triangles->AddVertice(new_point_pos, fill_col);
-		triangles->AddVertice(position, fill_col);
+		AddTriangle(point_pos, new_point_pos, position, fill_col);
 
 		// set the old point & rotation to the most recent
 		rotation = new_rotation;
