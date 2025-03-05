@@ -5,8 +5,7 @@
 #include <GLFW/glfw3.h>
 
 #include "JoePhys/Circle.hpp"
-#include "JoePhys/PhysObject.hpp"
-#include "JoePhys/World.hpp"
+#include "JoePhys/RigidBody.hpp"
 
 #include "Renderer.hpp"
 #include "Settings.hpp"
@@ -18,9 +17,6 @@ Settings settings;
 double cursor_x = 0;
 double cursor_y = 0;
 bool first_cursor_movement = 1;
-
-// TEMPORARY CODE HERE DO NOT THINK THAT I WILL LET THIS SLIDE
-World* world;
 
 static void glfwErrorCallback(int error, const char* description)
 {
@@ -44,12 +40,6 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 	case GLFW_KEY_A:
 		if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) && action == GLFW_PRESS)
 			appearanceWindowShown = (appearanceWindowShown == 1)? 0 : 1;
-		break;
-	case GLFW_KEY_D:
-		if (action == GLFW_PRESS)
-			if (world->getPhysObjects().size() > 0)
-				world->removePhysObject(world->getPhysObjects()[0]);
-		break;
 	}
 }
 
@@ -136,14 +126,11 @@ static void initGlad()
 void step()
 {
 	// TEMPORARILY CREATE CIRCLES
-	std::vector<PhysObject*> v = world->getPhysObjects();
+	Circle circ(100.0f);
+	RigidBody sun(&circ, vec2(0.0f, 0.0f), 1.0f);
+	Circle* b = (Circle*)sun.shape;
 
-	// loop over objects in world and draw them
-	for (int i = 0; i < (int)v.size(); i++)
-	{
-		Circle* c = (Circle*)v[i]->shape;
-		renderer.AddSolidCircle(v[i]->position, c->radius, settings.circle_res, palette.yellow, palette.dark_yellow);
-	}
+	renderer.AddSolidCircle(vec2(125.0f, 0.0f), b.radius, settings.circle_res, palette.yellow, palette.dark_yellow);
 }
 
 int main()
@@ -151,28 +138,6 @@ int main()
 	initGLFW();
 	initGlad();
 	initImGui(window);
-
-	// TEMPORARY CODE
-	world = new World();
-	Circle c(50.0f);
-	PhysObject one(&c, vec2(300.0f, 300.0f), 1.0f);
-	PhysObject two(&c, vec2(300.0f, 0.0f), 1.0f);
-	PhysObject thr(&c, vec2(300.0f, -300.0f), 1.0f);
-	PhysObject one1(&c, vec2(0.0f, 300.0f), 1.0f);
-	PhysObject two1(&c, vec2(0.0f, 0.0f), 1.0f);
-	PhysObject thr1(&c, vec2(0.0f, -300.0f), 1.0f);
-	PhysObject one11(&c, vec2(-300.0f, 300.0f), 1.0f);
-	PhysObject two11(&c, vec2(-300.0f, 0.0f), 1.0f);
-	PhysObject thr11(&c, vec2(-300.0f, -300.0f), 1.0f);
-	world->addPhysObject(&one);
-	world->addPhysObject(&two);
-	world->addPhysObject(&thr);
-	world->addPhysObject(&one1);
-	world->addPhysObject(&two1);
-	world->addPhysObject(&thr1);
-	world->addPhysObject(&one11);
-	world->addPhysObject(&two11);
-	world->addPhysObject(&thr11);
 
 	camera.Create(settings.initial_window_width, settings.initial_window_height);
 	renderer.Create();
