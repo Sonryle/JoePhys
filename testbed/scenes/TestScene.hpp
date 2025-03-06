@@ -18,8 +18,8 @@ public:
 		ResetSceneColours();
 
 		// add a 15x15 grid of circles to the scene
-		for (int x = 0; x < 15; x++)
-			for (int y = 0; y < 15; y++)
+		for (int x = -7; x < 8; x++)
+			for (int y = -3; y < 12; y++)
 			{
 				Circle* c = new Circle(10.0f);
 				vec2 pos(x * 20, y * 20);
@@ -39,9 +39,9 @@ public:
 	void ResetSceneColours() override
 	{
 		settings.ResetSceneColours();
-		settings.scene_colours.background = &palette.aqua;
-		settings.scene_colours.circles = &palette.purple;
-		settings.scene_colours.circle_outlines = &palette.dark_gray;
+		settings.scene_colours.background = Palette::JP_AQUA;
+		settings.scene_colours.circles = Palette::JP_PURPLE;
+		settings.scene_colours.circle_outlines = Palette::JP_DARK_GRAY;
 	}
 
 };

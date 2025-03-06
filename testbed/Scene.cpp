@@ -21,8 +21,9 @@ void Scene::Render()
 		{
 			const vec2 pos = current_obj->position;
 			const Circle* circ = (Circle*)current_obj->shape;
-			renderer.AddSolidCircle(pos, circ->radius, settings.circle_res, *settings.scene_colours.circles, *settings.scene_colours.circle_outlines);
-			/* renderer.AddSol */
+			const colour fill_col = palette.colours[settings.scene_colours.circles];
+			const colour outline_col = palette.colours[settings.scene_colours.circle_outlines];
+			renderer.AddSolidCircle(pos, circ->radius, settings.circle_res, fill_col, outline_col);
 		}
 		else
 		{

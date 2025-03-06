@@ -5,9 +5,9 @@
 
 struct SceneColours
 {
-	colour* background;
-	colour* circles;
-	colour* circle_outlines;
+	unsigned int background;
+	unsigned int circles;
+	unsigned int circle_outlines;
 };
 
 struct Settings
@@ -30,9 +30,9 @@ struct Settings
 
 	void ResetSceneColours()
 	{
-		scene_colours.background = &palette.dark_gray;
-		scene_colours.circles = &palette.red;
-		scene_colours.circle_outlines = & palette.dark_red;
+		scene_colours.background = Palette::JP_DARK_GRAY;
+		scene_colours.circles = Palette::JP_RED;
+		scene_colours.circle_outlines = Palette::JP_DARK_RED;
 	}
 
 	// Colours

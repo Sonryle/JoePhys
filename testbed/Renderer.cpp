@@ -507,15 +507,15 @@ void Camera::GenerateProjectionMatrix(float p[16])
 	real far = 1;
 	real near = -1;
 
-	right += center.x;
-	left += center.x;
-	top += center.y;
-	bottom += center.y;
-
 	right *= zoom;
 	left *= zoom;
 	top *= zoom;
 	bottom *= zoom;
+
+	right += center.x;
+	left += center.x;
+	top += center.y;
+	bottom += center.y;
 
 	// Row 1
 	p[0] = 2.0f / (right - left);

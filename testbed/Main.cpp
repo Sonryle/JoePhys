@@ -70,7 +70,7 @@ static void mousePosCallback(GLFWwindow* window, double dx, double dy)
 	ImGuiIO& io = ImGui::GetIO();
 	if ( !(first_cursor_movement || io.WantCaptureMouse) )
 		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
-			camera.center += vec2(cursor_x - dx, dy - cursor_y);
+			camera.center += vec2(cursor_x - dx, dy - cursor_y) * camera.zoom;
 
 	cursor_x = dx;
 	cursor_y = dy;
@@ -168,7 +168,7 @@ int main()
 	while(!glfwWindowShouldClose(window))
 	{
 		// Clear Screen
-		colour* bg = settings.scene_colours.background;
+		colour* bg = &palette.colours[settings.scene_colours.background];
 		glClearColor(bg->r, bg->g, bg->b, bg->a);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

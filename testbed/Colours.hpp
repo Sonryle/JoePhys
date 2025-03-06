@@ -45,87 +45,77 @@ struct Palette
 		SetPurpbox();
 	}
 
+	enum COLOUR
+	{
+		JP_GRAY, JP_RED, JP_GREEN, JP_YELLOW, JP_BLUE, JP_PURPLE, JP_AQUA, JP_WHITE,
+		JP_DARK_GRAY, JP_DARK_RED, JP_DARK_GREEN, JP_DARK_YELLOW, JP_DARK_BLUE, JP_DARK_PURPLE,
+		JP_DARK_AQUA, JP_DARK_WHITE
+	};
+
 	void SetPurpbox()
 	{
-		white.Set(0.92f, 0.86f, 0.7f, 1.0f);
-		red.Set(0.98f, 0.29f, 0.20f, 1.0f);
-		green.Set(0.72f, 0.73f, 0.15f, 1.0f);
-		yellow.Set(0.98f, 0.74f, 0.18f, 1.0f);
-		blue.Set(0.51f, 0.65f, 0.6f, 1.0f);
-		purple.Set(0.83f, 0.53f, 0.61f, 1.0f);
-		aqua.Set(0.56f, 0.75f, 0.49f, 1.0f);
-		gray.Set(0.24f, 0.19f, 0.33f, 1.0f);
+		colours[JP_GRAY].Set(0.24f, 0.19f, 0.33f, 1.0f);
+		colours[JP_RED].Set(0.98f, 0.29f, 0.20f, 1.0f);
+		colours[JP_GREEN].Set(0.72f, 0.73f, 0.15f, 1.0f);
+		colours[JP_YELLOW].Set(0.98f, 0.74f, 0.18f, 1.0f);
+		colours[JP_BLUE].Set(0.51f, 0.65f, 0.6f, 1.0f);
+		colours[JP_PURPLE].Set(0.83f, 0.53f, 0.61f, 1.0f);
+		colours[JP_AQUA].Set(0.56f, 0.75f, 0.49f, 1.0f);
+		colours[JP_WHITE].Set(0.92f, 0.86f, 0.7f, 1.0f);
 
-		dark_white.Set(0.66f, 0.6f, 0.52f, 1.0f);
-		dark_red.Set(0.8f, 0.14f, 0.11f, 1.0f);
-		dark_green.Set(0.6f, 0.59f, 0.1f, 1.0f);
-		dark_yellow.Set(0.84f, 0.6f, 0.13f, 1.0f);
-		dark_blue.Set(0.27f, 0.70f, 0.72f, 1.0f);
-		dark_purple.Set(0.69f, 0.38f, 0.53f, 1.0f);
-		dark_aqua.Set(0.4f, 0.61f, 0.41f, 1.0f);
-		dark_gray.Set(0.17f, 0.13f, 0.23f, 1.0f);
+		colours[JP_DARK_GRAY].Set(0.17f, 0.13f, 0.23f, 1.0f);
+		colours[JP_DARK_RED].Set(0.8f, 0.14f, 0.11f, 1.0f);
+		colours[JP_DARK_GREEN].Set(0.6f, 0.59f, 0.1f, 1.0f);
+		colours[JP_DARK_YELLOW].Set(0.84f, 0.6f, 0.13f, 1.0f);
+		colours[JP_DARK_BLUE].Set(0.27f, 0.70f, 0.72f, 1.0f);
+		colours[JP_DARK_PURPLE].Set(0.69f, 0.38f, 0.53f, 1.0f);
+		colours[JP_DARK_AQUA].Set(0.4f, 0.61f, 0.41f, 1.0f);
+		colours[JP_DARK_WHITE].Set(0.66f, 0.6f, 0.52f, 1.0f);
 	}
 
 	void SetGruvbox()
 	{
-		white.Set(0.92f, 0.86f, 0.7f, 1.0f);
-		red.Set(0.98f, 0.29f, 0.20f, 1.0f);
-		green.Set(0.72f, 0.73f, 0.15f, 1.0f);
-		yellow.Set(0.98f, 0.74f, 0.18f, 1.0f);
-		blue.Set(0.51f, 0.65f, 0.6f, 1.0f);
-		purple.Set(0.83f, 0.53f, 0.61f, 1.0f);
-		aqua.Set(0.56f, 0.75f, 0.49f, 1.0f);
-		gray.Set(0.57f, 0.51f, 0.45f, 1.0f);
+		colours[JP_GRAY].Set(0.57f, 0.51f, 0.45f, 1.0f);
+		colours[JP_RED].Set(0.98f, 0.29f, 0.20f, 1.0f);
+		colours[JP_GREEN].Set(0.72f, 0.73f, 0.15f, 1.0f);
+		colours[JP_YELLOW].Set(0.98f, 0.74f, 0.18f, 1.0f);
+		colours[JP_BLUE].Set(0.51f, 0.65f, 0.6f, 1.0f);
+		colours[JP_PURPLE].Set(0.83f, 0.53f, 0.61f, 1.0f);
+		colours[JP_AQUA].Set(0.56f, 0.75f, 0.49f, 1.0f);
+		colours[JP_WHITE].Set(0.92f, 0.86f, 0.7f, 1.0f);
 
-		dark_white.Set(0.66f, 0.6f, 0.52f, 1.0f);
-		dark_red.Set(0.8f, 0.14f, 0.11f, 1.0f);
-		dark_green.Set(0.6f, 0.59f, 0.1f, 1.0f);
-		dark_yellow.Set(0.84f, 0.6f, 0.13f, 1.0f);
-		dark_blue.Set(0.27f, 0.70f, 0.72f, 1.0f);
-		dark_purple.Set(0.69f, 0.38f, 0.53f, 1.0f);
-		dark_aqua.Set(0.4f, 0.61f, 0.41f, 1.0f);
-		dark_gray.Set(0.16f, 0.16f, 0.16f, 1.0f);
+		colours[JP_DARK_GRAY].Set(0.16f, 0.16f, 0.16f, 1.0f);
+		colours[JP_DARK_RED].Set(0.8f, 0.14f, 0.11f, 1.0f);
+		colours[JP_DARK_GREEN].Set(0.6f, 0.59f, 0.1f, 1.0f);
+		colours[JP_DARK_YELLOW].Set(0.84f, 0.6f, 0.13f, 1.0f);
+		colours[JP_DARK_BLUE].Set(0.27f, 0.70f, 0.72f, 1.0f);
+		colours[JP_DARK_PURPLE].Set(0.69f, 0.38f, 0.53f, 1.0f);
+		colours[JP_DARK_AQUA].Set(0.4f, 0.61f, 0.41f, 1.0f);
+		colours[JP_DARK_WHITE].Set(0.66f, 0.6f, 0.52f, 1.0f);
 	}
 
 	void SetPastel()
 	{
-		white.Set(0.89f, 0.89f, 0.89f, 1.0f);
-		red.Set(1.0f, 0.68f, 0.68f, 1.0f);
-		green.Set(0.79f, 1.0f, 0.75f, 1.0f);
-		yellow.Set(0.99f, 1.0f, 0.71f, 1.0f);
-		blue.Set(0.6f, 0.96f, 1.0f, 1.0f);
-		purple.Set(1.0f, 0.78f, 1.0f, 1.0f);
-		aqua.Set(0.59f, 0.95f, 0.82f, 1.0f);
-		gray.Set(0.52f, 0.52f, 0.52f, 1.0f);
+		colours[JP_GRAY].Set(0.52f, 0.52f, 0.52f, 1.0f);
+		colours[JP_RED].Set(1.0f, 0.68f, 0.68f, 1.0f);
+		colours[JP_GREEN].Set(0.79f, 1.0f, 0.75f, 1.0f);
+		colours[JP_YELLOW].Set(0.99f, 1.0f, 0.71f, 1.0f);
+		colours[JP_BLUE].Set(0.6f, 0.96f, 1.0f, 1.0f);
+		colours[JP_PURPLE].Set(1.0f, 0.78f, 1.0f, 1.0f);
+		colours[JP_AQUA].Set(0.59f, 0.95f, 0.82f, 1.0f);
+		colours[JP_WHITE].Set(0.89f, 0.89f, 0.89f, 1.0f);
 
-		dark_white.Set(0.59f, 0.59f, 0.59f, 1.0f);
-		dark_red.Set(0.7f, 0.38f, 0.38f, 1.0f);
-		dark_green.Set(0.49f, 0.7f, 0.45f, 1.0f);
-		dark_yellow.Set(0.69f, 0.7f, 0.41f, 1.0f);
-		dark_blue.Set(0.3f, 0.66f, 0.7f, 1.0f);
-		dark_purple.Set(0.7f, 0.48f, 0.7f, 1.0f);
-		dark_aqua.Set(0.29f, 0.65f, 0.52f, 1.0f);
-		/* dark_aqua.Set(0.47f, 0.55f, 0.49f, 1.0f); */
-		dark_gray.Set(0.22f, 0.22f, 0.22f, 1.0f);
+		colours[JP_DARK_GRAY].Set(0.22f, 0.22f, 0.22f, 1.0f);
+		colours[JP_DARK_RED].Set(0.7f, 0.38f, 0.38f, 1.0f);
+		colours[JP_DARK_GREEN].Set(0.49f, 0.7f, 0.45f, 1.0f);
+		colours[JP_DARK_YELLOW].Set(0.69f, 0.7f, 0.41f, 1.0f);
+		colours[JP_DARK_BLUE].Set(0.3f, 0.66f, 0.7f, 1.0f);
+		colours[JP_DARK_PURPLE].Set(0.7f, 0.48f, 0.7f, 1.0f);
+		colours[JP_DARK_AQUA].Set(0.29f, 0.65f, 0.52f, 1.0f);
+		colours[JP_DARK_WHITE].Set(0.59f, 0.59f, 0.59f, 1.0f);
 	}
 
-	colour white;
-	colour red;
-	colour green;
-	colour yellow;
-	colour blue;
-	colour purple;
-	colour aqua;
-	colour gray;
-
-	colour dark_white;
-	colour dark_red;
-	colour dark_green;
-	colour dark_yellow;
-	colour dark_blue;
-	colour dark_purple;
-	colour dark_aqua;
-	colour dark_gray;
+	colour colours[16];
 };
 
 extern Palette palette;
