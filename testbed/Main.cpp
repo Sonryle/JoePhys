@@ -4,12 +4,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "Scene.hpp"
-#include "AllSceneHeaders.hpp"
 #include "Renderer.hpp"
 #include "Settings.hpp"
 #include "GUI.hpp"
-#include "scenes/ColourTestScene.hpp"
 
 GLFWwindow* window = nullptr;
 Settings settings;
@@ -17,33 +14,6 @@ Settings settings;
 double cursor_x = 0;
 double cursor_y = 0;
 bool first_cursor_movement = 1;
-
-Scene* current_scene = nullptr;
-
-void switchScene(unsigned int i)
-{
-	delete current_scene;
-	current_scene = nullptr;
-
-	switch(i)
-	{
-	case (0):
-		current_scene = new TestScene();
-		settings.scene_number = 0;
-		break;
-	case (1):
-		current_scene = new TestSceneTwo();
-		settings.scene_number = 1;
-		break;
-	case (2):
-		current_scene = new ColourTestScene();
-		settings.scene_number = 2;
-		break;
-	default:
-		current_scene = new TestScene();
-		settings.scene_number = 0;
-	}
-}
 
 static void glfwErrorCallback(int error, const char* description)
 {
@@ -152,14 +122,7 @@ static void initGlad()
 
 void step()
 {
-	// Switch Scene if settings say we must
-	if (settings.scene_has_changed)
-	{
-		switchScene(settings.scene_number);
-		settings.scene_has_changed = 0;
-	}
-
-	current_scene->Render();
+	renderer.AddColourTest();
 }
 
 int main()
@@ -171,7 +134,7 @@ int main()
 	camera.Create(settings.initial_window_width, settings.initial_window_height);
 	renderer.Create();
 
-	switchScene(0);
+	/* switchScene(0); */
 
 	while(!glfwWindowShouldClose(window))
 	{

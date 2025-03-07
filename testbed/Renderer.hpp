@@ -17,7 +17,7 @@ public:
 
 	Camera()
 	{
-		center.set(0.0f, 0.0f);
+		center.Set(0.0f, 0.0f);
 		zoom = 1.0f;
 	}
 

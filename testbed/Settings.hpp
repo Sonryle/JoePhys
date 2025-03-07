@@ -1,7 +1,7 @@
 #ifndef JP_SETTINGS
 #define JP_SETTINGS
 
-#include "Colours.hpp"
+#include "Colour.hpp"
 
 struct SceneColours
 {

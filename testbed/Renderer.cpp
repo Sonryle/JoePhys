@@ -1,6 +1,11 @@
 #include "Renderer.hpp"
+#include "Colour.hpp"
 
-#include "Colours.hpp"
+// cstdio for "stderr" file path constant
+#include <cstdio>
+
+// constants for PI
+const double PI = 3.14159265359;
 
 Camera camera;
 Renderer renderer;

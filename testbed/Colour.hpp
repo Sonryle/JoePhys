@@ -1,41 +1,24 @@
-#ifndef JP_COLOURS
-#define JP_COLOURS
-
-#include <cmath>
-#include <cfloat> 	// for FLT_MAX
-#include <cstdio>	// for "stderr" file path constant
+#ifndef JP_COLOUR
+#define JP_COLOUR
 
 typedef float real;
 
-struct colour;
-struct gruv;
-
+// colour struct containing a float for each colour channel, red, green, blue and alpha
 struct colour
 {
-	// CONSTRUCTORS
-	// ------------
-
-	colour() {}
+	// constructors
+	colour() : r(0), g(0), b(0), a(0) {}
 	colour(real r_in, real g_in, real b_in, real a_in) : r(r_in), g(g_in), b(b_in), a(a_in) {}
+	colour(colour* col) : r(col->r), g(col->g), b(col->b), a(col->a) {}
 
-	// FUNCTIONS
-	// ---------
+	// functions
+	void Set(real r_in, real g_in, real b_in, real a_in) { r = r_in; g = g_in; b = b_in; a = a_in; }
+	void Set(const colour& col) { Set(col.r, col.g, col.b, col.a); }
 
-	void Set(real r_in, real g_in, real b_in, real a_in) {
-		r = r_in; g = g_in; b = b_in; a = a_in;
-	}
-	void Set(const colour& col) {
-		Set(col.r, col.g, col.b, col.a);
-	}
-
-	// Conversion operator to float*
-	operator float* () { return &r; }
+	// Conversion operator to float* (returns colour as an array of 3 floats)
 	operator const float* () const { return &r; }
 
-	// VARIABLES
-	// ---------
-
-	float r, g, b, a;
+	real r, g, b, a;
 };
 
 struct Palette
