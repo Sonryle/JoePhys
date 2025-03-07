@@ -55,6 +55,7 @@ struct Renderer
 	void AddLine(const vec2 p1, const vec2 p2, const colour col);
 	void AddCircle(const vec2 position, const float radius, const unsigned int segments, const colour col);
 	void AddSolidCircle(const vec2 position, const float radius, const unsigned int segments, const colour fill_col, const colour outline_col);
+	void AddColourTest();
 
 	void Flush();
 

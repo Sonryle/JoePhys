@@ -10,14 +10,12 @@ public:
 	Scene() {};
 	virtual ~Scene() {};
 
-	// Functions which will be changed by Scenes classes
+	// Functions which HAVE TO be changed by Scenes classes
 	virtual void ResetCamera() = 0;
 	virtual void ResetSceneColours() = 0;
 
 	// Functions which are defined in the main Scene class.
-	// (Other scene classes derived from this one will not
-	//  edit these functions)
-	void Render();
+	virtual void Render();
 
 protected:
 	World world;

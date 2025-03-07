@@ -42,7 +42,7 @@ struct Palette
 {
 	Palette()
 	{
-		SetPurpbox();
+		SetAutumn();
 	}
 
 	enum COLOUR
@@ -52,25 +52,25 @@ struct Palette
 		JP_DARK_AQUA, JP_DARK_WHITE
 	};
 
-	void SetPurpbox()
+	void SetAutumn()
 	{
-		colours[JP_GRAY].Set(0.24f, 0.19f, 0.33f, 1.0f);
-		colours[JP_RED].Set(0.98f, 0.29f, 0.20f, 1.0f);
-		colours[JP_GREEN].Set(0.72f, 0.73f, 0.15f, 1.0f);
-		colours[JP_YELLOW].Set(0.98f, 0.74f, 0.18f, 1.0f);
-		colours[JP_BLUE].Set(0.51f, 0.65f, 0.6f, 1.0f);
-		colours[JP_PURPLE].Set(0.83f, 0.53f, 0.61f, 1.0f);
-		colours[JP_AQUA].Set(0.56f, 0.75f, 0.49f, 1.0f);
-		colours[JP_WHITE].Set(0.92f, 0.86f, 0.7f, 1.0f);
+		colours[JP_GRAY].Set(0.16f, 0.16f, 0.16f, 1.0f);
+		colours[JP_RED].Set(0.44f, 0.16f, 0.14f, 1.0f);
+		colours[JP_GREEN].Set(0.55f, 0.55f, 0.39f, 1.0f);
+		colours[JP_YELLOW].Set(0.80f, 0.5f, 0.33f, 1.0f);
+		colours[JP_BLUE].Set(0.51f, 0.6f, 0.69f, 1.0f);
+		colours[JP_PURPLE].Set(0.58f, 0.48f, 0.65f, 1.0f);
+		colours[JP_AQUA].Set(0.13f, 0.44f, 0.44f, 1.0f);
+		colours[JP_WHITE].Set(0.67f, 0.67f, 0.67f, 1.0f);
 
-		colours[JP_DARK_GRAY].Set(0.17f, 0.13f, 0.23f, 1.0f);
-		colours[JP_DARK_RED].Set(0.8f, 0.14f, 0.11f, 1.0f);
-		colours[JP_DARK_GREEN].Set(0.6f, 0.59f, 0.1f, 1.0f);
-		colours[JP_DARK_YELLOW].Set(0.84f, 0.6f, 0.13f, 1.0f);
-		colours[JP_DARK_BLUE].Set(0.27f, 0.70f, 0.72f, 1.0f);
-		colours[JP_DARK_PURPLE].Set(0.69f, 0.38f, 0.53f, 1.0f);
-		colours[JP_DARK_AQUA].Set(0.4f, 0.61f, 0.41f, 1.0f);
-		colours[JP_DARK_WHITE].Set(0.66f, 0.6f, 0.52f, 1.0f);
+		colours[JP_DARK_GRAY].Set(0.08f, 0.08f, 0.08f, 1.0f);
+		colours[JP_DARK_RED].Set(0.29f, 0.11f, 0.12f, 1.0f);
+		colours[JP_DARK_GREEN].Set(0.25f, 0.3f, 0.14f, 1.0f);
+		colours[JP_DARK_YELLOW].Set(0.55f, 0.34f, 0.23f, 1.0f);
+		colours[JP_DARK_BLUE].Set(0.29f, 0.35f, 0.42f, 1.0f);
+		colours[JP_DARK_PURPLE].Set(0.36f, 0.2f, 0.37f, 1.0f);
+		colours[JP_DARK_AQUA].Set(0.1f, 0.27f, 0.29f, 1.0f);
+		colours[JP_DARK_WHITE].Set(0.31f, 0.27f, 0.26f, 1.0f);
 	}
 
 	void SetGruvbox()

@@ -8,7 +8,6 @@
 #include "GLFW/glfw3.h"
 #include "Settings.hpp"
 
-static bool appearanceWindowShown = 0;
 
 static void initImGui(GLFWwindow* window)
 {
@@ -17,6 +16,7 @@ static void initImGui(GLFWwindow* window)
 	ImGui_ImplOpenGL3_Init();
 }
 
+static bool appearanceWindowShown = 0;
 static void AppearanceWindow();
 
 static void updateImGui()
@@ -26,7 +26,7 @@ static void updateImGui()
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui::NewFrame();
 
-	// Add Our Knobs & Dails
+	// Add Our Top Main Menu Bar
         if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("Settings"))
@@ -48,6 +48,11 @@ static void updateImGui()
 			{
 				settings.scene_has_changed = 1;
 				settings.scene_number = 1;
+			}
+			if (ImGui::MenuItem("Colour Test Scene", NULL, (settings.scene_number == 2)))
+			{
+				settings.scene_has_changed = 1;
+				settings.scene_number = 2;
 			}
 			ImGui::EndMenu();
 		}
@@ -83,12 +88,68 @@ static void AppearanceWindow()
 
 	if (ImGui::CollapsingHeader("Colour"))
 	{
+		if (ImGui::TreeNode("Scene"))
+		{
+			// list of items MUST be in the same order as the colour palette enum (from colours.hpp)
+			const char* items[] = { "Gray", "Red", "Green", "Yellow", "Blue", "Purple", "Aqua", "White",
+						"Dark Gray", "Dark Red", "Dark Green", "Dark Yellow", "Dark Blue",
+						"Dark Purple", "Dark Aqua", "Dark White" };
+
+			// Selection box for background colour
+			const char* background_preview_value = items[settings.scene_colours.background];
+			if (ImGui::BeginCombo("Background", background_preview_value, 0))
+			{
+				for (int n = 0; n < IM_ARRAYSIZE(items); n++)
+				{
+					const bool is_selected = (settings.scene_colours.background == n);
+
+					if (ImGui::Selectable(items[n], is_selected))
+						settings.scene_colours.background = n;
+
+					if (is_selected)
+						ImGui::SetItemDefaultFocus();
+				}
+				ImGui::EndCombo();
+			}
+			// Selection box for circles colour
+			const char* circle_preview_value = items[settings.scene_colours.circles];
+			if (ImGui::BeginCombo("Circles", circle_preview_value, 0))
+			{
+				for (int n = 0; n < IM_ARRAYSIZE(items); n++)
+				{
+					const bool is_selected = (settings.scene_colours.circles == n);
+
+					if (ImGui::Selectable(items[n], is_selected))
+						settings.scene_colours.circles = n;
+
+					if (is_selected)
+						ImGui::SetItemDefaultFocus();
+				}
+				ImGui::EndCombo();
+			}
+			// Selection box for circle outlines colour
+			const char* circle_outline_preview_value = items[settings.scene_colours.circle_outlines];
+			if (ImGui::BeginCombo("Circle Outlines", circle_outline_preview_value, 0))
+			{
+				for (int n = 0; n < IM_ARRAYSIZE(items); n++)
+				{
+					const bool is_selected = (settings.scene_colours.circle_outlines == n);
+
+					if (ImGui::Selectable(items[n], is_selected))
+						settings.scene_colours.circle_outlines = n;
+
+					if (is_selected)
+						ImGui::SetItemDefaultFocus();
+				}
+				ImGui::EndCombo();
+			}
+			ImGui::TreePop();
+		}
 		if (ImGui::TreeNode("Palette"))
 		{
-			ImGui::Separator();
-			if(ImGui::Button("Set Purpbox"))
+			if(ImGui::Button("Set Autumn"))
 			{
-				palette.SetPurpbox();
+				palette.SetAutumn();
 			}
 			if(ImGui::Button("Set Gruvbox"))
 			{
@@ -98,7 +159,6 @@ static void AppearanceWindow()
 			{
 				palette.SetPastel();
 			}
-			ImGui::Separator();
 			ImGui::TreePop();
 		}
 	}

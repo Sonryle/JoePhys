@@ -9,6 +9,7 @@
 #include "Renderer.hpp"
 #include "Settings.hpp"
 #include "GUI.hpp"
+#include "scenes/ColourTestScene.hpp"
 
 GLFWwindow* window = nullptr;
 Settings settings;
@@ -28,12 +29,19 @@ void switchScene(unsigned int i)
 	{
 	case (0):
 		current_scene = new TestScene();
+		settings.scene_number = 0;
 		break;
 	case (1):
 		current_scene = new TestSceneTwo();
+		settings.scene_number = 1;
+		break;
+	case (2):
+		current_scene = new ColourTestScene();
+		settings.scene_number = 2;
 		break;
 	default:
 		current_scene = new TestScene();
+		settings.scene_number = 0;
 	}
 }
 
