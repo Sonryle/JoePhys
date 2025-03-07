@@ -137,6 +137,9 @@ int main()
 	initGlad();
 	initImGui(window);
 
+	// Disable GLFW's VSync
+	glfwSwapInterval(0);
+
 	// Create our camera and renderer
 	camera.Create(settings.initial_window_width, settings.initial_window_height);
 	renderer.Create();
