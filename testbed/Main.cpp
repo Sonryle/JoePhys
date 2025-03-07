@@ -1,19 +1,22 @@
 #include <cstdio>	// for "stderr" file path constant
 #include <algorithm>	// for std::max & std::min
 
+// include glad openGL function loader & GLFW window manager
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+// include testbed header files
 #include "Renderer.hpp"
 #include "Settings.hpp"
 #include "GUI.hpp"
 
 GLFWwindow* window = nullptr;
-Settings settings;
 
 double cursor_x = 0;
 double cursor_y = 0;
 bool first_cursor_movement = 1;
+
+// set up all of the callback functions
 
 static void glfwErrorCallback(int error, const char* description)
 {
@@ -35,7 +38,7 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 		break;
 	case GLFW_KEY_A:
 		if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) && action == GLFW_PRESS)
-			appearanceWindowShown = (appearanceWindowShown == 1)? 0 : 1;
+			appearanceWindowHidden = (appearanceWindowHidden == 1)? 0 : 1;
 		break;
 	}
 }
@@ -76,6 +79,7 @@ static void scrollCallback(GLFWwindow*, double dx, double dy)
 	return;
 }
 
+// Initiates GLFW and creates a window
 static void initGLFW()
 {
 	if (!glfwInit())
@@ -112,6 +116,7 @@ static void initGLFW()
 	glfwSetScrollCallback(window, scrollCallback);
 }
 
+// Initiates glad, which loads the openGL functions from our graphics cards
 static void initGlad()
 {
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -127,15 +132,16 @@ void step()
 
 int main()
 {
+	// initiate GLFW, glad and imgui
 	initGLFW();
 	initGlad();
 	initImGui(window);
 
+	// Create our camera and renderer
 	camera.Create(settings.initial_window_width, settings.initial_window_height);
 	renderer.Create();
 
-	/* switchScene(0); */
-
+	// main loop
 	while(!glfwWindowShouldClose(window))
 	{
 		// Clear Screen
@@ -148,13 +154,14 @@ int main()
 
 		// Render Frame
 		renderer.Flush();
-		updateImGui();
+		DrawGui();
 		glfwSwapBuffers(window);
 
 		// Poll Window Events
 		glfwPollEvents();
 	}
 
+	// destroy renderer & terminate GLFW
 	renderer.Destroy();
 	glfwTerminate();
 

@@ -21,6 +21,12 @@ struct colour
 	real r, g, b, a;
 };
 
+// Colour palette struct. Contains array of colours which can be accessed by any file which includes "Colour.hpp".
+// This is because we create an extern Palette named 'palette' at the end of this file, which is then declared in "Colour.cpp"
+//
+// There is an enum which contains the names of the colours in the palette. The colour names are defined in the same order as
+// the colours in the "colours" array. This is so that when you want to access a colour from the colour palette, you can
+// simply call "palette.colours[Palette::JP_RED]" to access the red colour, for example.
 struct Palette
 {
 	Palette()
@@ -31,8 +37,8 @@ struct Palette
 	enum COLOUR
 	{
 		JP_GRAY, JP_RED, JP_GREEN, JP_YELLOW, JP_BLUE, JP_PURPLE, JP_AQUA, JP_WHITE,
-		JP_DARK_GRAY, JP_DARK_RED, JP_DARK_GREEN, JP_DARK_YELLOW, JP_DARK_BLUE, JP_DARK_PURPLE,
-		JP_DARK_AQUA, JP_DARK_WHITE
+		JP_DARK_GRAY, JP_DARK_RED, JP_DARK_GREEN, JP_DARK_YELLOW, JP_DARK_BLUE,
+		JP_DARK_PURPLE, JP_DARK_AQUA, JP_DARK_WHITE
 	};
 
 	void SetAutumn()

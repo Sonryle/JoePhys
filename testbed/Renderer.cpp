@@ -10,16 +10,19 @@ const double PI = 3.14159265359;
 Camera camera;
 Renderer renderer;
 
+// This function creates an openGL shader, compiles it using the source code given and then returns a handle to the shader
 static GLuint createShaderFromString(const char* source, GLenum type)
 {
+	// create shader, link source code, and compile shader
 	GLuint handle = glCreateShader(type);
 	glShaderSource(handle, 1, &source, NULL);
 	glCompileShader(handle);
 
+	// check for errors during compilation and output error message if something went wrong
 	GLint success;
 	char error_message[512];
 	glGetShaderiv(handle, GL_COMPILE_STATUS, &success);
-if (!success) {
+	if (!success) {
 		glGetShaderInfoLog(handle, 512, nullptr, error_message);
 		glDeleteShader(handle);
 
@@ -28,16 +31,23 @@ if (!success) {
 		if (type == GL_FRAGMENT_SHADER)
 			fprintf(stderr, "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n%s\n", error_message);
 
+		// return -1 if there was an error during compilation
 		return -1;
 	}
 
+	// return the handle to the window
 	return handle;
 }
 
+// This function creates two openGL shaders using the source code provided, then creates and links them into an openGL shader program,
+// and returns a handle to the shader program
 static GLuint createShaderProgramFromString(const char* vertex_source, const char* fragment_source)
 {
+	// Create shaders using source code provided
 	GLuint vertex_shader = createShaderFromString(vertex_source, GL_VERTEX_SHADER);
 	GLuint fragment_shader = createShaderFromString(fragment_source, GL_FRAGMENT_SHADER);
+
+	// If either shader did not compile correctly, return -1 and print and error message
 	if (vertex_shader == -1)
 	{
 		fprintf(stderr, "ERROR::SHADER_PROGRAM::PROGRAM COULD NOT BE USED BECAUSE OF ERRORS IN VERTEX SHADER");
@@ -49,16 +59,18 @@ static GLuint createShaderProgramFromString(const char* vertex_source, const cha
 		return -1;
 	}
 
+	// Create shader program, attach shaders and then link the shader program into the executable shader pipeline
 	GLuint handle = glCreateProgram();
 	glAttachShader(handle, vertex_shader);
 	glAttachShader(handle, fragment_shader);
 	glBindFragDataLocation(handle, 0, "colour");
 	glLinkProgram(handle);
 
-	// Shaders have been safely copied into the shader program
+	// Delete shaders (they have been safely copied into the shader program and so we dont need them anymore)
 	glDeleteShader(vertex_shader);
 	glDeleteShader(fragment_shader);
 
+	// check for any errors during linking
 	GLint success;
 	char error_message[512];
 	glGetProgramiv(handle, GL_LINK_STATUS, &success);
@@ -66,18 +78,27 @@ static GLuint createShaderProgramFromString(const char* vertex_source, const cha
 	{
 		glGetShaderInfoLog(handle, 512, nullptr, error_message);
 		glDeleteProgram(handle);
-		fprintf(stderr, "hi");
-
+		fprintf(stderr, "ERROR::SHADER_PROGRAM::ERROR_WHILE_LINKING\n%s\n", error_message);
+		
+		// if there was an error while linking, return -1
 		return -1;
 	}
-
+	
+	// return the handle to the shader program
 	return handle;
 }
 
+// A struct which will make the process of rendering lines far easier. All you need to do is call "Create()" and
+// after that, you can add any vertices to the vertices array by using "AddVertice()". (openGL loops through the
+// vertices and draws lines between each pair of vertices which it finds) In order to render the lines in the
+// vertices array, all you need to do is call "Flush()" and the vertices array will be cleared and all the lines
+// will be drawn to the screen.
 struct GLRenderLines
 {
+	// Create shaders, shader program and set up VAO and VBOs
 	void Create()
 	{
+		// Source code for vertex & fragment shader
 		const char* vs = {
 			"#version 330 core\n"
 			"layout(location = 0) in vec2 v_position;\n"
@@ -106,6 +127,7 @@ struct GLRenderLines
 		// Set up shaders
 		program_handle = createShaderProgramFromString(vs, fs);
 		projection_uniform = glGetUniformLocation(program_handle, "projection_matrix");
+		// Set the position and colour attribute locations to be 0 and 1
 		position_attribute = 0;
 		colour_attribute = 1;
 
@@ -135,6 +157,7 @@ struct GLRenderLines
 		vertice_count = 0;
 	}
 
+	// deletes all resources
 	void Destroy()
 	{
 		if (vao)
@@ -151,8 +174,11 @@ struct GLRenderLines
 		}
 	}
 
+	// add a vertice to the 'vertices' array
 	void AddVertice(const vec2 v, const colour c)
 	{
+		// if vertices array is full, render scene, clear vertices
+		// array and add vertices to the empty vertices array
 		if (vertice_count >= MAX_VERTICE_COUNT)
 			Flush();
 
@@ -163,9 +189,11 @@ struct GLRenderLines
 
 	void Flush()
 	{
+		// If there is nothing to render, return
 		if (vertice_count == 0)
 			return;
 
+		// use our shader program
 		glUseProgram(program_handle);
 
 		// Get Projection Matrix from Camera
@@ -219,10 +247,12 @@ struct GLRenderLines
 	int vertice_count;
 };
 
+// The exact same thing as GLRenderLines, but for triangles. The only difference is the shader source code (vs and fs, defined in Create())
 struct GLRenderTriangles
 {
 	void Create()
 	{
+		// Set up shader source code (this is the only difference between GLRenderTriangles and GLRenderLines)
 		const char* vs = {
 			"#version 330 core\n"
 			"layout(location = 0) in vec2 v_position;\n"
@@ -364,18 +394,21 @@ struct GLRenderTriangles
 	int vertice_count;
 };
 
+// Constructor
 Renderer::Renderer()
 {
 	lines = nullptr;
 	triangles = nullptr;
 }
 
+// Destructor
 Renderer::~Renderer()
 {
 	if (lines != nullptr || triangles != nullptr)
 		Destroy();
 }
 
+// Creates new GLRenderLines and GLRenderTriangles structs
 void Renderer::Create()
 {
 	lines = new GLRenderLines;
@@ -386,6 +419,7 @@ void Renderer::Create()
 	return;
 }
 
+// Calls "Destroy()" on GLRenderLines and GLRenderTriangles
 void Renderer::Destroy()
 {
 	if (lines != nullptr)
@@ -403,19 +437,27 @@ void Renderer::Destroy()
 	}
 }
 
+// This function can be used to add a triangle to the "vertices" array in GLDrawTriangles.
 void Renderer::AddTriangle(const vec2 p1, const vec2 p2, const vec2 p3, const colour col)
 {
+	// if there is not enough space for a new triangle in the "vertices" array in GLDrawTriangles, Flush.
 	if (triangles->vertice_count + 3 >= triangles->MAX_VERTICE_COUNT)
 		Flush();
+	
+	// Add triangle
 	triangles->AddVertice(p1, col);
 	triangles->AddVertice(p2, col);
 	triangles->AddVertice(p3, col);
 }
 
+// This function can be used to add a line to the "vertices" array in GLDrawLines.
 void Renderer::AddLine(const vec2 p1, const vec2 p2, const colour col)
 {
+	// If tehre is not enough space for a new line in the "vertices" array in GLDrawLines, Flush.
 	if (lines->vertice_count + 2 >= lines->MAX_VERTICE_COUNT)
 		Flush();
+
+	// Add line
 	lines->AddVertice(p1, col);
 	lines->AddVertice(p2, col);
 }
@@ -608,14 +650,17 @@ void Renderer::AddColourTest()
 	AddTriangle(bt8p1, bt8p2, bt8p3, bt8col);
 }
 
+// Calls Flush on GLDrawTriangles struct & GLDrawLines struct.
 void Renderer::Flush()
 {
 	triangles->Flush();
 	lines->Flush();
 }
 
+// Generates projection matrix which will be applied to all our points in the vertex shaders before rendering
 void Camera::GenerateProjectionMatrix(float p[16])
 {
+	// set right, left, top, bottom, far and near so that 0,0 is in the center of the screen
 	real right = window_width / 2;
 	real left = window_width / -2;
 	real top = window_height / 2;
@@ -623,15 +668,19 @@ void Camera::GenerateProjectionMatrix(float p[16])
 	real far = 1;
 	real near = -1;
 
+	// Multiply corners of the screen by camera zoom
 	right *= zoom;
 	left *= zoom;
 	top *= zoom;
 	bottom *= zoom;
 
+	// Offset corners of the screen by the camera position (the camera's center)
 	right += center.x;
 	left += center.x;
 	top += center.y;
 	bottom += center.y;
+
+	// Generate Projection Matrix
 
 	// Row 1
 	p[0] = 2.0f / (right - left);
