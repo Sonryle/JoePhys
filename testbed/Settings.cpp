@@ -21,6 +21,8 @@ void Settings::Reset()
 
 	circle_res = 7;
 
+	frame_limit = 120;
+
 	simulation_hertz = 120;
 }
 

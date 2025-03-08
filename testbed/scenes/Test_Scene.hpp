@@ -2,6 +2,7 @@
 #define JP_TEST_SCENE
 
 #include <stdlib.h>	// for 'srand' and 'rand'
+#include <math.h>	// for M_PI
 #include "../Scene.hpp"
 #include "../Settings.hpp"
 #include "JoePhys/PhysObj.hpp"
@@ -29,8 +30,8 @@ struct TestScene : public Scene
 				vec2 vel(vel_x * r / 6, vel_y * r / 6);
 
 				vec2 pos(40 * x, 40 * y);
-				real radius = 10;
-				real mass = 1.0f;
+				real radius = 10 * r * 2;
+				real mass = M_PI * radius * radius;
 				Particle* myParticle = new Particle(pos, vel, radius, mass);
 				// Add the particle to the physics object
 				myPhysObj->particles.push_back(myParticle);

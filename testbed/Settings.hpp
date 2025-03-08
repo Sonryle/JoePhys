@@ -41,6 +41,9 @@ struct Settings
 	bool scene_has_changed;
 	unsigned int scene_number;
 
+	// Main Application Vars
+	int frame_limit;
+
 	// Simulation vars
 	int simulation_hertz;
 };

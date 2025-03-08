@@ -193,6 +193,9 @@ static void DrawAppearanceWindow()
 					   "lower the resolution, the more sharp and polygonal the circles appear.\n";
         		ImGui::SetTooltip("%s", desc);
 		}
+
+		// TEMPORARY SLIDER FOR FPS LIMIT
+		ImGui::SliderInt("APPLICATION FRAME LIMIT", &settings.frame_limit, 1, 320);
 	}
 	ImGui::End();
 }

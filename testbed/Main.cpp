@@ -21,6 +21,8 @@ bool first_cursor_movement = 1;
 Scene* current_scene = nullptr;
 void SwitchScene(int scene_number);
 
+double time_at_last_render = 0.0f;	// for FPS limit
+
 // set up all of the callback functions
 
 static void glfwErrorCallback(int error, const char* description)
@@ -201,18 +203,26 @@ int main()
 	// main loop
 	while(!glfwWindowShouldClose(window))
 	{
-		// Clear Screen
-		colour* bg = &palette.colours[settings.scene_colours.background];
-		glClearColor(bg->r, bg->g, bg->b, bg->a);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		// Implement Frame Limit
+		double current_time = glfwGetTime();
+		if (current_time - time_at_last_render > (1.0f / settings.frame_limit))
+		{
+			// Clear Screen
+			colour* bg = &palette.colours[settings.scene_colours.background];
+			glClearColor(bg->r, bg->g, bg->b, bg->a);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		
+			// Update Physics Sim
+			Step();
 
-		// Update Physics Sim
-		Step();
+			// Render Frame
+			renderer.Flush();
+			DrawGui();
+			glfwSwapBuffers(window);
 
-		// Render Frame
-		renderer.Flush();
-		DrawGui();
-		glfwSwapBuffers(window);
+			// Update time at last render
+			time_at_last_render = current_time;
+		}
 
 		// Poll Window Events
 		glfwPollEvents();
