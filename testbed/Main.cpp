@@ -8,6 +8,8 @@
 // include testbed header files
 #include "Renderer.hpp"
 #include "Settings.hpp"
+#include "Scene.hpp"
+#include "AllSceneHeaders.hpp"
 #include "GUI.hpp"
 
 GLFWwindow* window = nullptr;
@@ -15,6 +17,9 @@ GLFWwindow* window = nullptr;
 double cursor_x = 0;
 double cursor_y = 0;
 bool first_cursor_movement = 1;
+
+Scene* current_scene = nullptr;
+void SwitchScene(int scene_number);
 
 // set up all of the callback functions
 
@@ -39,6 +44,20 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 	case GLFW_KEY_A:
 		if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) && action == GLFW_PRESS)
 			appearanceWindowHidden = (appearanceWindowHidden == 1)? 0 : 1;
+		break;
+	case GLFW_KEY_LEFT:
+		if (action == GLFW_PRESS && settings.scene_number != 0)
+		{
+			settings.scene_number = settings.scene_number - 1;
+			settings.scene_has_changed = 1;
+		}
+		break;
+	case GLFW_KEY_RIGHT:
+		if (action == GLFW_PRESS && settings.scene_number + 1 < SCENE_COUNT)
+		{
+			settings.scene_number = settings.scene_number + 1;
+			settings.scene_has_changed = 1;
+		}
 		break;
 	}
 }
@@ -125,9 +144,41 @@ static void initGlad()
 	}
 }
 
-void step()
+// function to switch between scenes
+void SwitchScene(int scene_number)
 {
-	renderer.AddColourTest();
+	delete current_scene;
+	switch (scene_number)
+	{
+	case 0:
+		current_scene = new TestScene();
+		break;
+	case 1:
+		current_scene = new TestSceneTwo();
+		break;
+	case 2:
+		current_scene = new ColourDebugScene();
+		break;
+	default:
+		SwitchScene(0);
+		break;
+	}
+}
+
+void Step()
+{
+	// Switch scene if settings says to do so
+	if (settings.scene_has_changed)
+	{
+		SwitchScene(settings.scene_number);
+		settings.scene_has_changed = 0;
+	}
+
+	// Step the world forward
+	current_scene->Step();
+	
+	// Render current scene
+	current_scene->Render();
 }
 
 int main()
@@ -139,6 +190,9 @@ int main()
 
 	// Disable GLFW's VSync
 	glfwSwapInterval(0);
+
+	// Set scene
+	SwitchScene(0);
 
 	// Create our camera and renderer
 	camera.Create(settings.initial_window_width, settings.initial_window_height);
@@ -153,7 +207,7 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Update Physics Sim
-		step();
+		Step();
 
 		// Render Frame
 		renderer.Flush();

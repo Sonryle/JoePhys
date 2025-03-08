@@ -32,6 +32,8 @@ struct Settings
 		initial_window_height = 900;
 
 		circle_res = 32;
+
+		simulation_hertz = 120;
 	}
 	
 	// The default scene colours
@@ -55,6 +57,9 @@ struct Settings
 	// Scenes vars
 	bool scene_has_changed;
 	unsigned int scene_number;
+
+	// Simulation vars
+	int simulation_hertz;
 };
 
 // This settings struct will be accessable by every file which includes "Settings.hpp".
