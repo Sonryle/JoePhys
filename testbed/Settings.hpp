@@ -18,31 +18,14 @@ struct Settings
 {
 	
 	// constructor
-	Settings()
-	{
-		Reset();
-	}
+	Settings();
 
-	// Reset all of the settings which are stored in the settings struct
-	void Reset()
-	{
-		ResetSceneColours();
+	// functions
+	void Reset();
+	void ResetSceneColours();
 
-		initial_window_width = 1500;
-		initial_window_height = 900;
-
-		circle_res = 32;
-
-		simulation_hertz = 120;
-	}
-	
-	// The default scene colours
-	void ResetSceneColours()
-	{
-		scene_colours.background = Palette::JP_DARK_GRAY;
-		scene_colours.circles = Palette::JP_RED;
-		scene_colours.circle_outlines = Palette::JP_DARK_RED;
-	}
+	// VARIABLES
+	// ---------
 
 	// Scene Colours instance
 	SceneColours scene_colours;

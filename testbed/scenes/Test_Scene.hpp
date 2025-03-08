@@ -1,6 +1,7 @@
 #ifndef JP_TEST_SCENE
 #define JP_TEST_SCENE
 
+#include <stdlib.h>	// for 'srand' and 'rand'
 #include "../Scene.hpp"
 #include "../Settings.hpp"
 #include "JoePhys/PhysObj.hpp"
@@ -20,8 +21,14 @@ struct TestScene : public Scene
 		for (int y = -5; y < 6; y++)
 			for (int x = -5; x < 6; x++)
 			{
+				// generate random velocity
+				srand(x);
+				real r = (real)(rand() % 10 + 1) / 9;
+				real vel_x = sin(x + r);
+				real vel_y = cos(y + r);
+				vec2 vel(vel_x * r / 6, vel_y * r / 6);
+
 				vec2 pos(40 * x, 40 * y);
-				vec2 vel(0.0f, 0.0f);
 				real radius = 10;
 				real mass = 1.0f;
 				Particle* myParticle = new Particle(pos, vel, radius, mass);

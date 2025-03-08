@@ -25,6 +25,7 @@ private:
 
 	// functions
 	void UpdateParticlePositions();
+	void TemporaryConstrainToBox();
 
 	// variables
 	vec2 gravity;
