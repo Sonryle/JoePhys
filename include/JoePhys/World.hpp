@@ -21,15 +21,16 @@ struct World
 
 	// variables
 	std::vector<PhysObj*> PhysObjects;
+	int simulation_hertz;
 private:
 
 	// functions
 	void UpdateParticlePositions();
 	void TemporaryConstrainToBox();
+	void ResolveParticleCollisions();
 
 	// variables
 	vec2 gravity;
-	int simulation_hertz;
 };
 
 #endif

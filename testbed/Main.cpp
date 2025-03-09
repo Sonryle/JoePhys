@@ -153,12 +153,15 @@ void SwitchScene(int scene_number)
 	switch (scene_number)
 	{
 	case 0:
-		current_scene = new TestScene();
+		current_scene = new CollisionTestScene();
 		break;
 	case 1:
-		current_scene = new TestSceneTwo();
+		current_scene = new TestScene();
 		break;
 	case 2:
+		current_scene = new TestSceneTwo();
+		break;
+	case 3:
 		current_scene = new ColourDebugScene();
 		break;
 	default:

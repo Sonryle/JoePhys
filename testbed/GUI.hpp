@@ -44,20 +44,25 @@ static void DrawGui()
 		}
 		if (ImGui::BeginMenu("Scenes"))
 		{
-			if (ImGui::MenuItem("Test Scene", NULL, (settings.scene_number == 0)))
+			if (ImGui::MenuItem("Collision Test Scene", NULL, (settings.scene_number == 0)))
 			{
 				settings.scene_has_changed = 1;
 				settings.scene_number = 0;
 			}
-			if (ImGui::MenuItem("Test Scene Two", NULL, (settings.scene_number == 1)))
+			if (ImGui::MenuItem("Test Scene", NULL, (settings.scene_number == 1)))
 			{
 				settings.scene_has_changed = 1;
 				settings.scene_number = 1;
 			}
-			if (ImGui::MenuItem("Colour Test Scene", NULL, (settings.scene_number == 2)))
+			if (ImGui::MenuItem("Test Scene Two", NULL, (settings.scene_number == 2)))
 			{
 				settings.scene_has_changed = 1;
 				settings.scene_number = 2;
+			}
+			if (ImGui::MenuItem("Colour Test Scene", NULL, (settings.scene_number == 3)))
+			{
+				settings.scene_has_changed = 1;
+				settings.scene_number = 3;
 			}
 			ImGui::EndMenu();
 		}
@@ -194,8 +199,10 @@ static void DrawAppearanceWindow()
         		ImGui::SetTooltip("%s", desc);
 		}
 
+		// TEMPORARY SLIDER FOR SIMULATION HERTZ
+		ImGui::SliderInt("SIMULATION HERTZ", &settings.simulation_hertz, 1, 500);
 		// TEMPORARY SLIDER FOR FPS LIMIT
-		ImGui::SliderInt("APPLICATION FRAME LIMIT", &settings.frame_limit, 1, 320);
+		ImGui::SliderInt("APPLICATION FRAME LIMIT", &settings.frame_limit, 1, 500);
 	}
 	ImGui::End();
 }

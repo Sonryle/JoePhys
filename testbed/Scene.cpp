@@ -54,5 +54,9 @@ void Scene::ResetCamera()
 void Scene::Step()
 {
 	if (world != nullptr)
+	{
+		if (world->simulation_hertz != settings.simulation_hertz)
+			world->simulation_hertz = settings.simulation_hertz;
 		world->Step();
+	}
 }

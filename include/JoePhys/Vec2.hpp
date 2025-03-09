@@ -43,6 +43,20 @@ struct vec2
 	real x, y;
 };
 
+// functions for vec2's
+// --------------------
+
+inline real length(vec2 v)
+{
+	return sqrt(v.x * v.x + v.y * v.y);
+}
+
+// Dot product of two vectors.
+inline real dot(const vec2 a, const vec2 b)
+{
+	return a.x * b.x + a.y * b.y;
+}
+
 // operator functions for vec2
 // ---------------------------
 
