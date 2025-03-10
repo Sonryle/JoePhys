@@ -33,9 +33,9 @@ void Scene::Render()
 			// Create a copy of the particle we're looking at
 			Particle* current_part = current_obj->particles[part];
 
-			vec2 pos = current_part->position;
+			int segments = settings.circle_res;
 			real rad = current_part->radius;
-			real segments = settings.circle_res;
+			vec2 pos = current_part->position;
 			colour col = palette.colours[settings.scene_colours.circles];
 			colour outline_col = palette.colours[settings.scene_colours.circle_outlines];
 

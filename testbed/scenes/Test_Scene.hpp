@@ -14,7 +14,8 @@ struct TestScene : public Scene
 	{
 		SetUpSceneColours();
 		world = new World(settings.simulation_hertz, vec2(0.0f, -980));
-		settings.circle_res = 20;
+		settings.circle_res = 20; //20
+		double PI = 3.141592653589;
 
 		// Create a physics object to go in our world
 		PhysObj* myPhysObj = new PhysObj;
@@ -30,10 +31,10 @@ struct TestScene : public Scene
 				real vel_y = cos(y + r);
 				vec2 vel(vel_x * 30, vel_y * 30);
 
-				vec2 pos(40 * x, 40 * y);
+				vec2 pos(40.0f * x, 40.0f * y);
 				real elasticity = 0.9f;
 				real radius = r * 3;
-				real mass = M_PI * radius * radius;
+				real mass = (float)PI * radius * radius;
 				Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass);
 				// Add the particle to the physics object
 				myPhysObj->particles.push_back(myParticle);

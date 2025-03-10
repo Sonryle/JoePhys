@@ -23,7 +23,7 @@ public:
 	}
 
 	// functions
-	void Create(float width, float height) { WindowResize(width, height); }
+	void Create(int width, int height) { WindowResize(width, height); }
 	void WindowResize(int width, int height) { window_width = width; window_height = height; }
 	void GenerateProjectionMatrix(float p[16]);
 
@@ -36,8 +36,8 @@ private:
 	// so that it can generate the proper projection matrix,
 	// keeping the coordinate system fixed nomatter the
 	// width or height of the window.
-	float window_width;
-	float window_height;
+	int window_width;
+	int window_height;
 
 private:
 };
@@ -54,8 +54,8 @@ struct Renderer
 	// Functions to add shapes to the renderer to be rendered when "Flush()" is called
 	void AddTriangle(const vec2 p1, const vec2 p2, const vec2 p3, const colour col);
 	void AddLine(const vec2 p1, const vec2 p2, const colour col);
-	void AddCircle(const vec2 position, const float radius, const unsigned int segments, const colour col);
-	void AddSolidCircle(const vec2 position, const float radius, const unsigned int segments, const colour fill_col, const colour outline_col);
+	void AddCircle(const vec2 position, const float radius, const int segments, const colour col);
+	void AddSolidCircle(const vec2 position, const float radius, const int segments, const colour fill_col, const colour outline_col);
 	void AddColourTest();
 
 	// Function which renders the shapes which have been added

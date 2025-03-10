@@ -14,8 +14,8 @@
 
 GLFWwindow* window = nullptr;
 
-double cursor_x = 0;
-double cursor_y = 0;
+real cursor_x = 0;
+real cursor_y = 0;
 bool first_cursor_movement = 1;
 
 Scene* current_scene = nullptr;
@@ -72,10 +72,10 @@ static void mousePosCallback(GLFWwindow* window, double dx, double dy)
 	ImGuiIO& io = ImGui::GetIO();
 	if ( !(first_cursor_movement || io.WantCaptureMouse) )
 		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
-			camera.center += vec2(cursor_x - dx, dy - cursor_y) * camera.zoom;
+			camera.center += vec2(cursor_x - (float)dx, (float)dy - cursor_y) * camera.zoom;
 
-	cursor_x = dx;
-	cursor_y = dy;
+	cursor_x = (float)dx;
+	cursor_y = (float)dy;
 	first_cursor_movement = 0;
 		
 	return;
@@ -162,6 +162,7 @@ void SwitchScene(int scene_number)
 		current_scene = new TestSceneTwo();
 		break;
 	case 3:
+		//current_scene = new TestSceneTwo();
 		current_scene = new ColourDebugScene();
 		break;
 	default:

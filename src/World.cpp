@@ -51,8 +51,8 @@ void World::UpdateParticlePositions()
 		for (int part = 0; part < current_obj->particles.size(); part++)
 		{
 			Particle* current_part = current_obj->particles[part];
-			current_part->velocity += current_part->acceleration * dt;
-			current_part->position += current_part->velocity * dt;
+			current_part->velocity += current_part->acceleration * (float)dt;
+			current_part->position += current_part->velocity * (float)dt;
 			current_part->acceleration.Set(0.0f, 0.0f);
 		}
 	}

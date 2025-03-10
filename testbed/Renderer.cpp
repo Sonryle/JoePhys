@@ -463,10 +463,10 @@ void Renderer::AddLine(const vec2 p1, const vec2 p2, const colour col)
 }
 
 // This will draw a circle out of lines. It will not be filled in.
-void Renderer::AddCircle(const vec2 position, const float radius, const unsigned int segments, const colour col)
+void Renderer::AddCircle(const vec2 position, const float radius, const int segments, const colour col)
 {
 	// rotation increment between points in circle
-	const real rotation_increment = 2.0f * PI / segments;
+	const real rotation_increment = 2.0f * (float)PI / segments;
 
 	// sin & cos of rotation increment
 	const real sin_increment = sinf(rotation_increment);
@@ -500,10 +500,10 @@ void Renderer::AddCircle(const vec2 position, const float radius, const unsigned
 }
 
 // This will draw a circle out of triangles & outline it with lines
-void Renderer::AddSolidCircle(const vec2 position, const float radius, const unsigned int segments, const colour fill_col, const colour outline_col)
+void Renderer::AddSolidCircle(const vec2 position, const float radius, const int segments, const colour fill_col, const colour outline_col)
 {
 	// rotation increment between points in circle
-	const real rotation_increment = 2.0f * PI / segments;
+	const real rotation_increment = 2.0f * (float)PI / segments;
 
 	// sin & cos of rotation increment
 	const real sin_increment = sinf(rotation_increment);
@@ -661,10 +661,10 @@ void Renderer::Flush()
 void Camera::GenerateProjectionMatrix(float p[16])
 {
 	// set right, left, top, bottom, far and near so that 0,0 is in the center of the screen
-	real right = window_width / 2;
-	real left = window_width / -2;
-	real top = window_height / 2;
-	real bottom = window_height / -2;
+	real right = (float)window_width / 2;
+	real left = (float)window_width / -2;
+	real top = (float)window_height / 2;
+	real bottom = (float)window_height / -2;
 	real far = 1;
 	real near = -1;
 

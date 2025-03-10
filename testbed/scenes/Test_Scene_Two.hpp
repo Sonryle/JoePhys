@@ -21,8 +21,8 @@ struct TestSceneTwo : public Scene
 		for (int y = -2; y < 3; y++)
 			for (int x = -2; x < 3; x++)
 			{
-				vec2 pos(60 * x, 60 * y);
-				vec2 vel(x * 100, x * 100);
+				vec2 pos(60.0f * x, 60.0f * y);
+				vec2 vel(x * 100.0f, x * 100.0f);
 				real elasticity = 0.9f;
 				real radius = 30;
 				real mass = 1.0f;

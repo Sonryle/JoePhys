@@ -11,6 +11,7 @@ struct ColourDebugScene : public Scene
 	ColourDebugScene()
 	{
 		SetUpSceneColours();
+		world = nullptr;
 	}
 
 	void Render() override
