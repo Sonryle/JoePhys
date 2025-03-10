@@ -19,11 +19,9 @@ void World::Step()
 {
 	ApplyGravityToParticles();
 	UpdateParticlePositions();
-	for (int n = 0; n < 32; n++)
-		ResolveParticleCollisions();
+	ResolveParticleCollisions();
 	TemporaryConstrainToBox();
-	for (int n = 0; n < 32; n++)
-		ResolveParticleCollisions();
+	ResolveParticleCollisions();
 }
 
 void World::ApplyGravityToParticles()
