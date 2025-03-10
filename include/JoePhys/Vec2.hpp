@@ -46,15 +46,22 @@ struct vec2
 // functions for vec2's
 // --------------------
 
+// return length of a vector
 inline real length(vec2 v)
 {
 	return sqrt(v.x * v.x + v.y * v.y);
 }
 
-// Dot product of two vectors.
+// return dot product of two vectors.
 inline real dot(const vec2 a, const vec2 b)
 {
 	return a.x * b.x + a.y * b.y;
+}
+
+// return vector that has been normalized
+inline vec2 normalize(vec2 a)
+{
+	return vec2(a.x / length(a), a.y / length(a));
 }
 
 // operator functions for vec2

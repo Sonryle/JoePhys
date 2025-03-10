@@ -17,9 +17,26 @@ World::~World()
 
 void World::Step()
 {
+	ApplyGravityToParticles();
 	UpdateParticlePositions();
+	for (int n = 0; n < 32; n++)
+		ResolveParticleCollisions();
 	TemporaryConstrainToBox();
-	ResolveParticleCollisions();
+	for (int n = 0; n < 32; n++)
+		ResolveParticleCollisions();
+}
+
+void World::ApplyGravityToParticles()
+{
+	// loop over every particle and add gravity to its acceleration
+	for (int obj = 0; obj < PhysObjects.size(); obj++)
+	{
+		PhysObj* current_obj = PhysObjects[obj];
+		for (int part = 0; part < current_obj->particles.size(); part++)
+		{
+			current_obj->particles[part]->acceleration += gravity;
+		}
+	}
 }
 
 void World::UpdateParticlePositions()
@@ -34,7 +51,9 @@ void World::UpdateParticlePositions()
 		for (int part = 0; part < current_obj->particles.size(); part++)
 		{
 			Particle* current_part = current_obj->particles[part];
+			current_part->velocity += current_part->acceleration * dt;
 			current_part->position += current_part->velocity * dt;
+			current_part->acceleration.Set(0.0f, 0.0f);
 		}
 	}
 }
@@ -51,29 +70,31 @@ void World::TemporaryConstrainToBox()
 
 			// check for collisions with walls of box
 			const int box = 250;
+			real elas = current_part->elasticity;
+			/* real elas = 1.0f; */
 			real rad = current_part->radius;
 			vec2 pos = current_part->position;
 			vec2 vel = current_part->velocity;
 			
 			if (pos.x + rad > box)
 			{
-				current_part->velocity = vec2(-vel.x, vel.y);
-				current_part->position = vec2(box - rad, pos.y);
+				current_part->velocity.x *= -1 * elas;
+				current_part->position.x = box - rad;
 			}
 			if (pos.y + rad > box)
 			{
-				current_part->velocity = vec2(vel.x, -vel.y);
-				current_part->position = vec2(pos.x, box - rad);
+				current_part->velocity.y *= -1 * elas;
+				current_part->position.y = box - rad;
 			}
 			if (pos.x - rad < -box)
 			{
-				current_part->velocity = vec2(-vel.x, vel.y);
-				current_part->position = vec2(-box + rad, pos.y);
+				current_part->velocity.x *= -1 * elas;
+				current_part->position.x = -box + rad;
 			}
 			if (pos.y - rad < -box)
 			{
-				current_part->velocity = vec2(vel.x, -vel.y);
-				current_part->position = vec2(pos.x, -box + rad);
+				current_part->velocity.y *= -1 * elas;
+				current_part->position.y = -box + rad;
 			}
 		}
 	}
@@ -81,7 +102,8 @@ void World::TemporaryConstrainToBox()
 
 void World::ResolveParticleCollisions()
 {
-	// TODO: Collision resolution
+	// Credit for Particle Collision Resolution goes to "The Coding Train"
+	// https://www.youtube.com/watch?v=dJNFPv9Mj-Y&t=1421s
 	
 	// loop over every particle in every physObj and compair it to every other particle in every other physObj
 	for (int objA = 0; objA < PhysObjects.size(); objA++)
@@ -96,34 +118,36 @@ void World::ResolveParticleCollisions()
 				{
 					Particle* particleB = PhysObjects[objB]->particles[partB];
 
-					// Check for collision between particle A and B
+					// If dist between particles is less than their radii then they have collided
 					real dist = length(particleA->position - particleB->position);
-					vec2 impactAxis = particleB->position - particleA->position;
 					if (dist < particleA->radius + particleB->radius)
 					{
-						// Collision has occurred, we must now solve it
+						// difference in position between particles
+						vec2 pos_diff = particleB->position - particleA->position;
 
+						// Move particles away from eachother along their impact axis
+						vec2 dir = pos_diff.GetNormalized();
 						real overlap = dist - (particleA->radius + particleB->radius);
-						vec2 dir = impactAxis.GetNormalized();
 						dir *= overlap * 0.5f;
 						particleA->position += dir;
 						particleB->position -= dir;
 
-						real mSum = particleA->mass + particleB->mass;
-						vec2 vDiff = particleB->velocity - particleA->velocity;
+						// Solve for new velocities
 
 						// Particle A
-						real numA = 2 * particleB->mass * dot(vDiff, impactAxis);
-						real den = mSum * dist * dist;
-						vec2 deltaVA = impactAxis * (numA / den);
-						particleA->velocity += deltaVA;
+						real mass_sum = particleA->mass + particleB->mass;
+						vec2 vel_diff = particleB->velocity - particleA->velocity;
+						real denominator = mass_sum * dist * dist;
+						real numerator = 2 * particleB->mass * dot(vel_diff, pos_diff);
+						vec2 delta_vel = pos_diff * (numerator / denominator);
+						particleA->velocity += delta_vel * particleA->elasticity;
 
 						// Particle B
-						vDiff *= -1;
-						impactAxis *= -1;
-						real numB = 2 * particleA->mass * dot(vDiff, impactAxis);
-						vec2 deltaVB = impactAxis * (numB/ den);
-						particleB->velocity += deltaVB;
+						vel_diff *= -1;
+						pos_diff *= -1;
+						numerator = 2 * particleA->mass * dot(vel_diff, pos_diff);
+						delta_vel = pos_diff * (numerator/ denominator);
+						particleB->velocity += delta_vel * particleB->elasticity;
 
 					}
 				}

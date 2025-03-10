@@ -25,6 +25,7 @@ struct World
 private:
 
 	// functions
+	void ApplyGravityToParticles();
 	void UpdateParticlePositions();
 	void TemporaryConstrainToBox();
 	void ResolveParticleCollisions();
