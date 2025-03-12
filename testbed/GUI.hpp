@@ -187,7 +187,7 @@ static void DrawAppearanceWindow()
 	if (ImGui::CollapsingHeader("Renderer"))
 	{
 		// Add a slider which will control the resolution of circles
-		ImGui::SliderInt("Circle Resolution", &settings.circle_res, 3, 32);
+		ImGui::SliderInt("Circle Resolution", &settings.circle_res, 3, 100);
 		// Add a description to that slider describing what "Circle Resolution" means
 		ImGui::SameLine();
 		ImGui::TextDisabled("(?)");
