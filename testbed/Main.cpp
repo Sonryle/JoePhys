@@ -92,7 +92,7 @@ static void scrollCallback(GLFWwindow*, double dx, double dy)
 	if (io.WantCaptureMouse == 0)
 	{
 		if (dy < 0)
-			camera.zoom = std::max(camera.zoom * 0.95f, 0.1f);
+			camera.zoom = std::max(camera.zoom * 0.95f, 0.001f);
 		else if (dy > 0)
 			camera.zoom = std::min(camera.zoom * 1.05f, 10.0f);
 	}

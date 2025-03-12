@@ -1,8 +1,6 @@
 #ifndef JP_TEST_SCENE
 #define JP_TEST_SCENE
 
-#include <stdlib.h>	// for 'srand' and 'rand'
-#include <math.h>	// for M_PI
 #include "../Scene.hpp"
 #include "../Settings.hpp"
 #include "JoePhys/PhysObj.hpp"
@@ -22,18 +20,12 @@ struct TestScene : public Scene
 
 		// Create an 11x11 grid of particles to go in our physics object
 		for (int y = -5; y < 6; y++)
-			for (int x = -5; x < 6; x++)
+			for (int x = 5; x < 15; x++)
 			{
-				// generate random velocity
-				srand(x);
-				real r = (real)(rand() % 10 + 1);
-				real vel_x = sin(x + r);
-				real vel_y = cos(y + r);
-				vec2 vel(vel_x * 30, vel_y * 30);
-
-				vec2 pos(40.0f * x, 40.0f * y);
+				vec2 vel(0.0f, 0.0f);
+				vec2 pos(40.0f * (x - 10), 40.0f * y);
 				real elasticity = 0.9f;
-				real radius = r * 3;
+				real radius = x * 1.5f;
 				real mass = (float)PI * radius * radius;
 				Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass);
 				// Add the particle to the physics object

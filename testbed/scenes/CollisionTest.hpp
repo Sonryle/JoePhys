@@ -11,7 +11,7 @@ struct CollisionTestScene : public Scene
 	CollisionTestScene()
 	{
 		SetUpSceneColours();
-		world = new World(settings.simulation_hertz, vec2(0.0f, -980));
+		world = new World(settings.simulation_hertz, vec2(0.0f, 0.0f));
 		settings.circle_res = 15;
 		double PI = 3.141592653589;
 
@@ -21,7 +21,7 @@ struct CollisionTestScene : public Scene
 		// Add two particles to the physics object
 		vec2 posA(-100, -100);
 		vec2 velA(100.0f, 100.0f);
-		real elasticityA = 0.5f;
+		real elasticityA = 1.0f;
 		real radiusA = 50;
 		real massA = (float)PI * radiusA * radiusA;
 		Particle* partA = new Particle(posA, velA, elasticityA, radiusA, massA);

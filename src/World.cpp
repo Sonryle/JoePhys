@@ -17,11 +17,17 @@ World::~World()
 
 void World::Step()
 {
-	ApplyGravityToParticles();
-	UpdateParticlePositions();
-	ResolveParticleCollisions();
-	TemporaryConstrainToBox();
-	ResolveParticleCollisions();
+	real dt = 1.0f / simulation_hertz;
+	unsigned int sub_step_count = 8;
+
+	for (int n = 0; n < sub_step_count; n++)
+	{
+		ApplyGravityToParticles();
+		UpdateParticlePositions(dt / (float)sub_step_count);
+		ResolveParticleCollisions();
+		TemporaryConstrainToBox();
+		ResolveParticleCollisions();
+	}
 }
 
 void World::ApplyGravityToParticles()
@@ -37,20 +43,36 @@ void World::ApplyGravityToParticles()
 	}
 }
 
-void World::UpdateParticlePositions()
+// Move particles forwards along their velocities
+void World::UpdateParticlePositions(real dt)
 {
-	// TODO: Implement the runge-kutta method
-	
-	// TEMPORARY::EULER'S INTEGRATION TO MOVE PARTICLES
-	double dt = 1.0f / simulation_hertz;
+
 	for (int obj = 0; obj < PhysObjects.size(); obj++)
 	{
 		PhysObj* current_obj = PhysObjects[obj];
 		for (int part = 0; part < current_obj->particles.size(); part++)
 		{
 			Particle* current_part = current_obj->particles[part];
-			current_part->velocity += current_part->acceleration * (float)dt;
-			current_part->position += current_part->velocity * (float)dt;
+			current_part->velocity += current_part->acceleration * dt;
+
+			// Returns the current velocity of the particle offset by a certain time value
+			auto f = [&](real time_offset, vec2 pos)
+				{
+					return current_part->velocity + (current_part->acceleration * time_offset);
+				};
+
+			// Use 4th order Runge-Kutta algorithm to find optimal position offset
+			vec2 pos = current_part->position;
+			vec2 k1 = f(   0           , pos                    );
+			vec2 k2 = f(   dt / 2.0f   , pos + k1 * dt / 2.0f   );
+			vec2 k3 = f(   dt / 2.0f   , pos + k2 * dt / 2.0f   );
+			vec2 k4 = f(   dt          , pos + k3 * dt          );
+
+			// Weighted average of k1, k2, k3 & k4
+			vec2 offset = dt * (k1 + 2*k2 + 2*k3 + k4) / 6.0f;
+
+			// Add offset to particle position & reset acceleration
+			current_part->position += offset;
 			current_part->acceleration.Set(0.0f, 0.0f);
 		}
 	}
@@ -67,32 +89,33 @@ void World::TemporaryConstrainToBox()
 			Particle* current_part = current_obj->particles[part];
 
 			// check for collisions with walls of box
-			const int box = 250;
+			const int boxy = 250;
+			const int boxx = 500;
 			real elas = current_part->elasticity;
 			/* real elas = 1.0f; */
 			real rad = current_part->radius;
 			vec2 pos = current_part->position;
 			vec2 vel = current_part->velocity;
 			
-			if (pos.x + rad > box)
+			if (pos.x + rad > boxx)
 			{
 				current_part->velocity.x *= -1 * elas;
-				current_part->position.x = box - rad;
+				current_part->position.x = boxx - rad;
 			}
-			if (pos.y + rad > box)
+			if (pos.y + rad > boxy)
 			{
 				current_part->velocity.y *= -1 * elas;
-				current_part->position.y = box - rad;
+				current_part->position.y = boxy - rad;
 			}
-			if (pos.x - rad < -box)
+			if (pos.x - rad < -boxx)
 			{
 				current_part->velocity.x *= -1 * elas;
-				current_part->position.x = -box + rad;
+				current_part->position.x = -boxx + rad;
 			}
-			if (pos.y - rad < -box)
+			if (pos.y - rad < -boxy)
 			{
 				current_part->velocity.y *= -1 * elas;
-				current_part->position.y = -box + rad;
+				current_part->position.y = -boxy + rad;
 			}
 		}
 	}
