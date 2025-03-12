@@ -46,6 +46,7 @@ struct Settings
 
 	// Simulation vars
 	int simulation_hertz;
+	int sub_steps;
 };
 
 // This settings struct will be accessable by every file which includes "Settings.hpp".

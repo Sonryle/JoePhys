@@ -11,7 +11,7 @@ struct TestScene : public Scene
 	TestScene()
 	{
 		SetUpSceneColours();
-		world = new World(settings.simulation_hertz, vec2(0.0f, -980));
+		world = new World(settings.simulation_hertz, settings.sub_steps, vec2(0.0f, -980));
 		settings.circle_res = 20; //20
 		double PI = 3.141592653589;
 

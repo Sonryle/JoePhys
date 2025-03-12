@@ -13,7 +13,7 @@ typedef float real;
 struct World
 {
 	// constructors & destuctor
-	World(int simulation_hertz, vec2 gravity);
+	World(int simulation_hertz, int sub_steps, vec2 gravity);
 	~World();
 
 	// functions
@@ -22,6 +22,7 @@ struct World
 	// variables
 	std::vector<PhysObj*> PhysObjects;
 	int simulation_hertz;
+	int sub_steps;
 private:
 
 	// functions

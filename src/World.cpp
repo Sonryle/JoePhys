@@ -2,9 +2,10 @@
 
 #include "JoePhys/World.hpp"
 
-World::World(int simulation_hertz, vec2 gravity)
+World::World(int simulation_hertz, int sub_steps, vec2 gravity)
 {
 	this->simulation_hertz = simulation_hertz;
+	this->sub_steps = sub_steps;
 	this->gravity = gravity;
 }
 
@@ -18,12 +19,11 @@ World::~World()
 void World::Step()
 {
 	real dt = 1.0f / simulation_hertz;
-	unsigned int sub_step_count = 8;
 
-	for (int n = 0; n < sub_step_count; n++)
+	for (int n = 0; n < sub_steps; n++)
 	{
 		ApplyGravityToParticles();
-		UpdateParticlePositions(dt / (float)sub_step_count);
+		UpdateParticlePositions(dt / sub_steps);
 		ResolveParticleCollisions();
 		TemporaryConstrainToBox();
 		ResolveParticleCollisions();

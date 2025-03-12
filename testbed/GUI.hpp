@@ -201,6 +201,8 @@ static void DrawAppearanceWindow()
 
 		// TEMPORARY SLIDER FOR SIMULATION HERTZ
 		ImGui::SliderInt("SIMULATION HERTZ", &settings.simulation_hertz, 1, 500);
+		// TEMPORARY SLIDER FOR SUB STEPS
+		ImGui::SliderInt("SUB STEPS", &settings.sub_steps, 1, 500);
 		// TEMPORARY SLIDER FOR FPS LIMIT
 		ImGui::SliderInt("APPLICATION FRAME LIMIT", &settings.frame_limit, 1, 500);
 	}

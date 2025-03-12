@@ -21,9 +21,10 @@ void Settings::Reset()
 
 	circle_res = 7;
 
-	frame_limit = 500;
+	frame_limit = 250;
 
-	simulation_hertz = 500;
+	simulation_hertz = 250;
+	sub_steps = 8;
 }
 
 void Settings::ResetSceneColours()

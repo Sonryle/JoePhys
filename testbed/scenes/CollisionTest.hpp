@@ -11,7 +11,7 @@ struct CollisionTestScene : public Scene
 	CollisionTestScene()
 	{
 		SetUpSceneColours();
-		world = new World(settings.simulation_hertz, vec2(0.0f, 0.0f));
+		world = new World(settings.simulation_hertz, settings.sub_steps, vec2(0.0f, 0.0f));
 		settings.circle_res = 15;
 		double PI = 3.141592653589;
 

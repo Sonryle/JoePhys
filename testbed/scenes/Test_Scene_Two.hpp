@@ -11,7 +11,7 @@ struct TestSceneTwo : public Scene
 	TestSceneTwo()
 	{
 		SetUpSceneColours();
-		world = new World(settings.simulation_hertz, vec2(0, -980));
+		world = new World(settings.simulation_hertz, settings.sub_steps, vec2(0, -980));
 		settings.circle_res = 20;
 
 		// Create a physics object to go in our world

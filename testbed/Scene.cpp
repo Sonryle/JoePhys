@@ -55,6 +55,8 @@ void Scene::Step()
 {
 	if (world != nullptr)
 	{
+		if (world->sub_steps != settings.sub_steps)
+			world->sub_steps = settings.sub_steps;
 		if (world->simulation_hertz != settings.simulation_hertz)
 			world->simulation_hertz = settings.simulation_hertz;
 		world->Step();
