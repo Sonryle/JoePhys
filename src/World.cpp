@@ -49,31 +49,24 @@ void World::UpdateParticlePositions(real dt)
 
 	for (int obj = 0; obj < PhysObjects.size(); obj++)
 	{
-		PhysObj* current_obj = PhysObjects[obj];
-		for (int part = 0; part < current_obj->particles.size(); part++)
+		PhysObj* phys_object = PhysObjects[obj];
+		for (int part = 0; part < phys_object->particles.size(); part++)
 		{
-			Particle* current_part = current_obj->particles[part];
-			current_part->velocity += current_part->acceleration * dt;
+			Particle* particle = phys_object->particles[part];
+			// since acceleration remains constant over time step, velocity
+			// can be updated using euler's integration
+			particle->velocity += particle->acceleration * dt;
 
-			// Returns the current velocity of the particle offset by a certain time value
-			auto f = [&](real time_offset, vec2 pos)
-				{
-					return current_part->velocity + (current_part->acceleration * time_offset);
-				};
+			vec2 v = particle->velocity;
+			vec2 a = particle->acceleration;
 
-			// Use 4th order Runge-Kutta algorithm to find optimal position offset
-			vec2 pos = current_part->position;
-			vec2 k1 = f(   0           , pos                    );
-			vec2 k2 = f(   dt / 2.0f   , pos + k1 * dt / 2.0f   );
-			vec2 k3 = f(   dt / 2.0f   , pos + k2 * dt / 2.0f   );
-			vec2 k4 = f(   dt          , pos + k3 * dt          );
+			vec2 k1 = v;
+			vec2 k2 = v + (a * dt / 2.0f);
+			vec2 k3 = v + (a * dt / 2.0f);
+			vec2 k4 = v + (a * dt);
 
-			// Weighted average of k1, k2, k3 & k4
-			vec2 offset = dt * (k1 + 2*k2 + 2*k3 + k4) / 6.0f;
-
-			// Add offset to particle position & reset acceleration
-			current_part->position += offset;
-			current_part->acceleration.Set(0.0f, 0.0f);
+			particle->position += ((k1 + 2.0f*k2 + 2.0f*k3 + k4) / 6.0f) * dt;
+			particle->acceleration.Set(0.0f, 0.0f);
 		}
 	}
 }
