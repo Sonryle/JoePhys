@@ -23,6 +23,31 @@ void SwitchScene(int scene_number);
 
 double time_at_last_render = 0.0f;	// for FPS limit
 
+// function to switch between scenes
+void SwitchScene(int scene_number)
+{
+	delete current_scene;
+	switch (scene_number)
+	{
+	case 0:
+		current_scene = new CollisionTestScene();
+		break;
+	case 1:
+		current_scene = new TestScene();
+		break;
+	case 2:
+		current_scene = new TestSceneTwo();
+		break;
+	case 3:
+		//current_scene = new TestSceneTwo();
+		current_scene = new ColourDebugScene();
+		break;
+	default:
+		SwitchScene(0);
+		break;
+	}
+}
+
 // set up all of the callback functions
 
 static void glfwErrorCallback(int error, const char* description)
@@ -42,6 +67,10 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 	{
 	case GLFW_KEY_ESCAPE:
 		glfwSetWindowShouldClose(window, GL_TRUE);
+		break;
+	case GLFW_KEY_R:
+		if (action == GLFW_PRESS)
+			SwitchScene(settings.scene_number);
 		break;
 	case GLFW_KEY_A:
 		if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) && action == GLFW_PRESS)
@@ -143,31 +172,6 @@ static void initGlad()
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{ fprintf(stderr, "Failed to initiate GLAD\n");
 		return;
-	}
-}
-
-// function to switch between scenes
-void SwitchScene(int scene_number)
-{
-	delete current_scene;
-	switch (scene_number)
-	{
-	case 0:
-		current_scene = new CollisionTestScene();
-		break;
-	case 1:
-		current_scene = new TestScene();
-		break;
-	case 2:
-		current_scene = new TestSceneTwo();
-		break;
-	case 3:
-		//current_scene = new TestSceneTwo();
-		current_scene = new ColourDebugScene();
-		break;
-	default:
-		SwitchScene(0);
-		break;
 	}
 }
 

@@ -132,15 +132,15 @@ static void DrawAppearanceWindow()
 				ImGui::EndCombo();
 			}
 			// Selection box for circles colour
-			const char* circle_preview_value = items[settings.scene_colours.circles];
+			const char* circle_preview_value = items[settings.scene_colours.particle];
 			if (ImGui::BeginCombo("Circles", circle_preview_value, 0))
 			{
 				for (int n = 0; n < IM_ARRAYSIZE(items); n++)
 				{
-					const bool is_selected = (settings.scene_colours.circles == n);
+					const bool is_selected = (settings.scene_colours.particle == n);
 
 					if (ImGui::Selectable(items[n], is_selected))
-						settings.scene_colours.circles = n;
+						settings.scene_colours.particle = n;
 
 					if (is_selected)
 						ImGui::SetItemDefaultFocus();
@@ -148,15 +148,15 @@ static void DrawAppearanceWindow()
 				ImGui::EndCombo();
 			}
 			// Selection box for circle outlines colour
-			const char* circle_outline_preview_value = items[settings.scene_colours.circle_outlines];
+			const char* circle_outline_preview_value = items[settings.scene_colours.particle_outline];
 			if (ImGui::BeginCombo("Circle Outlines", circle_outline_preview_value, 0))
 			{
 				for (int n = 0; n < IM_ARRAYSIZE(items); n++)
 				{
-					const bool is_selected = (settings.scene_colours.circle_outlines == n);
+					const bool is_selected = (settings.scene_colours.particle_outline == n);
 
 					if (ImGui::Selectable(items[n], is_selected))
-						settings.scene_colours.circle_outlines = n;
+						settings.scene_colours.particle_outline = n;
 
 					if (is_selected)
 						ImGui::SetItemDefaultFocus();

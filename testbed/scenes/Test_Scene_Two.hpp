@@ -47,8 +47,10 @@ struct TestSceneTwo : public Scene
 	void SetUpSceneColours() override
 	{
 		settings.scene_colours.background = Palette::JP_GRAY;
-		settings.scene_colours.circle_outlines = Palette::JP_DARK_GRAY;
-		settings.scene_colours.circles = Palette::JP_RED;
+		settings.scene_colours.particle = Palette::JP_RED;
+		settings.scene_colours.particle_outline = Palette::JP_DARK_GRAY;
+		settings.scene_colours.particle = Palette::JP_DARK_RED;
+		settings.scene_colours.particle_outline = Palette::JP_DARK_GRAY;
 	}
 };
 

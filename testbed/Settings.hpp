@@ -10,8 +10,10 @@
 struct SceneColours
 {
 	unsigned int background;
-	unsigned int circles;
-	unsigned int circle_outlines;
+	unsigned int particle;
+	unsigned int particle_outline;
+	unsigned int static_particle;
+	unsigned int static_particle_outline;
 };
 
 struct Settings

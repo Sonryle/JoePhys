@@ -28,14 +28,19 @@ void Scene::Render()
 			int segments = settings.circle_res;
 			real rad = p->radius;
 			vec2 pos = p->position;
-			colour col = palette.colours[settings.scene_colours.circles];
-			colour outline_col = palette.colours[settings.scene_colours.circle_outlines];
+			colour col;
+			colour outline_col;
+			if (p->mass == 0.0f)
+			{
+				col = palette.colours[settings.scene_colours.static_particle];
+				outline_col = palette.colours[settings.scene_colours.static_particle_outline];
+			}
+			else
+			{
+				col = palette.colours[settings.scene_colours.particle];
+				outline_col = palette.colours[settings.scene_colours.particle_outline];
+			}
 
-			if (c == 0)
-				col = palette.colours[Palette::JP_GREEN];
-			if (c == 1)
-				col = palette.colours[Palette::JP_RED];
-	
 			// Render particle
 			renderer.AddSolidCircle(pos, rad, segments, col, outline_col);
 		}
