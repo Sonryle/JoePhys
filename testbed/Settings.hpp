@@ -10,6 +10,7 @@
 struct SceneColours
 {
 	unsigned int background;
+	unsigned int spring;
 	unsigned int particle;
 	unsigned int particle_outline;
 	unsigned int static_particle;

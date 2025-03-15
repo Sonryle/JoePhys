@@ -44,25 +44,20 @@ static void DrawGui()
 		}
 		if (ImGui::BeginMenu("Scenes"))
 		{
-			if (ImGui::MenuItem("Collision Test Scene", NULL, (settings.scene_number == 0)))
+			if (ImGui::MenuItem("Collision Scene", NULL, (settings.scene_number == 0)))
 			{
 				settings.scene_has_changed = 1;
 				settings.scene_number = 0;
 			}
-			if (ImGui::MenuItem("Test Scene", NULL, (settings.scene_number == 1)))
+			if (ImGui::MenuItem("Pinball Scene", NULL, (settings.scene_number == 1)))
 			{
 				settings.scene_has_changed = 1;
 				settings.scene_number = 1;
 			}
-			if (ImGui::MenuItem("Test Scene Two", NULL, (settings.scene_number == 2)))
+			if (ImGui::MenuItem("Colour Test Scene", NULL, (settings.scene_number == 2)))
 			{
 				settings.scene_has_changed = 1;
 				settings.scene_number = 2;
-			}
-			if (ImGui::MenuItem("Colour Test Scene", NULL, (settings.scene_number == 3)))
-			{
-				settings.scene_has_changed = 1;
-				settings.scene_number = 3;
 			}
 			ImGui::EndMenu();
 		}

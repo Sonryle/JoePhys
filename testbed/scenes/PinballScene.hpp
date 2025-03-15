@@ -1,15 +1,15 @@
-#ifndef JP_TEST_SCENE
-#define JP_TEST_SCENE
+#ifndef JP_PINBALL_SCENE
+#define JP_PINBALL_SCENE
 
 #include "../Scene.hpp"
 #include "../Settings.hpp"
 #include "../Renderer.hpp"
 #include "JoePhys/Particle.hpp"
 
-struct TestScene : public Scene
+struct PinballScene : public Scene
 {
 	// constructors & destructors
-	TestScene()
+	PinballScene()
 	{
 		SetUpSceneColours();
 		world = new World(settings.simulation_hertz, settings.sub_steps, vec2(0.0f, -980));
@@ -139,6 +139,7 @@ struct TestScene : public Scene
 	void SetUpSceneColours() override
 	{
 		settings.scene_colours.background = Palette::JP_YELLOW;
+		settings.scene_colours.spring = Palette::JP_GREEN;
 		settings.scene_colours.particle = Palette::JP_AQUA;
 		settings.scene_colours.particle_outline = Palette::JP_DARK_GRAY;
 		settings.scene_colours.static_particle = Palette::JP_DARK_AQUA;

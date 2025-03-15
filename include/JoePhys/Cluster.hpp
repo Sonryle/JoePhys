@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "Particle.hpp"
+#include "Spring.hpp"
 
 struct Cluster
 {
@@ -15,6 +16,7 @@ struct Cluster
 	}
 
 	std::vector<Particle*> particles;
+	std::vector<Spring*> springs;
 };
 
 #endif

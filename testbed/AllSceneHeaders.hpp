@@ -1,6 +1,6 @@
 // This SCENE_COUNT must ALWAYS be equal to the amount of scenes that there are
 #define SCENE_COUNT 4
-#include "scenes/CollisionTest.hpp"
-#include "scenes/Test_Scene.hpp"
-#include "scenes/Test_Scene_Two.hpp"
+#include "scenes/CollisionScene.hpp"
+#include "scenes/PinballScene.hpp"
+#include "scenes/SquishySquareScene.hpp"
 #include "scenes/ColourDebugScene.hpp"

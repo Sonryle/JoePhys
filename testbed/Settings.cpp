@@ -30,6 +30,7 @@ void Settings::Reset()
 void Settings::ResetSceneColours()
 {
 	scene_colours.background = Palette::JP_DARK_GRAY;
+	scene_colours.spring = Palette::JP_GREEN;
 	scene_colours.particle = Palette::JP_RED;
 	scene_colours.particle_outline = Palette::JP_DARK_RED;
 	scene_colours.static_particle = Palette::JP_BLUE;

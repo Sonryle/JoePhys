@@ -30,16 +30,15 @@ void SwitchScene(int scene_number)
 	switch (scene_number)
 	{
 	case 0:
-		current_scene = new CollisionTestScene();
+		current_scene = new CollisionScene();
 		break;
 	case 1:
-		current_scene = new TestScene();
+		current_scene = new PinballScene();
 		break;
 	case 2:
-		current_scene = new TestSceneTwo();
+		current_scene = new SquishySquareScene();
 		break;
 	case 3:
-		//current_scene = new TestSceneTwo();
 		current_scene = new ColourDebugScene();
 		break;
 	default:
@@ -79,14 +78,14 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 	case GLFW_KEY_LEFT:
 		if (action == GLFW_PRESS && settings.scene_number != 0)
 		{
-			settings.scene_number = settings.scene_number - 1;
+			settings.scene_number -= 1;
 			settings.scene_has_changed = 1;
 		}
 		break;
 	case GLFW_KEY_RIGHT:
 		if (action == GLFW_PRESS && settings.scene_number + 1 < SCENE_COUNT)
 		{
-			settings.scene_number = settings.scene_number + 1;
+			settings.scene_number += 1;
 			settings.scene_has_changed = 1;
 		}
 		break;

@@ -21,10 +21,13 @@ void Scene::Render()
 	if (world == nullptr)
 		return;
 
-	// loop over every particle in every physics object
+	// loop over every cluster in the world
 	for (int c = 0; c < world->clusters.size(); c++)
+	{
+		// loop over every particle in each cluster
 		for (Particle* p : world->clusters[c]->particles)
 		{
+			// Render each particle
 			int segments = settings.circle_res;
 			real rad = p->radius;
 			vec2 pos = p->position;
@@ -44,6 +47,17 @@ void Scene::Render()
 			// Render particle
 			renderer.AddSolidCircle(pos, rad, segments, col, outline_col);
 		}
+		// loop over every spring in each cluster
+		for (Spring* s : world->clusters[c]->springs)
+		{
+			// Render each spring
+			vec2 posA = s->particleA->position;
+			vec2 posB = s->particleB->position;
+			colour col = palette.colours[settings.scene_colours.spring];
+
+			renderer.AddLine(posA, posB, col);
+		}
+	}
 }
 
 

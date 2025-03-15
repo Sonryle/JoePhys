@@ -23,6 +23,7 @@ void World::Step()
 	for (int n = 0; n < sub_steps; n++)
 	{
 		ApplyGravityToParticles();
+		UpdateSprings();
 		UpdateParticlePositions(dt / sub_steps);
 		ResolveAllCollisions();
 	}
@@ -118,25 +119,21 @@ void ResolveCollision(Particle* pA, Particle* pB)
 		real numerator;
 		vec2 delta_vel;
 
+		mass_sum = pAMass + pBMass;
+		vel_diff = pB->velocity - pA->velocity;
+		denominator = mass_sum * dist * dist;
+		numerator = 2 * pBMass * dot(vel_diff, pos_diff);
+		delta_vel = pos_diff * (numerator / denominator);
 		if (pA->mass != 0.0f)
-		{
-			mass_sum = pAMass + pBMass;
-			vel_diff = pB->velocity - pA->velocity;
-			denominator = mass_sum * dist * dist;
-			numerator = 2 * pBMass * dot(vel_diff, pos_diff);
-			delta_vel = pos_diff * (numerator / denominator);
 			pA->velocity += delta_vel * pA->elasticity;
-		}
 
 		// Particle B
+		vel_diff *= -1;
+		pos_diff *= -1;
+		numerator = 2 * pAMass * dot(vel_diff, pos_diff);
+		delta_vel = pos_diff * (numerator/ denominator);
 		if (pB->mass != 0.0f)
-		{
-			vel_diff *= -1;
-			pos_diff *= -1;
-			numerator = 2 * pAMass * dot(vel_diff, pos_diff);
-			delta_vel = pos_diff * (numerator/ denominator);
 			pB->velocity += delta_vel * pB->elasticity;
-		}
 
 	}
 }
@@ -158,4 +155,25 @@ void World::ResolveAllCollisions()
 			for (int c2 = c1; c2 < clusters.size(); c2++)
 				for (int p2 = (c2 == c1)? p1 + 1 : 0; p2 < clusters[c2]->particles.size(); p2++)
 					ResolveCollision(clusters[c1]->particles[p1], clusters[c2]->particles[p2]);
+}
+
+void World::UpdateSprings()
+{
+	// loop over every spring and move particles away from eachother by spring length
+	for (Cluster* c : clusters)
+		for (Spring* s : c->springs)
+		{
+			vec2 dirAxis = s->particleA->position - s->particleB->position;
+			real dist = length(dirAxis);
+			real diff = s->length - dist;
+
+			real percent = (diff / dist) / 2.0f;
+			vec2 offset = dirAxis * percent;
+
+			if (s->particleA->mass != 0.0f)
+				s->particleA->position += offset;
+			if (s->particleB->mass != 0.0f)
+				s->particleB->position -= offset;
+		}
+	return;
 }

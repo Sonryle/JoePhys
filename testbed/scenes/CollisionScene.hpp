@@ -1,17 +1,17 @@
-#ifndef JP_COLLISION_TEST_SCENE
-#define JP_COLLISION_TEST_SCENE
+#ifndef JP_COLLISION_SCENE
+#define JP_COLLISION_SCENE
 
 #include "../Scene.hpp"
 #include "../Settings.hpp"
 #include "JoePhys/Particle.hpp"
 
-struct CollisionTestScene : public Scene
+struct CollisionScene : public Scene
 {
 	// constructors & destructors
-	CollisionTestScene()
+	CollisionScene()
 	{
 		SetUpSceneColours();
-		world = new World(settings.simulation_hertz, settings.sub_steps, vec2(0.0f, -980.0f));
+		world = new World(settings.simulation_hertz, settings.sub_steps, vec2(0.0f, 0.0f));
 		settings.circle_res = 25;
 		double PI = 3.141592653589;
 
@@ -20,8 +20,8 @@ struct CollisionTestScene : public Scene
 
 		// Add two particles to the cluster
 		vec2 posA(-100, -100);
-		vec2 velA(100.0f, 100.0f);
-		real elasticityA = 1.0f;
+		vec2 velA(100.0f, 200.0f);
+		real elasticityA = 0.9f;
 		real radiusA = 50;
 		real massA = (float)PI * radiusA * radiusA;
 		Particle* partA = new Particle(posA, velA, elasticityA, radiusA, massA);
@@ -29,9 +29,9 @@ struct CollisionTestScene : public Scene
 
 		vec2 posB(100, 100);
 		vec2 velB(-10.0f, -20.0f);
-		real elasticityB = 1.0f;
+		real elasticityB = 0.9f;
 		real radiusB = 100;
-		real massB = (float)PI * radiusA * radiusA;
+		real massB = (float)PI * radiusB * radiusB;
 		Particle* partB = new Particle(posB, velB, elasticityB, radiusB, massB);
 		c->particles.push_back(partB);
 
@@ -42,6 +42,7 @@ struct CollisionTestScene : public Scene
 	void SetUpSceneColours() override
 	{
 		settings.scene_colours.background = Palette::JP_AQUA;
+		settings.scene_colours.spring = Palette::JP_GREEN;
 		settings.scene_colours.particle = Palette::JP_GREEN;
 		settings.scene_colours.particle_outline = Palette::JP_DARK_GRAY;
 		settings.scene_colours.static_particle = Palette::JP_DARK_GREEN;
