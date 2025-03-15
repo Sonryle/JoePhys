@@ -163,12 +163,16 @@ void World::UpdateSprings()
 	for (Cluster* c : clusters)
 		for (Spring* s : c->springs)
 		{
+			// stiffness of 0 = no stiffness, stiffness of 1 = completely stiff
+			real stiffness = 0.01;
+
 			vec2 dirAxis = s->particleA->position - s->particleB->position;
 			real dist = length(dirAxis);
-			real diff = s->length - dist;
+			real deltaLen = dist - s->resting_length;
 
-			real percent = (diff / dist) / 2.0f;
-			vec2 offset = dirAxis * percent;
+			real force = -stiffness * deltaLen;
+
+			vec2 offset = normalize(dirAxis) * force;
 
 			if (s->particleA->mass != 0.0f)
 				s->particleA->position += offset;

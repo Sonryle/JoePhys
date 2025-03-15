@@ -5,10 +5,10 @@
 
 struct Spring
 {
-	Spring(Particle* pA, Particle* pB, real length) : particleA(pA), particleB(pB), length(length) {}
+	Spring(Particle* pA, Particle* pB, real length) : particleA(pA), particleB(pB), resting_length(length) {}
 	~Spring() {}
 	
-	real length;
+	real resting_length;
 	Particle* particleB;
 	Particle* particleA;
 };
