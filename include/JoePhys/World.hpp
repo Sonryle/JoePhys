@@ -4,7 +4,7 @@
 typedef float real;
 
 #include <vector>
-#include <JoePhys/PhysObj.hpp>
+#include <JoePhys/Cluster.hpp>
 
 // World class will store a collection of Physics Objects (PhysObj classes).
 // It will have a "step" function which will update the position of all particles
@@ -20,7 +20,7 @@ struct World
 	void Step();
 
 	// variables
-	std::vector<PhysObj*> PhysObjects;
+	std::vector<Cluster*> clusters;
 	int simulation_hertz;
 	int sub_steps;
 private:
@@ -29,7 +29,7 @@ private:
 	void ApplyGravityToParticles();
 	void UpdateParticlePositions(real dt);
 	void TemporaryConstrainToBox();
-	void ResolveParticleCollisions();
+	void ResolveAllCollisions();
 
 	// variables
 	vec2 gravity;

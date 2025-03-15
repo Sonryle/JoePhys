@@ -21,29 +21,26 @@ void Scene::Render()
 	if (world == nullptr)
 		return;
 
-	// loop over every physics object in the world
-	for (int obj = 0; obj < world->PhysObjects.size(); obj++)
-	{
-		// Create a copy of the PhysObject that we're looking at
-		PhysObj* current_obj = world->PhysObjects[obj];
-
-		// loop over every particle in the physics objectttt
-		for (int part = 0; part < current_obj->particles.size(); part++)
+	// loop over every particle in every physics object
+	for (int c = 0; c < world->clusters.size(); c++)
+		for (Particle* p : world->clusters[c]->particles)
 		{
-			// Create a copy of the particle we're looking at
-			Particle* current_part = current_obj->particles[part];
-
 			int segments = settings.circle_res;
-			real rad = current_part->radius;
-			vec2 pos = current_part->position;
+			real rad = p->radius;
+			vec2 pos = p->position;
 			colour col = palette.colours[settings.scene_colours.circles];
 			colour outline_col = palette.colours[settings.scene_colours.circle_outlines];
 
+			if (c == 0)
+				col = palette.colours[Palette::JP_GREEN];
+			if (c == 1)
+				col = palette.colours[Palette::JP_RED];
+	
 			// Render particle
 			renderer.AddSolidCircle(pos, rad, segments, col, outline_col);
 		}
-	}
 }
+
 
 void Scene::ResetCamera()
 {

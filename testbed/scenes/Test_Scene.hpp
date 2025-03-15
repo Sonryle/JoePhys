@@ -3,7 +3,7 @@
 
 #include "../Scene.hpp"
 #include "../Settings.hpp"
-#include "JoePhys/PhysObj.hpp"
+#include "JoePhys/Particle.hpp"
 
 struct TestScene : public Scene
 {
@@ -15,10 +15,10 @@ struct TestScene : public Scene
 		settings.circle_res = 20; //20
 		double PI = 3.141592653589;
 
-		// Create a physics object to go in our world
-		PhysObj* myPhysObj = new PhysObj;
+		// Create a cluster for the grid of particles (sand) to go in
+		Cluster* sand = new Cluster;
 
-		// Create an 11x11 grid of particles to go in our physics object
+		// Create an 11x11 grid of particles to go in our cluster
 		for (int y = -5; y < 6; y++)
 			for (int x = 5; x < 15; x++)
 			{
@@ -28,12 +28,28 @@ struct TestScene : public Scene
 				real radius = x * 1.5f;
 				real mass = (float)PI * radius * radius;
 				Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass);
-				// Add the particle to the physics object
-				myPhysObj->particles.push_back(myParticle);
+				// Add the particle to the world
+				sand->particles.push_back(myParticle);
 			}
 
-		// Add the physics object to the world
-		world->PhysObjects.push_back(myPhysObj);
+		// Create a cluster for the ground
+		Cluster* floor = new Cluster;
+		// Add a line of particles as the ground
+		for (int x = -20; x < 20; x++)
+		{
+			vec2 vel(0.0f, 0.0f);
+			vec2 pos(20.0f * x, -160);
+			real elasticity = 0.9f;
+			real radius = 10;
+			real mass = (float)PI * radius * radius;
+			Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass);
+			// Add the particle to the physics object
+			floor->particles.push_back(myParticle);
+		}
+
+		// Add cluster to world
+		world->clusters.push_back(sand);
+		world->clusters.push_back(floor);
 	}
 
 	void SetUpSceneColours() override

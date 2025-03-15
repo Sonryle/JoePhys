@@ -3,7 +3,7 @@
 
 #include "../Scene.hpp"
 #include "../Settings.hpp"
-#include "JoePhys/PhysObj.hpp"
+#include "JoePhys/Particle.hpp"
 
 struct TestSceneTwo : public Scene
 {
@@ -14,10 +14,10 @@ struct TestSceneTwo : public Scene
 		world = new World(settings.simulation_hertz, settings.sub_steps, vec2(0, -980));
 		settings.circle_res = 20;
 
-		// Create a physics object to go in our world
-		PhysObj* myPhysObj = new PhysObj;
+		// Create a cluster to hold our particles
+		Cluster* c = new Cluster;
 
-		// Create a 10x10 grid of particles to go in our physics object
+		// Create a 10x10 grid of particles to go in our world
 		for (int y = 0; y < 10; y++)
 			for (int x = 0; x < 10; x++)
 			{
@@ -27,8 +27,8 @@ struct TestSceneTwo : public Scene
 				real radius = 10;
 				real mass = 1.0f;
 				Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass);
-				// Add the particle to the physics object
-				myPhysObj->particles.push_back(myParticle);
+				// Add the particle to the world
+				c->particles.push_back(myParticle);
 			}
 
 		// Add a ball to bounce into the other particles
@@ -38,11 +38,10 @@ struct TestSceneTwo : public Scene
 		real radius = 30;
 		real mass = 4.0f;
 		Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass);
-		// Add the particle to the physics object
-		myPhysObj->particles.push_back(myParticle);
+		c->particles.push_back(myParticle);
 
-		// Add the physics object to the world
-		world->PhysObjects.push_back(myPhysObj);
+		// Add the cluster to the world
+		world->clusters.push_back(c);
 	}
 
 	void SetUpSceneColours() override
