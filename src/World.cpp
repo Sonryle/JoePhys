@@ -164,7 +164,7 @@ void World::UpdateSprings()
 		for (Spring* s : c->springs)
 		{
 			// stiffness of 0 = no stiffness, stiffness of 1 = completely stiff
-			real stiffness = 0.01;
+			real stiffness = 0.01f;
 
 			vec2 dirAxis = s->particleA->position - s->particleB->position;
 			real dist = length(dirAxis);

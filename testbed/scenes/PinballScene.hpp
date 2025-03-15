@@ -79,8 +79,8 @@ struct PinballScene : public Scene
 			for (int x = -2; x < 3; x++)
 			{
 				vec2 vel(0.0f, 0.0f);
-				real radius = 15;
-				vec2 pos(x * 90, y * 200);
+				real radius = 15.0f;
+				vec2 pos(x * 90.0f, y * 200.0f);
 				real elasticity = 0.9f;
 				real mass = 0.0f;
 				Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass);
@@ -90,8 +90,8 @@ struct PinballScene : public Scene
 			for (int x = -2; x < 2; x++)
 			{
 				vec2 vel(0.0f, 0.0f);
-				real radius = 20;
-				vec2 pos((x * 90) + 45, (y * 200) - 100);
+				real radius = 20.0f;
+				vec2 pos((x * 90.0f) + 45.0f, (y * 200.0f) - 100.0f);
 				real elasticity = 0.9f;
 				real mass = 0.0f;
 				Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass);
@@ -104,7 +104,7 @@ struct PinballScene : public Scene
 		for (int x = 0; x < 5; x++)
 		{
 			vec2 vel(0.0f, 0.0f);
-			real radius = 10;
+			real radius = 10.0f;
 			vec2 pos((radius * 2.0f * x) - 680, 450);
 			real elasticity = 0.9f;
 			real mass = 0.0f;
@@ -113,7 +113,7 @@ struct PinballScene : public Scene
 			floor->particles.push_back(myParticle);
 			
 			vel.Set(0.0f, 0.0f);
-			radius = 10;
+			radius = 10.0f;
 			pos.Set(-600, (radius * 2.0f * x) + 450);
 			elasticity = 0.9f;
 			mass = 0.0f;
