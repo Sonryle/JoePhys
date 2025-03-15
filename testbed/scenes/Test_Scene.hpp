@@ -23,7 +23,7 @@ struct TestScene : public Scene
 			for (int x = 5; x < 15; x++)
 			{
 				vec2 vel(0.0f, 0.0f);
-				vec2 pos(40.0f * (x - 10), 40.0f * y);
+				vec2 pos(50.0f * (x - 10), 40.0f * y);
 				real elasticity = 0.9f;
 				real radius = x * 1.5f;
 				real mass = (float)PI * radius * radius;
@@ -38,10 +38,34 @@ struct TestScene : public Scene
 		for (int x = -20; x < 20; x++)
 		{
 			vec2 vel(0.0f, 0.0f);
-			vec2 pos(20.0f * x, -160);
+			vec2 pos(20.0f * x, -250);
 			real elasticity = 0.9f;
 			real radius = 10;
-			real mass = (float)PI * radius * radius;
+			real mass = 0.0f;
+			Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass);
+			// Add the particle to the physics object
+			floor->particles.push_back(myParticle);
+		}
+		// Add a line of particles as the left wall
+		for (int y = -10; y < 0; y++)
+		{
+			vec2 vel(0.0f, 0.0f);
+			vec2 pos(-400, (y * 20) - 50);
+			real elasticity = 0.9f;
+			real radius = 10;
+			real mass = 0.0f;
+			Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass);
+			// Add the particle to the physics object
+			floor->particles.push_back(myParticle);
+		}
+		// Add a line of particles as the right wall
+		for (int y = -10; y < 0; y++)
+		{
+			vec2 vel(0.0f, 0.0f);
+			vec2 pos(400, (y * 20) - 50);
+			real elasticity = 0.9f;
+			real radius = 10;
+			real mass = 0.0f;
 			Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass);
 			// Add the particle to the physics object
 			floor->particles.push_back(myParticle);

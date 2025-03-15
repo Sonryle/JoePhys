@@ -28,7 +28,6 @@ private:
 	// functions
 	void ApplyGravityToParticles();
 	void UpdateParticlePositions(real dt);
-	void TemporaryConstrainToBox();
 	void ResolveAllCollisions();
 
 	// variables
