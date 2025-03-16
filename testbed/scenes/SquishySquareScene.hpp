@@ -12,7 +12,7 @@ struct SquishySquareScene : public Scene
 	SquishySquareScene()
 	{
 		SetUpSceneColours();
-		world = new World(settings.simulation_hertz, settings.sub_steps, vec2(0.0f, -980));
+		world = new World(settings.simulation_hertz, settings.sub_steps, vec2(0.0f, -980.0f));
 		settings.circle_res = 20; //20
 		double PI = 3.141592653589;
 		
@@ -41,7 +41,8 @@ struct SquishySquareScene : public Scene
 		// Top Left Point
 		real radius = 20.0f;
 		vec2 pos(100.0f, -100.0f);
-		vec2 vel(50.0f, 900.0f);
+		/* vec2 vel(50.0f, 900.0f); */
+		vec2 vel(0.0f, 0.0f);
 		real elasticity = 0.9f;
 		real mass = (real)PI * radius * radius;
 		Particle* topLeft = new Particle(pos, vel, elasticity, radius, mass);

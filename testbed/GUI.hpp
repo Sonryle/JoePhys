@@ -59,10 +59,15 @@ static void DrawGui()
 				settings.scene_has_changed = 1;
 				settings.scene_number = 2;
 			}
-			if (ImGui::MenuItem("Colour Test Scene", NULL, (settings.scene_number == 3)))
+			if (ImGui::MenuItem("Squishy Rectangle Scene", NULL, (settings.scene_number == 3)))
 			{
 				settings.scene_has_changed = 1;
 				settings.scene_number = 3;
+			}
+			if (ImGui::MenuItem("Colour Test Scene", NULL, (settings.scene_number == 4)))
+			{
+				settings.scene_has_changed = 1;
+				settings.scene_number = 4;
 			}
 			ImGui::EndMenu();
 		}

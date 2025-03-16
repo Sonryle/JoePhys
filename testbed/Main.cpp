@@ -39,6 +39,9 @@ void SwitchScene(int scene_number)
 		current_scene = new SquishySquareScene();
 		break;
 	case 3:
+		current_scene = new SquishyRectangleScene();
+		break;
+	case 4:
 		current_scene = new ColourDebugScene();
 		break;
 	default:

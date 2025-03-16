@@ -29,7 +29,7 @@ private:
 	void ApplyGravityToParticles();
 	void UpdateParticlePositions(real dt);
 	void ResolveAllCollisions();
-	void UpdateSprings();
+	void UpdateSprings(real dt);
 
 	// variables
 	vec2 gravity;

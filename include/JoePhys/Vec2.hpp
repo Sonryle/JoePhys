@@ -75,6 +75,9 @@ inline vec2 operator / (vec2 a, vec2 b) { return vec2(a.x / b.x, a.y / b.y); }
 inline bool operator ==(vec2 a, vec2 b) { return a.x == b.x && a.y == b.y; }
 inline bool operator !=(vec2 a, vec2 b) { return a.x != b.x || a.y != b.y; }
 
+// return negative vector
+inline vec2 operator -(vec2 a) { return vec2(-a.x, -a.y); }
+
 // operations between a vec2 and a float
 inline vec2 operator + (vec2 a, real b) { return vec2(a.x + b, a.y + b); }
 inline vec2 operator - (vec2 a, real b) { return vec2(a.x - b, a.y - b); }

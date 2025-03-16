@@ -1,6 +1,7 @@
 #include <cstdio>	// for "stderr" file path constant
 
 #include "JoePhys/World.hpp"
+#include "JoePhys/Vec2.hpp"
 
 World::World(int simulation_hertz, int sub_steps, vec2 gravity)
 {
@@ -23,7 +24,7 @@ void World::Step()
 	for (int n = 0; n < sub_steps; n++)
 	{
 		ApplyGravityToParticles();
-		UpdateSprings();
+		UpdateSprings(dt / sub_steps);
 		UpdateParticlePositions(dt / sub_steps);
 		ResolveAllCollisions();
 	}
@@ -35,7 +36,7 @@ void World::ApplyGravityToParticles()
 	for (Cluster* c : clusters)
 		for (Particle* p : c->particles)
 			if (p->mass != 0.0f)	// if particle isnt static
-				p->acceleration += gravity;
+				p->Accelerate(p->mass * gravity);
 }
 
 // Move particles forwards along their velocities
@@ -157,27 +158,21 @@ void World::ResolveAllCollisions()
 					ResolveCollision(clusters[c1]->particles[p1], clusters[c2]->particles[p2]);
 }
 
-void World::UpdateSprings()
+void World::UpdateSprings(real dt)
 {
 	// loop over every spring and move particles away from eachother by spring length
 	for (Cluster* c : clusters)
 		for (Spring* s : c->springs)
 		{
-			// stiffness of 0 = no stiffness, stiffness of 1 = completely stiff
-			real stiffness = 0.01f;
+			vec2 diff = s->particleA->position - s->particleB->position;
+			vec2 diff_norm = normalize(diff);
+			real diff_len = length(diff);
 
-			vec2 dirAxis = s->particleA->position - s->particleB->position;
-			real dist = length(dirAxis);
-			real deltaLen = dist - s->resting_length;
+			real move_len = s->resting_length - diff_len;
+			vec2 acceleration = diff_norm * move_len;
 
-			real force = -stiffness * deltaLen;
-
-			vec2 offset = normalize(dirAxis) * force;
-
-			if (s->particleA->mass != 0.0f)
-				s->particleA->position += offset;
-			if (s->particleB->mass != 0.0f)
-				s->particleB->position -= offset;
+			s->particleA->Accelerate(acceleration * 1000000);
+			s->particleB->Accelerate(-acceleration * 1000000);
 		}
 	return;
 }
