@@ -29,7 +29,7 @@ struct SquishyRectangleScene : public Scene
 		for (int x = -20; x < 30; x++)
 		{
 			real radius = 2.5f;
-			vec2 pos(x * radius * 2.0f, -250 - x * 2);
+			vec2 pos(x * radius * 2.0f, -250 - x * 2.0f);
 			vec2 vel(0.0f, 0.0f);
 			real elasticity = 0.5f;
 			real mass = 0.0f;
@@ -75,11 +75,11 @@ struct SquishyRectangleScene : public Scene
 			for (int y = 0; y < 14; y++)
 			{
 				// Add Particles
-				vec2 pos((x * 20) - 3 * 20, (y * 20) - 200.0f);
+				vec2 pos((x * 20) - 3 * 20.0f, (y * 20) - 200.0f);
 				vec2 vel(0.0f, 0.0f);
 				real elas = 0.5f;
 				real rad = 5.0f;
-				real mass = PI * rad * rad;
+				real mass = (real)PI * rad * rad;
 				hp[x][y] = new Particle(pos, vel, elas, rad, mass);
 				horiz_rect->particles.push_back(hp[x][y]);
 
@@ -108,7 +108,7 @@ struct SquishyRectangleScene : public Scene
 		// ---------------
 		
 		Cluster* circ = new Cluster;
-		int circ_segments = 17;
+		const int circ_segments = 17;
 		real circ_radius = 30.0f;
 		vec2 circ_pos(0.0f, 130.0f);
 
