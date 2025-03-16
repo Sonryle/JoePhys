@@ -171,7 +171,7 @@ void World::UpdateSprings(real dt)
 
 			vec2 offset = dp * percent;
 			
-			real rigidity = 1.0f;
+			real rigidity = 0.02f;
 			real springiness = rigidity * 160000000;
 
 			s->particleA->Accelerate(offset * springiness);

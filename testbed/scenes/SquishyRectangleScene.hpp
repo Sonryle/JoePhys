@@ -78,7 +78,7 @@ struct SquishyRectangleScene : public Scene
 				vec2 pos((x * 20) - 3 * 20, (y * 20) - 200.0f);
 				vec2 vel(0.0f, 0.0f);
 				real elas = 0.5f;
-				real rad = 9.0f;
+				real rad = 5.0f;
 				real mass = PI * rad * rad;
 				hp[x][y] = new Particle(pos, vel, elas, rad, mass);
 				horiz_rect->particles.push_back(hp[x][y]);
