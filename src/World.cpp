@@ -24,8 +24,8 @@ void World::Step()
 	for (int n = 0; n < sub_steps; n++)
 	{
 		ApplyGravityToParticles();
-		UpdateSprings(dt / sub_steps);
 		UpdateParticlePositions(dt / sub_steps);
+		UpdateSprings(dt / sub_steps);
 		ResolveAllCollisions();
 	}
 }
@@ -164,15 +164,18 @@ void World::UpdateSprings(real dt)
 	for (Cluster* c : clusters)
 		for (Spring* s : c->springs)
 		{
-			vec2 diff = s->particleA->position - s->particleB->position;
-			vec2 diff_norm = normalize(diff);
-			real diff_len = length(diff);
+			vec2 dp = s->particleA->position - s->particleB->position;
+			real dist = length(dp);
+			real diff = s->resting_length - dist;
+			real percent = (diff / dist) / 2.0f;
 
-			real move_len = s->resting_length - diff_len;
-			vec2 acceleration = diff_norm * move_len;
+			vec2 offset = dp * percent;
+			
+			real rigidity = 1.0f;
+			real springiness = rigidity * 160000000;
 
-			s->particleA->Accelerate(acceleration * 1000000);
-			s->particleB->Accelerate(-acceleration * 1000000);
+			s->particleA->Accelerate(offset * springiness);
+			s->particleB->Accelerate(-offset * springiness);
 		}
 	return;
 }
