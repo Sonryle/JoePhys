@@ -29,11 +29,11 @@ void Scene::Render()
 		{
 			// Render each particle
 			int segments = settings.circle_res;
-			real rad = p->radius;
-			vec2 pos = p->position;
+			real rad = p->radius_in_meters;
+			vec2 pos = p->pos_in_meters;
 			colour col;
 			colour outline_col;
-			if (p->mass == 0.0f)
+			if (p->mass_in_grams == 0.0f)
 			{
 				col = palette.colours[settings.scene_colours.static_particle];
 				outline_col = palette.colours[settings.scene_colours.static_particle_outline];
@@ -51,8 +51,8 @@ void Scene::Render()
 		for (Spring* s : world->clusters[c]->springs)
 		{
 			// Render each spring
-			vec2 posA = s->particleA->position;
-			vec2 posB = s->particleB->position;
+			vec2 posA = s->particleA->pos_in_meters;
+			vec2 posB = s->particleB->pos_in_meters;
 			colour col = palette.colours[settings.scene_colours.spring];
 
 			renderer.AddLine(posA, posB, col);

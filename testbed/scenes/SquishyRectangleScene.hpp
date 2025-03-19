@@ -149,16 +149,16 @@ struct SquishyRectangleScene : public Scene
 			circ->particles.push_back(p);
 
 			// Create springs to connect particles
-			Spring* spring = new Spring(circ_parts[i], inside_p, length(circ_parts[i]->position - inside_p->position));
+			Spring* spring = new Spring(circ_parts[i], inside_p, length(circ_parts[i]->pos_in_meters - inside_p->pos_in_meters));
 			circ->springs.push_back(spring);
 			if (i > 0)
 			{
-				Spring* s = new Spring(circ_parts[i], circ_parts[i-1], length(circ_parts[i]->position - circ_parts[i-1]->position));
+				Spring* s = new Spring(circ_parts[i], circ_parts[i-1], length(circ_parts[i]->pos_in_meters - circ_parts[i-1]->pos_in_meters));
 				circ->springs.push_back(s);
 			}
 			if (i == circ_segments - 1)
 			{
-				Spring* s = new Spring(circ_parts[i], circ_parts[0], length(circ_parts[i]->position - circ_parts[0]->position));
+				Spring* s = new Spring(circ_parts[i], circ_parts[0], length(circ_parts[i]->pos_in_meters - circ_parts[0]->pos_in_meters));
 				circ->springs.push_back(s);
 			}
 
