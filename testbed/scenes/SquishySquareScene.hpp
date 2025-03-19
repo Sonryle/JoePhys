@@ -12,7 +12,7 @@ struct SquishySquareScene : public Scene
 	SquishySquareScene()
 	{
 		SetUpSceneColours();
-		world = new World(settings.simulation_hertz, settings.sub_steps, vec2(0.0f, -980.0f));
+		world = new World(settings.simulation_hertz, settings.sub_steps, vec2(0.0f, -9.8f));
 		settings.circle_res = 20; //20
 		double PI = 3.141592653589;
 		
@@ -22,8 +22,8 @@ struct SquishySquareScene : public Scene
 		Cluster* floor = new Cluster;
 		for (int x = -12; x < 12; x++)
 		{
-			real radius = 10.0f;
-			vec2 pos(x * radius * 2.0f, -250);
+			real radius = 0.1f;
+			vec2 pos(x * radius * 2.0f, -2.5f);
 			vec2 vel(0.0f, 0.0f);
 			real elasticity = 0.9f;
 			real mass = 0.0f;
@@ -39,8 +39,8 @@ struct SquishySquareScene : public Scene
 		Cluster* square = new Cluster;
 
 		// Top Left Point
-		real radius = 20.0f;
-		vec2 pos(100.0f, -100.0f);
+		real radius = 0.2f;
+		vec2 pos(1.0f, -1.0f);
 		/* vec2 vel(50.0f, 900.0f); */
 		vec2 vel(0.0f, 0.0f);
 		real elasticity = 0.9f;
@@ -49,25 +49,25 @@ struct SquishySquareScene : public Scene
 		square->particles.push_back(topLeft);
 		
 		// Top Right Point
-		pos.Set(100.0f, 100.0f);
+		pos.Set(1.0f, 1.0f);
 		vel.Set(0.0f, 0.0f);
 		Particle* topRight = new Particle(pos, vel, elasticity, radius, mass);
 		square->particles.push_back(topRight);
 		
 		// Bottom Left Point
-		pos.Set(-100.0f, -100.0f);
+		pos.Set(-1.0f, -1.0f);
 		Particle* bottomLeft = new Particle(pos, vel, elasticity, radius, mass);
 		square->particles.push_back(bottomLeft);
 		
 		// Bottom Right Point
-		pos.Set(-100.0f, 100.0f);
+		pos.Set(-1.0f, 1.0f);
 		Particle* bottomRight = new Particle(pos, vel, elasticity, radius, mass);
 		square->particles.push_back(bottomRight);
 
 		// Add Springs To Square
 		// ---------------------
 
-		real len = 200.0f;
+		real len = 2.0f;
 		Spring* topSpring = new Spring(topLeft, topRight, len);
 		Spring* bottomSpring = new Spring(bottomLeft, bottomRight, len);
 		Spring* leftSpring = new Spring(topLeft, bottomLeft, len);

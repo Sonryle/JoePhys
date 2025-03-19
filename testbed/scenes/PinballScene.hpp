@@ -12,9 +12,9 @@ struct PinballScene : public Scene
 	PinballScene()
 	{
 		SetUpSceneColours();
-		world = new World(settings.simulation_hertz, settings.sub_steps, vec2(0.0f, -980));
+		world = new World(settings.simulation_hertz, settings.sub_steps, vec2(0.0f, -9.8f));
 		settings.circle_res = 20; //20
-		camera.center.Set( 0.0f, 350.0f);
+		camera.center.Set( 0.0f, 3.5f);
 		camera.zoom = 1.4f;
 		double PI = 3.141592653589;
 
@@ -26,10 +26,10 @@ struct PinballScene : public Scene
 			for (int x = -4; x < 5; x++)
 			{
 				vec2 vel(0.0f, 0.0f);
-				vec2 pos((50.0f * x) + 5, (40.0f * y) + 800);
-				real elasticity = 0.9f;
-				real radius = (x + 7) * 1.5f;
+				vec2 pos((0.5f * x) + 0.05f, (0.4f * y) + 8.0f);
+				real radius = (x + 7) * 0.015f;
 				real mass = (float)PI * radius * radius;
+				real elasticity = 0.8f;
 				Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass);
 				// Add the particle to the world
 				sand->particles.push_back(myParticle);
@@ -41,8 +41,8 @@ struct PinballScene : public Scene
 		for (int x = -12; x < 12; x++)
 		{
 			vec2 vel(0.0f, 0.0f);
-			real radius = 10;
-			vec2 pos(radius * 2.0f * x, -250);
+			real radius = 0.1f;
+			vec2 pos(radius * 2.0f * x, -2.5f);
 			real elasticity = 0.9f;
 			real mass = 0.0f;
 			Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass);
@@ -53,8 +53,8 @@ struct PinballScene : public Scene
 		for (int y = -10; y < 30; y++)
 		{
 			vec2 vel(0.0f, 0.0f);
-			real radius = 10;
-			vec2 pos(-240, (y * 2.0f * radius) - 50);
+			real radius = 0.1f;
+			vec2 pos(-2.4f, (y * 2.0f * radius) - 0.5f);
 			real elasticity = 0.9f;
 			real mass = 0.0f;
 			Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass);
@@ -65,8 +65,8 @@ struct PinballScene : public Scene
 		for (int y = -10; y < 30; y++)
 		{
 			vec2 vel(0.0f, 0.0f);
-			real radius = 10;
-			vec2 pos(240, (y * 2.0f * radius) - 50);
+			real radius = 0.1f;
+			vec2 pos(2.4f, (y * 2.0f * radius) - 0.5f);
 			real elasticity = 0.9f;
 			real mass = 0.0f;
 			Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass);
@@ -79,8 +79,8 @@ struct PinballScene : public Scene
 			for (int x = -2; x < 3; x++)
 			{
 				vec2 vel(0.0f, 0.0f);
-				real radius = 15.0f;
-				vec2 pos(x * 90.0f, y * 200.0f);
+				real radius = 0.15f;
+				vec2 pos(x * 0.9f, y * 2.0f);
 				real elasticity = 0.9f;
 				real mass = 0.0f;
 				Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass);
@@ -90,45 +90,14 @@ struct PinballScene : public Scene
 			for (int x = -2; x < 2; x++)
 			{
 				vec2 vel(0.0f, 0.0f);
-				real radius = 20.0f;
-				vec2 pos((x * 90.0f) + 45.0f, (y * 200.0f) - 100.0f);
+				real radius = 0.2f;
+				vec2 pos((x * 0.9f) + 0.45f, (y * 2.0f) - 1.0f);
 				real elasticity = 0.9f;
 				real mass = 0.0f;
 				Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass);
 				// Add the particle to the physics object
 				floor->particles.push_back(myParticle);
 			}
-		}
-
-		// Create a basket to catch the odd flying ball
-		for (int x = 0; x < 5; x++)
-		{
-			vec2 vel(0.0f, 0.0f);
-			real radius = 10.0f;
-			vec2 pos((radius * 2.0f * x) - 680, 450);
-			real elasticity = 0.9f;
-			real mass = 0.0f;
-			Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass);
-			// Add the particle to the physics object
-			floor->particles.push_back(myParticle);
-			
-			vel.Set(0.0f, 0.0f);
-			radius = 10.0f;
-			pos.Set(-600, (radius * 2.0f * x) + 450);
-			elasticity = 0.9f;
-			mass = 0.0f;
-			myParticle = new Particle(pos, vel, elasticity, radius, mass);
-			// Add the particle to the physics object
-			floor->particles.push_back(myParticle);
-
-			vel.Set(0.0f, 0.0f);
-			radius = 10;
-			pos.Set(-680, (radius * 2.0f * x) + 450);
-			elasticity = 0.9f;
-			mass = 0.0f;
-			myParticle = new Particle(pos, vel, elasticity, radius, mass);
-			// Add the particle to the physics object
-			floor->particles.push_back(myParticle);
 		}
 
 		// Add cluster to world

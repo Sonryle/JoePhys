@@ -19,18 +19,18 @@ struct CollisionScene : public Scene
 		Cluster* c = new Cluster;
 
 		// Add two particles to the cluster
-		vec2 posA(-100, -100);
-		vec2 velA(100.0f, 200.0f);
+		vec2 posA(-1, -1);
+		vec2 velA(1.0f, 2.0f);
 		real elasticityA = 0.9f;
-		real radiusA = 50;
+		real radiusA = 0.5f;
 		real massA = (float)PI * radiusA * radiusA;
 		Particle* partA = new Particle(posA, velA, elasticityA, radiusA, massA);
 		c->particles.push_back(partA);
 
-		vec2 posB(100, 100);
-		vec2 velB(-10.0f, -20.0f);
+		vec2 posB(1, 1);
+		vec2 velB(-0.1f, -0.2f);
 		real elasticityB = 0.9f;
-		real radiusB = 100;
+		real radiusB = 1;
 		real massB = (float)PI * radiusB * radiusB;
 		Particle* partB = new Particle(posB, velB, elasticityB, radiusB, massB);
 		c->particles.push_back(partB);

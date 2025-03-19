@@ -546,88 +546,88 @@ void Renderer::AddColourTest()
 	// --------------------
 	
 	// tri 1
-	vec2 tt1p1( -390,  0 );
-	vec2 tt1p2( -310,  0 );
-	vec2 tt1p3( -350, 65 );
+	vec2 tt1p1( -3.9f,  0     );
+	vec2 tt1p2( -3.1f,  0     );
+	vec2 tt1p3( -3.5f,  0.65f );
 	colour tt1col(palette.colours[Palette::JP_DARK_GRAY]);
 	// tri 2
-	vec2 tt2p1( -290,  0 );
-	vec2 tt2p2( -210,  0 );
-	vec2 tt2p3( -250, 65 );
+	vec2 tt2p1( -2.9f,  0     );
+	vec2 tt2p2( -2.1f,  0     );
+	vec2 tt2p3( -2.5f,  0.65f );
 	colour tt2col(palette.colours[Palette::JP_DARK_RED]);
 	// tri 3
-	vec2 tt3p1( -190,   0 );
-	vec2 tt3p2( -110,   0 );
-	vec2 tt3p3( -150,  65 );
+	vec2 tt3p1( -1.9f,   0     );
+	vec2 tt3p2( -1.1f,   0     );
+	vec2 tt3p3( -1.5f,   0.65f );
 	colour tt3col(palette.colours[Palette::JP_DARK_GREEN]);
 	// tri 4
-	vec2 tt4p1( -90,   0 );
-	vec2 tt4p2( -10,   0 );
-	vec2 tt4p3( -50,  65 );
+	vec2 tt4p1( -0.9f,   0     );
+	vec2 tt4p2( -0.1f,   0     );
+	vec2 tt4p3( -0.5f,   0.65f );
 	colour tt4col(palette.colours[Palette::JP_DARK_YELLOW]);
 	// tri 5
-	vec2 tt5p1(  10,   0 );
-	vec2 tt5p2(  90,   0 );
-	vec2 tt5p3(  50,   65 );
+	vec2 tt5p1(  0.1f,   0     );
+	vec2 tt5p2(  0.9f,   0     );
+	vec2 tt5p3(  0.5f,   0.65f );
 	colour tt5col(palette.colours[Palette::JP_DARK_BLUE]);
 	// tri 6
-	vec2 tt6p1( 110,   0 );
-	vec2 tt6p2( 190,   0 );
-	vec2 tt6p3( 150,  65 );
+	vec2 tt6p1( 1.1f,   0     );
+	vec2 tt6p2( 1.9f,   0     );
+	vec2 tt6p3( 1.5f,   0.65f );
 	colour tt6col(palette.colours[Palette::JP_DARK_PURPLE]);
 	// tri 7
-	vec2 tt7p1( 210,   0 );
-	vec2 tt7p2( 290,   0 );
-	vec2 tt7p3( 250,  65 );
+	vec2 tt7p1( 2.1f,   0     );
+	vec2 tt7p2( 2.9f,   0     );
+	vec2 tt7p3( 2.5f,   0.65f );
 	colour tt7col(palette.colours[Palette::JP_DARK_AQUA]);
 	// tri 8
-	vec2 tt8p1( 310,   0 );
-	vec2 tt8p2( 390,   0 );
-	vec2 tt8p3( 350,  65 );
+	vec2 tt8p1( 3.1f,   0     );
+	vec2 tt8p2( 3.9f,   0     );
+	vec2 tt8p3( 3.5f,   0.65f );
 	colour tt8col(palette.colours[Palette::JP_DARK_WHITE]);
 
 	// BOTTOM ROW OF TRIANGLES
 	// --------------------
 	
 	// tri 1
-	vec2 bt1p1( -390, 0 );
-	vec2 bt1p2( -310, 0 );
-	vec2 bt1p3( -350,  -35 );
+	vec2 bt1p1( -3.9f,   0     );
+	vec2 bt1p2( -3.1f,   0     );
+	vec2 bt1p3( -3.5f,  -0.35f );
 	colour bt1col(palette.colours[Palette::JP_GRAY]);
 	// tri 2
-	vec2 bt2p1( -290, 0 );
-	vec2 bt2p2( -210, 0 );
-	vec2 bt2p3( -250,  -35 );
+	vec2 bt2p1( -2.9f,   0     );
+	vec2 bt2p2( -2.1f,   0     );
+	vec2 bt2p3( -2.5f,  -0.35f );
 	colour bt2col(palette.colours[Palette::JP_RED]);
 	// tri 3
-	vec2 bt3p1( -190, 0 );
-	vec2 bt3p2( -110, 0 );
-	vec2 bt3p3( -150, -35 );
+	vec2 bt3p1( -1.9f,  0     );
+	vec2 bt3p2( -1.1f,  0     );
+	vec2 bt3p3( -1.5f, -0.35f );
 	colour bt3col(palette.colours[Palette::JP_GREEN]);
 	// tri 4
-	vec2 bt4p1(  -90, 0 );
-	vec2 bt4p2(  -10, 0 );
-	vec2 bt4p3(  -50, -35 );
+	vec2 bt4p1(  -.9f,  0     );
+	vec2 bt4p2(  -.1f,  0     );
+	vec2 bt4p3(  -.5f, -0.35f );
 	colour bt4col(palette.colours[Palette::JP_YELLOW]);
 	// tri 5
-	vec2 bt5p1(  10, 0 );
-	vec2 bt5p2(  90, 0 );
-	vec2 bt5p3(  50, -35 );
+	vec2 bt5p1(  0.1f,  0     );
+	vec2 bt5p2(  0.9f,  0     );
+	vec2 bt5p3(  0.5f, -0.35f );
 	colour bt5col(palette.colours[Palette::JP_BLUE]);
 	// tri 6
-	vec2 bt6p1( 110, 0 );
-	vec2 bt6p2( 190, 0 );
-	vec2 bt6p3( 150, -35 );
+	vec2 bt6p1( 1.1f,  0     );
+	vec2 bt6p2( 1.9f,  0     );
+	vec2 bt6p3( 1.5f, -0.35f );
 	colour bt6col(palette.colours[Palette::JP_PURPLE]);
 	// tri 7
-	vec2 bt7p1( 210, 0 );
-	vec2 bt7p2( 290, 0 );
-	vec2 bt7p3( 250, -35 );
+	vec2 bt7p1( 2.1f,  0     );
+	vec2 bt7p2( 2.9f,  0     );
+	vec2 bt7p3( 2.5f, -0.35f );
 	colour bt7col(palette.colours[Palette::JP_AQUA]);
 	// tri 8
-	vec2 bt8p1( 310, 0 );
-	vec2 bt8p2( 390, 0 );
-	vec2 bt8p3( 350, -35 );
+	vec2 bt8p1( 3.1f,  0     );
+	vec2 bt8p2( 3.9f,  0     );
+	vec2 bt8p3( 3.5f, -0.35f );
 	colour bt8col(palette.colours[Palette::JP_WHITE]);
 
 	// RENDER TOP TRIANGLES
@@ -667,6 +667,12 @@ void Camera::GenerateProjectionMatrix(float p[16])
 	real bottom = (float)window_height / -2;
 	real far = 1;
 	real near = -1;
+
+	// divide right, left, top and bottom by 100 so that 100 pixels is equal to 1 unit on the coordinate system.
+	right /= 100;
+	left /= 100;
+	top /= 100;
+	bottom /= 100;
 
 	// Multiply corners of the screen by camera zoom
 	right *= zoom;

@@ -103,7 +103,7 @@ static void mousePosCallback(GLFWwindow* window, double dx, double dy)
 	ImGuiIO& io = ImGui::GetIO();
 	if ( !(first_cursor_movement || io.WantCaptureMouse) )
 		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
-			camera.center += vec2(cursor_x - (float)dx, (float)dy - cursor_y) * camera.zoom;
+			camera.center += vec2(cursor_x - (float)dx, (float)dy - cursor_y) * camera.zoom / 100.0f;
 
 	cursor_x = (float)dx;
 	cursor_y = (float)dy;
@@ -123,9 +123,9 @@ static void scrollCallback(GLFWwindow*, double dx, double dy)
 	if (io.WantCaptureMouse == 0)
 	{
 		if (dy < 0)
-			camera.zoom = std::max(camera.zoom * 0.95f, 0.001f);
+			camera.zoom = std::max(camera.zoom * 0.95f, 0.00001f);
 		else if (dy > 0)
-			camera.zoom = std::min(camera.zoom * 1.05f, 10.0f);
+			camera.zoom = std::min(camera.zoom * 1.05f, 1000.0f);
 	}
 
 	return;

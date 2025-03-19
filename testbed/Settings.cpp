@@ -24,7 +24,7 @@ void Settings::Reset()
 	frame_limit = 250;
 
 	simulation_hertz = 250;
-	sub_steps = 8;
+	sub_steps = 4;
 }
 
 void Settings::ResetSceneColours()
