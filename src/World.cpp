@@ -167,8 +167,11 @@ void World::UpdateSprings(real dt)
 			vec2 dp = s->particleA->pos_in_meters - s->particleB->pos_in_meters;
 			real dist = length(dp);
 			real diff = s->resting_length - dist;
+			vec2 dn = normalize(dp);
 
-			vec2 force(0.0f, 0.0f);
+			real k = s->stiffness;
+			vec2 x = dn * diff;
+			vec2 force = k * x;
 
 			s->particleA->Accelerate(force);
 			s->particleB->Accelerate(-force);

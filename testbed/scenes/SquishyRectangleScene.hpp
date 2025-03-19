@@ -84,20 +84,21 @@ struct SquishyRectangleScene : public Scene
 				horiz_rect->particles.push_back(hp[x][y]);
 
 				// Add Springs
+				real stiffness = 500.0f;
 				if (x > 0)
 				{
-					Spring* s = new Spring(hp[x][y], hp[x-1][y], 20.0f);
+					Spring* s = new Spring(hp[x][y], hp[x-1][y], 0.2f, stiffness);
 					horiz_rect->springs.push_back(s);
 				}
 				if (y > 0)
 				{
-					Spring* s = new Spring(hp[x][y], hp[x][y-1], 20.0f);
+					Spring* s = new Spring(hp[x][y], hp[x][y-1], 0.2f, stiffness);
 					horiz_rect->springs.push_back(s);
 				}
 				if (y > 0 && x > 0)
 				{
-					Spring* s = new Spring(hp[x-1][y], hp[x][y-1], sqrt(800.0f));
-					Spring* s2 = new Spring(hp[x][y], hp[x-1][y-1], sqrt(800.0f));
+					Spring* s = new Spring(hp[x-1][y], hp[x][y-1], sqrt(0.08f), stiffness);
+					Spring* s2 = new Spring(hp[x][y], hp[x-1][y-1], sqrt(0.08f), stiffness);
 					horiz_rect->springs.push_back(s);
 					horiz_rect->springs.push_back(s2);
 				}
@@ -149,16 +150,17 @@ struct SquishyRectangleScene : public Scene
 			circ->particles.push_back(p);
 
 			// Create springs to connect particles
-			Spring* spring = new Spring(circ_parts[i], inside_p, length(circ_parts[i]->pos_in_meters - inside_p->pos_in_meters));
+			real stiffness = 500.0f;
+			Spring* spring = new Spring(circ_parts[i], inside_p, length(circ_parts[i]->pos_in_meters - inside_p->pos_in_meters), stiffness);
 			circ->springs.push_back(spring);
 			if (i > 0)
 			{
-				Spring* s = new Spring(circ_parts[i], circ_parts[i-1], length(circ_parts[i]->pos_in_meters - circ_parts[i-1]->pos_in_meters));
+				Spring* s = new Spring(circ_parts[i], circ_parts[i-1], length(circ_parts[i]->pos_in_meters - circ_parts[i-1]->pos_in_meters), stiffness);
 				circ->springs.push_back(s);
 			}
 			if (i == circ_segments - 1)
 			{
-				Spring* s = new Spring(circ_parts[i], circ_parts[0], length(circ_parts[i]->pos_in_meters - circ_parts[0]->pos_in_meters));
+				Spring* s = new Spring(circ_parts[i], circ_parts[0], length(circ_parts[i]->pos_in_meters - circ_parts[0]->pos_in_meters), stiffness);
 				circ->springs.push_back(s);
 			}
 

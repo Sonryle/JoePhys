@@ -67,13 +67,14 @@ struct SquishySquareScene : public Scene
 		// Add Springs To Square
 		// ---------------------
 
-		real len = 2.0f;
-		Spring* topSpring = new Spring(topLeft, topRight, len);
-		Spring* bottomSpring = new Spring(bottomLeft, bottomRight, len);
-		Spring* leftSpring = new Spring(topLeft, bottomLeft, len);
-		Spring* rightSpring = new Spring(topRight, bottomRight, len);
-		Spring* topLeftToBottomRight = new Spring(topLeft, bottomRight, sqrt(len*len*2));
-		Spring* topRightToBottomLeft = new Spring(topRight, bottomLeft, sqrt(len*len*2));
+		real len = 3.0f;
+		real stiffness = 10.0f;
+		Spring* topSpring = new Spring(topLeft, topRight, len, stiffness);
+		Spring* bottomSpring = new Spring(bottomLeft, bottomRight, len, stiffness);
+		Spring* leftSpring = new Spring(topLeft, bottomLeft, len, stiffness);
+		Spring* rightSpring = new Spring(topRight, bottomRight, len, stiffness);
+		Spring* topLeftToBottomRight = new Spring(topLeft, bottomRight, sqrt(len*len*2), stiffness);
+		Spring* topRightToBottomLeft = new Spring(topRight, bottomLeft, sqrt(len*len*2), stiffness);
 
 		// Add springs to cluster
 		square->springs.push_back(topSpring);
