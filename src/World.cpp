@@ -24,6 +24,7 @@ void World::Step()
 	for (int n = 0; n < sub_steps; n++)
 	{
 		ApplyGravityToParticles();
+		ApplyDragToParticles();
 		UpdateParticlePositions(dt / sub_steps);
 		UpdateSprings(dt / sub_steps);
 		ResolveAllCollisions();
@@ -35,8 +36,26 @@ void World::ApplyGravityToParticles()
 	// loop over every particle in every cluster and add gravity to its acceleration
 	for (Cluster* c : clusters)
 		for (Particle* p : c->particles)
-			if (p->mass_in_grams != 0.0f)	// if particle isnt static
-				p->Accelerate(p->mass_in_grams * gravity);
+			p->Accelerate(p->mass_in_grams * gravity);
+}
+
+void World::ApplyDragToParticles()
+{
+	double PI = 3.14159265359;
+	// loop over every particle in every cluster and apply air resistance
+	for (Cluster* c : clusters)
+		for (Particle* pt : c->particles)
+		{
+			if (pt->vel_in_meters_per_sec.GetLength() < 0.0001f)
+				continue;
+
+			real dampening = 0.0047f;
+			real vel_magnitude = pt->vel_in_meters_per_sec.GetLength();
+			real drag_magnitude = vel_magnitude * vel_magnitude * dampening;
+			vec2 drag_force = pt->vel_in_meters_per_sec.GetNormalized() * -drag_magnitude;
+
+			pt->Accelerate(drag_force);
+		}
 }
 
 // Move particles forwards along their velocities

@@ -27,6 +27,7 @@ private:
 
 	// functions
 	void ApplyGravityToParticles();
+	void ApplyDragToParticles();
 	void UpdateParticlePositions(real dt);
 	void ResolveAllCollisions();
 	void UpdateSprings(real dt);
