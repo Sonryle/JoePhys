@@ -36,7 +36,7 @@ struct SquishyRectangleScene : public Scene
 			Particle* p = new Particle(pos, vel, elasticity, radius, mass);
 
 			// Add particle to floor cluster
-			floor->particles.push_back(p);
+			/* floor->particles.push_back(p); */
 		}
 		for (int x = -20; x < 30; x++)
 		{
@@ -69,13 +69,13 @@ struct SquishyRectangleScene : public Scene
 		Cluster* horiz_rect = new Cluster;
 
 		// Create a 7x14 grid of particles, connected by springs
-		Particle* hp[7][14];
-		for (int x = 0; x < 7; x++)
+		Particle* hp[14][7];
+		for (int x = 0; x < 14; x++)
 		{
-			for (int y = 0; y < 14; y++)
+			for (int y = 0; y < 7; y++)
 			{
 				// Add Particles
-				vec2 pos((x * 0.2f) - 3 * 0.2f, (y * 0.2f) - 2.0f);
+				vec2 pos((x * 0.2f) - 3 * 0.2f, (y * 0.2f) - 5.0f);
 				vec2 vel(0.0f, 0.0f);
 				real elas = 0.5f;
 				real rad = 0.05f;
@@ -141,7 +141,7 @@ struct SquishyRectangleScene : public Scene
 
 			// Create a particle at point pos
 			vec2 pos(new_point_pos);
-			vec2 vel(0.0f, 0.0f);
+			vec2 vel(-1.0f, 0.0f);
 			real rad = 0.07f;
 			real elas = 0.5f;
 			real mass = (real)PI * rad * rad;
@@ -150,7 +150,7 @@ struct SquishyRectangleScene : public Scene
 			circ->particles.push_back(p);
 
 			// Create springs to connect particles
-			real stiffness = 1000.0f;
+			real stiffness = 80.0f;
 			Spring* spring = new Spring(circ_parts[i], inside_p, length(circ_parts[i]->pos_in_meters - inside_p->pos_in_meters), stiffness);
 			circ->springs.push_back(spring);
 			if (i > 0)
@@ -171,7 +171,7 @@ struct SquishyRectangleScene : public Scene
 		// Add clusters to world
 		world->clusters.push_back(floor);
 		world->clusters.push_back(horiz_rect);
-		world->clusters.push_back(circ);
+		/* world->clusters.push_back(circ); */
 	}
 
 	void SetUpSceneColours() override

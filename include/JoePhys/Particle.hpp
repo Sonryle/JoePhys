@@ -13,18 +13,13 @@ struct Particle
 	Particle(vec2 pos, vec2 vel, real elasticity, real radius, real mass) : pos_in_meters(pos), vel_in_meters_per_sec(vel), elasticity(elasticity), radius_in_meters(radius), mass_in_grams(mass) {}
 
 	// functions
-	void Accelerate(vec2 force)
-	{
-		acc_in_meters_per_sec += force / mass_in_grams;
-	}
-	vec2 GetAcceleration()
-	{
-		return acc_in_meters_per_sec;
-	}
-	void ResetAcceleration()
-	{
-		acc_in_meters_per_sec.Set(0.0f, 0.0f);
-	}
+	void Accelerate(vec2 force);
+	vec2 GetAcceleration();
+	void ResetAcceleration();
+	void ApplyDrag(real dampening);
+	void UpdatePosition(real dt);
+	void ResolveCollision(Particle* p);
+
 	
 	// variables
 	vec2 pos_in_meters;
