@@ -4,6 +4,26 @@
 typedef float real;
 
 #include <JoePhys/World.hpp>
+#include "Colour.hpp"
+
+struct SceneColours
+{
+	SceneColours()
+	{
+		background = Palette::JP_AQUA;
+		spring = Palette::JP_GREEN;
+		particle = Palette::JP_DARK_GRAY;
+		particle_outline = Palette::JP_DARK_GRAY;
+		static_particle = Palette::JP_DARK_GREEN;
+		static_particle_outline = Palette::JP_DARK_GRAY;
+	}
+	int background;
+	int spring;
+	int particle;
+	int particle_outline;
+	int static_particle;
+	int static_particle_outline;
+};
 
 // Base struct for all scene structs. Every scene struct will
 // inherit from this base Scene struct
@@ -19,6 +39,9 @@ struct Scene
 
 	// functions
 	void Step();
+
+	// SceneColours class
+	SceneColours colours;
 
 protected:
 	

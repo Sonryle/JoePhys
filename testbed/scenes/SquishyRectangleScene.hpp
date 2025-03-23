@@ -4,7 +4,7 @@
 // TEMPORARY FOR "stderr"
 #include <cstdio>
 
-#include "../Scene.hpp"
+#include "../Scenes.hpp"
 #include "../Settings.hpp"
 #include "../Renderer.hpp"
 #include "JoePhys/Particle.hpp"
@@ -84,7 +84,7 @@ struct SquishyRectangleScene : public Scene
 				horiz_rect->particles.push_back(hp[x][y]);
 
 				// Add Springs
-				real stiffness = 1000.0f;
+				real stiffness = 100.0f;
 				if (x > 0)
 				{
 					Spring* s = new Spring(hp[x][y], hp[x-1][y], 0.2f, stiffness);
@@ -176,12 +176,12 @@ struct SquishyRectangleScene : public Scene
 
 	void SetUpSceneColours() override
 	{
-		settings.scene_colours.background = Palette::JP_DARK_GREEN;
-		settings.scene_colours.spring = Palette::JP_YELLOW;
-		settings.scene_colours.particle = Palette::JP_DARK_YELLOW;
-		settings.scene_colours.particle_outline = Palette::JP_DARK_GRAY;
-		settings.scene_colours.static_particle = Palette::JP_GRAY;
-		settings.scene_colours.static_particle_outline = Palette::JP_DARK_GRAY;
+		colours.background = Palette::JP_DARK_GREEN;
+		colours.spring = Palette::JP_YELLOW;
+		colours.particle = Palette::JP_DARK_YELLOW;
+		colours.particle_outline = Palette::JP_DARK_GRAY;
+		colours.static_particle = Palette::JP_GRAY;
+		colours.static_particle_outline = Palette::JP_DARK_GRAY;
 	}
 };
 

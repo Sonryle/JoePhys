@@ -1,8 +1,8 @@
 #ifndef JP_COLOUR_DEBUG_SCENE
 #define JP_COLOUR_DEBUG_SCENE
 
-#include "../Scene.hpp"
-#include "../Settings.hpp"
+#include "../Scenes.hpp"
+#include "../Colour.hpp"
 #include "../Renderer.hpp"
 
 struct ColourDebugScene : public Scene
@@ -21,7 +21,7 @@ struct ColourDebugScene : public Scene
 
 	void SetUpSceneColours() override
 	{
-		settings.scene_colours.background = Palette::JP_DARK_GRAY;
+		colours.background = Palette::JP_DARK_GRAY;
 	}
 };
 

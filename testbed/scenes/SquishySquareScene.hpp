@@ -1,7 +1,7 @@
 #ifndef SQUISHY_SQUARE_SCENE
 #define SQUISHY_SQUARE_SCENE
 
-#include "../Scene.hpp"
+#include "../Scenes.hpp"
 #include "../Settings.hpp"
 #include "JoePhys/Particle.hpp"
 #include "JoePhys/Spring.hpp"
@@ -91,12 +91,12 @@ struct SquishySquareScene : public Scene
 
 	void SetUpSceneColours() override
 	{
-		settings.scene_colours.background = Palette::JP_BLUE;
-		settings.scene_colours.spring = Palette::JP_GREEN;
-		settings.scene_colours.particle = Palette::JP_DARK_PURPLE;
-		settings.scene_colours.particle_outline = Palette::JP_DARK_GRAY;
-		settings.scene_colours.static_particle = Palette::JP_YELLOW;
-		settings.scene_colours.static_particle_outline = Palette::JP_DARK_YELLOW;
+		colours.background = Palette::JP_BLUE;
+		colours.spring = Palette::JP_GREEN;
+		colours.particle = Palette::JP_DARK_PURPLE;
+		colours.particle_outline = Palette::JP_DARK_GRAY;
+		colours.static_particle = Palette::JP_YELLOW;
+		colours.static_particle_outline = Palette::JP_DARK_YELLOW;
 	}
 };
 

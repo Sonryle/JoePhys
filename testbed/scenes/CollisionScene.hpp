@@ -1,7 +1,7 @@
 #ifndef JP_COLLISION_SCENE
 #define JP_COLLISION_SCENE
 
-#include "../Scene.hpp"
+#include "../Scenes.hpp"
 #include "../Settings.hpp"
 #include "JoePhys/Particle.hpp"
 
@@ -41,12 +41,12 @@ struct CollisionScene : public Scene
 
 	void SetUpSceneColours() override
 	{
-		settings.scene_colours.background = Palette::JP_AQUA;
-		settings.scene_colours.spring = Palette::JP_GREEN;
-		settings.scene_colours.particle = Palette::JP_GREEN;
-		settings.scene_colours.particle_outline = Palette::JP_DARK_GRAY;
-		settings.scene_colours.static_particle = Palette::JP_DARK_GREEN;
-		settings.scene_colours.static_particle_outline = Palette::JP_DARK_GRAY;
+		colours.background = Palette::JP_AQUA;
+		colours.spring = Palette::JP_GREEN;
+		colours.particle = Palette::JP_GREEN;
+		colours.particle_outline = Palette::JP_DARK_GRAY;
+		colours.static_particle = Palette::JP_DARK_GREEN;
+		colours.static_particle_outline = Palette::JP_DARK_GRAY;
 	}
 };
 

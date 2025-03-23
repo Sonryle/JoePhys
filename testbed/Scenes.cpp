@@ -1,6 +1,6 @@
 #include <cstdio>	// for "stderr" file path constant
 
-#include "Scene.hpp"
+#include "Scenes.hpp"
 #include "Colour.hpp"
 #include "Renderer.hpp"
 #include "Settings.hpp"
@@ -35,13 +35,13 @@ void Scene::Render()
 			colour outline_col;
 			if (p->mass_in_grams == 0.0f)
 			{
-				col = palette.colours[settings.scene_colours.static_particle];
-				outline_col = palette.colours[settings.scene_colours.static_particle_outline];
+				col = palette.colours[colours.static_particle];
+				outline_col = palette.colours[colours.static_particle_outline];
 			}
 			else
 			{
-				col = palette.colours[settings.scene_colours.particle];
-				outline_col = palette.colours[settings.scene_colours.particle_outline];
+				col = palette.colours[colours.particle];
+				outline_col = palette.colours[colours.particle_outline];
 			}
 
 			// Render particle
@@ -53,7 +53,7 @@ void Scene::Render()
 			// Render each spring
 			vec2 posA = s->particleA->pos_in_meters;
 			vec2 posB = s->particleB->pos_in_meters;
-			colour col = palette.colours[settings.scene_colours.spring];
+			colour col = palette.colours[colours.spring];
 
 			renderer.AddLine(posA, posB, col);
 		}

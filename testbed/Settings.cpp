@@ -14,8 +14,6 @@ Settings::Settings()
 
 void Settings::Reset()
 {
-	ResetSceneColours();
-
 	initial_window_width = 1500;
 	initial_window_height = 900;
 
@@ -27,12 +25,3 @@ void Settings::Reset()
 	sub_steps = 4;
 }
 
-void Settings::ResetSceneColours()
-{
-	scene_colours.background = Palette::JP_DARK_GRAY;
-	scene_colours.spring = Palette::JP_GREEN;
-	scene_colours.particle = Palette::JP_RED;
-	scene_colours.particle_outline = Palette::JP_DARK_RED;
-	scene_colours.static_particle = Palette::JP_BLUE;
-	scene_colours.static_particle_outline = Palette::JP_DARK_BLUE;
-}
