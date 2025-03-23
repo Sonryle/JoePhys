@@ -39,6 +39,9 @@ struct Scene
 
 	// functions
 	void Step();
+	void AddStaticParticle(vec2 pos, real radius);
+	void AddRepulsionForce(vec2 pos, real amplitude);
+	void AddAttractionForce(vec2 pos, real amplitude);
 
 	// SceneColours class
 	SceneColours colours;

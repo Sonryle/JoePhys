@@ -54,7 +54,7 @@ static void MousePosCallback(GLFWwindow* window, double dx, double dy)
 	bool left_mouse_button_down = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
 	bool GUI_not_being_interacted_with = !(io.WantCaptureMouse);
 
-	// If the left mouse button is pressed and the GUI is not being interacted with then move the camera by
+	// If the 'G' key is pressed and the GUI is not being interacted with then move the camera by
 	// the difference between the new cursor position (dx & dy) and the old cursor position (cursor_pos)
 	if (left_mouse_button_down && GUI_not_being_interacted_with)
 	{
@@ -135,6 +135,21 @@ static void InitGlad()
 	}
 }
 
+void ManageInput()
+{
+	// If the 'P' key is pressed, add static particles into the scene at that position of the cursor
+	if (glfwGetKey(jp_window, GLFW_KEY_P) == GLFW_PRESS)
+		scene_manager.current_scene->AddStaticParticle(camera.ScreenSpaceToWorldSpace(cursor_pos), 0.1f);
+
+	// If the 'M' key is pressed, add add a repulsion force at the location of the mouse pointer
+	if (glfwGetKey(jp_window, GLFW_KEY_M) == GLFW_PRESS)
+		scene_manager.current_scene->AddRepulsionForce(camera.ScreenSpaceToWorldSpace(cursor_pos), 5.0f);
+
+	// If the 'N' key is pressed, add add a repulsion force at the location of the mouse pointer
+	if (glfwGetKey(jp_window, GLFW_KEY_N) == GLFW_PRESS)
+		scene_manager.current_scene->AddAttractionForce(camera.ScreenSpaceToWorldSpace(cursor_pos), 8.0f);
+}
+
 void Step()
 {
 	// Step the world forward
@@ -168,6 +183,9 @@ int main()
 		{
 			// Clear Screen
 			glClear(GL_COLOR_BUFFER_BIT);
+
+			// Manage Input
+			ManageInput();
 		
 			// Update Physics Sim
 			Step();

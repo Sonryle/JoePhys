@@ -13,10 +13,11 @@ typedef float real;
 struct World
 {
 	// constructors & destuctor
-	World(int simulation_hertz, int sub_steps, vec2 gravity);
+	World() {}
 	~World();
 
 	// functions
+	void Create(int simulation_hertz, int sub_steps, vec2 gravity);
 	void Step();
 
 	// variables

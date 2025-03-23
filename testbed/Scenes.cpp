@@ -8,6 +8,11 @@
 Scene::Scene()
 {
 	ResetCamera();
+	world = new World();
+	
+	// Will contain the particles added by the user
+	Cluster* user_particles = new Cluster();
+	world->clusters.push_back(user_particles);
 }
 
 Scene::~Scene()
@@ -77,4 +82,49 @@ void Scene::Step()
 			world->simulation_hertz = settings.simulation_hertz;
 		world->Step();
 	}
+}
+
+void Scene::AddStaticParticle(vec2 pos, real radius)
+{
+	if (world == nullptr)
+		return;
+
+	vec2 vel(0.0f, 0.0f);
+	real elas = 0.5f;
+	real mass = 0.0f;
+	Particle* p = new Particle(pos, vel, elas, radius, mass);
+	world->clusters[0]->particles.push_back(p);
+	return;
+}
+
+void Scene::AddRepulsionForce(vec2 pos, real amplitude)
+{
+	if (world == nullptr)
+		return;
+
+	// loop over every particle in every cluster and add repulsion force
+	for (Cluster* c : world->clusters)
+		for (Particle* p : c->particles)
+		{
+			// Add repulsion force to every particle
+			real dist = length(p->pos_in_meters - pos);
+			real force = std::max(0.0f, amplitude - (dist));
+			p->Accelerate(force * (p->pos_in_meters - pos));
+		}
+}
+
+void Scene::AddAttractionForce(vec2 pos, real amplitude)
+{
+	if (world == nullptr)
+		return;
+
+	// loop over every particle in every cluster and add repulsion force
+	for (Cluster* c : world->clusters)
+		for (Particle* p : c->particles)
+		{
+			// Add repulsion force to every particle
+			real dist = length(p->pos_in_meters - pos);
+			real force = std::max(0.0f, amplitude - (dist));
+			p->Accelerate(force * (pos - p->pos_in_meters));
+		}
 }

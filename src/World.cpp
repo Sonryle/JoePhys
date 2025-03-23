@@ -3,18 +3,18 @@
 #include "JoePhys/World.hpp"
 #include "JoePhys/Vec2.hpp"
 
-World::World(int simulation_hertz, int sub_steps, vec2 gravity)
-{
-	this->simulation_hertz = simulation_hertz;
-	this->sub_steps = sub_steps;
-	this->gravity = gravity;
-}
-
 World::~World()
 {
 	// loop through every Cluster and delete it
 	for (Cluster* n : clusters)
 		delete n;
+}
+
+void World::Create(int simulation_hertz, int sub_steps, vec2 gravity)
+{
+	this->simulation_hertz = simulation_hertz;
+	this->sub_steps = sub_steps;
+	this->gravity = gravity;
 }
 
 void World::Step()

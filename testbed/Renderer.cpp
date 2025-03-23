@@ -712,3 +712,14 @@ void Camera::GenerateProjectionMatrix(float p[16])
 	p[14] = -( (far + near) / (far - near) );
 	p[15] = 1.0f;
 }
+
+vec2 Camera::ScreenSpaceToWorldSpace(vec2 input)
+{
+	vec2 output;
+	output = vec2(input.x / 100.0f, input.y / -100.0f);
+	output -= vec2(window_width / 200.0f, window_height / -200.0f);
+	output *= zoom;
+	output += center;
+
+	return output;
+}

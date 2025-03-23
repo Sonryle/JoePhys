@@ -26,6 +26,7 @@ public:
 	void Create(int width, int height) { WindowResize(width, height); }
 	void WindowResize(int width, int height) { window_width = width; window_height = height; }
 	void GenerateProjectionMatrix(float p[16]);
+	vec2 ScreenSpaceToWorldSpace(vec2 input);
 
 	vec2 center;
 	float zoom;

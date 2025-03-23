@@ -5,13 +5,15 @@
 #include "../Settings.hpp"
 #include "JoePhys/Particle.hpp"
 
+#include <cstdio>	// for "stderr" file path constant
+
 struct CollisionScene : public Scene
 {
 	// constructors & destructors
 	CollisionScene()
 	{
 		SetUpSceneColours();
-		world = new World(settings.simulation_hertz, settings.sub_steps, vec2(0.0f, 0.0f));
+		world->Create(settings.simulation_hertz, settings.sub_steps, vec2(0.0f, 0.0f));
 		settings.circle_res = 25;
 		double PI = 3.141592653589;
 

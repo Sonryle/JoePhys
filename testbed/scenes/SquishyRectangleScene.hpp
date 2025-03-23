@@ -16,7 +16,7 @@ struct SquishyRectangleScene : public Scene
 	SquishyRectangleScene()
 	{
 		SetUpSceneColours();
-		world = new World(settings.simulation_hertz, settings.sub_steps, vec2(0.0f, -9.8f));
+		world->Create(settings.simulation_hertz, settings.sub_steps, vec2(0.0f, -9.8f));
 		settings.circle_res = 20;
 		camera.zoom = 1.0f;
 		camera.center.Set(4.0f, -4.0f);
