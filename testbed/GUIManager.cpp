@@ -55,8 +55,10 @@ void GUIManager::DrawGui()
 				scene_manager.SwitchScene(4);
 			if (ImGui::MenuItem("Cloth Scene", NULL, (scene_manager.current_scene_number == 5)))
 				scene_manager.SwitchScene(5);
-			if (ImGui::MenuItem("Colour Pallete Test Scene", NULL, (scene_manager.current_scene_number == 6)))
+			if (ImGui::MenuItem("Rope Scene", NULL, (scene_manager.current_scene_number == 6)))
 				scene_manager.SwitchScene(6);
+			if (ImGui::MenuItem("Colour Pallete Test Scene", NULL, (scene_manager.current_scene_number == 7)))
+				scene_manager.SwitchScene(7);
 
 			ImGui::EndMenu();
 		}

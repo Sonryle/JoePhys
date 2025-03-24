@@ -26,6 +26,9 @@ void SceneManager::SwitchScene(int scene_number)
 		current_scene = new ClothScene();
 		break;
 	case 6:
+		current_scene = new RopeScene();
+		break;
+	case 7:
 		current_scene = new ColourDebugScene();
 		break;
 	default:
