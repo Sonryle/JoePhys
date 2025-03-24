@@ -21,32 +21,13 @@ struct ClothScene : public Scene
 		camera.zoom = 1.0f;
 		double PI = 3.141592653589;
 		
-		// Create static points to hold cloth up
-		// -------------------------------------
-
-		Cluster* pins = new Cluster;
-		for (int x = -0; x < 2; x++)
-		{
-			real radius = 0.075f;
-			real y = 6;
-			vec2 pos((x-1) * 12 + 6, ((y-2) * 3) * 0.3f);
-			vec2 vel(0.0f, 0.0f);
-			real elasticity = 0.5f;
-			real mass = 0.0f;
-			Particle* p = new Particle(pos, vel, elasticity, radius, mass);
-
-			// Add particle to floor cluster
-			pins->particles.push_back(p);
-		}
-
 		// Create the cloth
 		// ----------------
 	
 		Cluster* cloth = new Cluster;
 
-		// Create a 7x14 grid of particles, connected by springs
-		Particle* hp[24][14];
-		for (int x = 0; x < 24; x++)
+		Particle* hp[25][14];
+		for (int x = 0; x < 25; x++)
 		{
 			for (int y = 0; y < 14; y++)
 			{
@@ -56,11 +37,13 @@ struct ClothScene : public Scene
 				vec2 vel(0.0f, 0.0f);
 				real elas = 0.5f;
 				real mass = (real)PI * rad * rad;
+				if (y == 13 && (x == 0 || x == 6 || x == 12 || x == 18 || x == 24))
+					mass = 0.0f;
 				hp[x][y] = new Particle(pos, vel, elas, rad, mass);
 				cloth->particles.push_back(hp[x][y]);
 
 				// Add Springs
-				real stiffness = 15.0f;
+				real stiffness = 25.0f;
 				if (x > 0)
 				{
 					real len = length(hp[x][y]->pos_in_meters - hp[x-1][y]->pos_in_meters);
@@ -73,27 +56,10 @@ struct ClothScene : public Scene
 					Spring* s = new Spring(hp[x][y], hp[x][y-1], len, stiffness);
 					cloth->springs.push_back(s);
 				}
-				if (y > 0 && x > 0)
-				{
-					real len = length(hp[x-1][y]->pos_in_meters - hp[x][y-1]->pos_in_meters);
-					real len2 = length(hp[x][y]->pos_in_meters - hp[x-1][y-1]->pos_in_meters);
-					Spring* s = new Spring(hp[x-1][y], hp[x][y-1], len, stiffness / 2);
-					Spring* s2 = new Spring(hp[x][y], hp[x-1][y-1], len2, stiffness / 2);
-					cloth->springs.push_back(s);
-					cloth->springs.push_back(s2);
-				}
 			}
 		}
-		real stiffness = 1000.0f;
-		real leng = length(hp[0][13]->pos_in_meters - pins->particles[0]->pos_in_meters);
-		Spring* s = new Spring(hp[0][13], pins->particles[0], leng, stiffness);
-		real leng2 = length(hp[23][13]->pos_in_meters - pins->particles[0]->pos_in_meters);
-		Spring* s2 = new Spring(hp[23][13], pins->particles[1], leng, stiffness);
-		cloth->springs.push_back(s);
-		cloth->springs.push_back(s2);
 
 		// Add clusters to world
-		world->clusters.push_back(pins);
 		world->clusters.push_back(cloth);
 	}
 

@@ -27,7 +27,7 @@ void World::Step()
 		ApplyDragToParticles();
 		UpdateParticlePositions(dt / sub_steps);
 		UpdateSprings(dt / sub_steps);
-		ResolveAllCollisions();
+		/* ResolveAllCollisions(); */
 	}
 }
 
