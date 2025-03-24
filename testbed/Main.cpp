@@ -182,6 +182,8 @@ int main()
 		if (current_time - time_at_last_render > (1.0f / settings.frame_limit))
 		{
 			// Clear Screen
+			colour bg = palette.colours[scene_manager.current_scene->colours.background];
+			glClearColor(bg.r, bg.g, bg.b, bg.a);
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			// Manage Input

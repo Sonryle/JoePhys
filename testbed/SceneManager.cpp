@@ -1,5 +1,5 @@
 #include "SceneManager.hpp"
-#include "glad/glad.h"
+#include "scenes/NewtonsCradleScene.hpp"
 
 void SceneManager::SwitchScene(int scene_number)
 {
@@ -20,14 +20,18 @@ void SceneManager::SwitchScene(int scene_number)
 		current_scene = new SquishyRectangleScene();
 		break;
 	case 4:
+		current_scene = new NewtonsCradleScene();
+		break;
+	case 5:
+		current_scene = new ClothScene();
+		break;
+	case 6:
 		current_scene = new ColourDebugScene();
 		break;
 	default:
 		SwitchScene(0);
 		break;
 	}
-	colour bg = palette.colours[current_scene->colours.background];
-	glClearColor(bg.r, bg.g, bg.b, bg.a);
 }
 
 SceneManager scene_manager;
