@@ -39,12 +39,13 @@ void SceneManager::SwitchScene(int scene_number)
 
 	ImGuiStyle& style = ImGui::GetStyle();
 
-	real w = 0.45f;
-	real m = 0.6f;
 	colour bg = palette.colours[current_scene->colours.background];
-	style.Colors[ImGuiCol_WindowBg] = ImVec4(bg.r*w, bg.g*w, bg.b*w, bg.a);
-        style.Colors[ImGuiCol_MenuBarBg] = ImVec4(bg.r*m, bg.g*m, bg.b*m, bg.a);
-        style.Colors[ImGuiCol_TitleBgActive] = ImVec4(bg.r*m, bg.g*m, bg.b*m, bg.a);
+	real w = 0.45f;	// Window darken
+	real m = 0.6f;	// Menu darken
+	real t = 0.6f;	// Title darken
+	style.Colors[ImGuiCol_WindowBg]		= ImVec4(bg.r*w, bg.g*w, bg.b*w, bg.a);
+        style.Colors[ImGuiCol_MenuBarBg]	= ImVec4(bg.r*m, bg.g*m, bg.b*m, bg.a);
+        style.Colors[ImGuiCol_TitleBgActive]	= ImVec4(bg.r*t, bg.g*t, bg.b*t, bg.a);
 
 }
 

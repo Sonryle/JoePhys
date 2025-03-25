@@ -2,6 +2,7 @@
 
 #include "Scenes.hpp"
 #include "Colour.hpp"
+#include "JoePhys/World.hpp"
 #include "Renderer.hpp"
 #include "Settings.hpp"
 
@@ -80,7 +81,19 @@ void Scene::Step()
 			world->sub_steps = settings.sub_steps;
 		if (world->simulation_hertz != settings.simulation_hertz)
 			world->simulation_hertz = settings.simulation_hertz;
-		world->Step(settings.enable_gravity, settings.enable_drag, settings.enable_springs, settings.enable_particle_movement, settings.enable_collision);
+
+		int flags = 0;
+		if (!settings.enable_gravity)
+			flags |= NO_GRAVITY;
+		if (!settings.enable_drag)
+			flags |= NO_DRAG;
+		if (!settings.enable_particle_movement)
+			flags |= NO_PARTICLE_MOVEMENT;
+		if (!settings.enable_collision)
+			flags |= NO_PARTICLE_COLLISIONS;
+		if (!settings.enable_springs)
+			flags |= NO_SPRING_FORCES;
+		world->Step(flags);
 	}
 }
 
