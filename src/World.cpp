@@ -17,19 +17,24 @@ void World::Create(int simulation_hertz, int sub_steps, vec2 gravity)
 	this->gravity = gravity;
 }
 
-void World::Step()
+void World::Step(bool enable_gravity, bool enable_drag, bool enable_springs, bool enable_particle_movement, bool enable_collision)
 {
 	real dt = 1.0f / simulation_hertz;
 
 	for (int n = 0; n < sub_steps; n++)
 	{
-		ApplyGravityToParticles();
-		ApplyDragToParticles();
+		if (enable_gravity)
+			ApplyGravityToParticles();
+		if (enable_drag)
+			ApplyDragToParticles();
 
-		UpdateParticlePositions(dt / sub_steps);
-		UpdateSprings(dt / sub_steps);
+		if (enable_particle_movement)
+			UpdateParticlePositions(dt / sub_steps);
+		if (enable_springs)
+			UpdateSprings(dt / sub_steps);
 
-		ResolveAllCollisions();
+		if (enable_collision)
+			ResolveAllCollisions();
 	}
 }
 

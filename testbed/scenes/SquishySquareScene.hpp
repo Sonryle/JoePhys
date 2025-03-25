@@ -12,6 +12,7 @@ struct SquishySquareScene : public Scene
 	SquishySquareScene()
 	{
 		SetUpSceneColours();
+		settings.Reset();
 		world->Create(settings.simulation_hertz, settings.sub_steps, vec2(0.0f, -9.8f));
 		settings.circle_res = 20; //20
 		double PI = 3.141592653589;

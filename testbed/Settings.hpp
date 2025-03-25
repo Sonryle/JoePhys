@@ -24,6 +24,11 @@ struct Settings
 	int frame_limit;
 
 	// Simulation vars
+	bool enable_gravity;
+	bool enable_drag;
+	bool enable_springs;
+	bool enable_particle_movement;
+	bool enable_collision;
 	int simulation_hertz;
 	int sub_steps;
 };

@@ -19,9 +19,14 @@ void Settings::Reset()
 
 	circle_res = 7;
 
-	frame_limit = 250;
+	frame_limit = 120;
 
-	simulation_hertz = 250;
+	enable_gravity = 1;
+	enable_drag = 1;
+	enable_springs = 1;
+	enable_particle_movement = 1;
+	enable_collision = 1;
+	simulation_hertz = 120;
 	sub_steps = 4;
 }
 

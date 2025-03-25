@@ -1,8 +1,9 @@
 #include "GUIManager.hpp"
 #include "SceneManager.hpp"
+#include "imgui.h"
 
 // Constructor
-GUIManager::GUIManager() : appearance_window_shown(0)
+GUIManager::GUIManager() : appearance_window_shown(0), simulation_window_shown(0)
 {
 	return;
 }
@@ -13,12 +14,23 @@ void GUIManager::Init(GLFWwindow* window)
 	ImGui::CreateContext();	
 	ImGui_ImplGlfw_InitForOpenGL(window, 1);
 	ImGui_ImplOpenGL3_Init();
-}
 
+
+	ImGuiStyle& style = ImGui::GetStyle();
+	style.Alpha = 0.85f;
+	style.FrameRounding = 4.0f;
+	/* style.Colors[ImGuiCol_WindowBg] = ImVec4(0.94f, 0.94f, 0.94f, 0.94f); */
+}
 // Toggles the "appearance" window on and off
 void GUIManager::ToggleAppearanceWindow()
 {
 	appearance_window_shown = !appearance_window_shown;
+}
+
+// Toggles the "appearance" window on and off
+void GUIManager::ToggleSimulationWindow()
+{
+	simulation_window_shown = !simulation_window_shown;
 }
 
 // Draws a menu bar at the top of the program, and calls functions to draw every other
@@ -38,6 +50,10 @@ void GUIManager::DrawGui()
 			if (ImGui::MenuItem("Appearance", "\tCtrl+A", appearance_window_shown))
 			{ 
 				appearance_window_shown = (appearance_window_shown == 1)? 0 : 1;
+			}
+			if (ImGui::MenuItem("Simulation", "\tCtrl+S", simulation_window_shown))
+			{ 
+				simulation_window_shown = (simulation_window_shown == 1)? 0 : 1;
 			}
 			ImGui::EndMenu();
 		}
@@ -75,6 +91,7 @@ void GUIManager::DrawGui()
 
 	// Call the functions which draw all other windows
 	DrawAppearanceWindow();
+	DrawSimulationWindow();
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -92,30 +109,25 @@ void GUIManager::DrawAppearanceWindow()
 
 	// Set the correct position & scale
 	ImGuiIO& io = ImGui::GetIO();
-	ImVec2 initial_size(500, 500);
+	ImVec2 initial_size(500, 250);
 	ImVec2 initial_pos(io.DisplaySize.x - ImGui::GetWindowWidth() - 10, 30);
 	ImGui::SetWindowSize(initial_size, ImGuiCond_None);
 	ImGui::SetWindowPos(initial_pos, ImGuiCond_None);
 
-	// Create Contents of appearance window
-	if (ImGui::CollapsingHeader("Colour"))
+	// Create colour palette options
+	if (ImGui::CollapsingHeader("Colour Palette"))
 	{
-		// "Palette" will hold buttons for changing the colour palette
-		if (ImGui::TreeNode("Palette"))
+		if(ImGui::Button("Set Autumn"))
 		{
-			if(ImGui::Button("Set Autumn"))
-			{
-				palette.SetAutumn();
-			}
-			if(ImGui::Button("Set Gruvbox"))
-			{
-				palette.SetGruvbox();
-			}
-			if(ImGui::Button("Set Pastel"))
-			{
-				palette.SetPastel();
-			}
-			ImGui::TreePop();
+			palette.SetAutumn();
+		}
+		if(ImGui::Button("Set Gruvbox"))
+		{
+			palette.SetGruvbox();
+		}
+		if(ImGui::Button("Set Pastel"))
+		{
+			palette.SetPastel();
 		}
 	}
 	// Create Renderer options
@@ -133,13 +145,37 @@ void GUIManager::DrawAppearanceWindow()
 					   "lower the resolution, the more sharp and polygonal the circles appear.\n";
         		ImGui::SetTooltip("%s", desc);
 		}
+	}
+	ImGui::End();
+}
 
-		// TEMPORARY SLIDER FOR SIMULATION HERTZ
-		ImGui::SliderInt("SIMULATION HERTZ", &settings.simulation_hertz, 1, 500);
-		// TEMPORARY SLIDER FOR SUB STEPS
-		ImGui::SliderInt("SUB STEPS", &settings.sub_steps, 1, 500);
-		// TEMPORARY SLIDER FOR FPS LIMIT
-		ImGui::SliderInt("APPLICATION FRAME LIMIT", &settings.frame_limit, 1, 500);
+
+// Draws the "simulation" imgui window (only if simulationWindowHidden is false)
+void GUIManager::DrawSimulationWindow()
+{
+	if (!simulation_window_shown)
+		return;
+	
+	// Begin the window
+	ImGui::Begin("Simulation", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+
+	// Set the correct position & scale
+	ImGuiIO& io = ImGui::GetIO();
+	ImVec2 initial_size(500, 250);
+	ImVec2 initial_pos(io.DisplaySize.x - ImGui::GetWindowWidth() - 10, 295);
+	ImGui::SetWindowSize(initial_size, ImGuiCond_None);
+	ImGui::SetWindowPos(initial_pos, ImGuiCond_None);
+
+	// Create Contents of simulation window
+	if (ImGui::CollapsingHeader("World"))
+	{
+		ImGui::SliderInt("Sub Steps", &settings.sub_steps, 4, 64);
+		ImGui::Separator();
+		ImGui::Checkbox("Gravity", &settings.enable_gravity);
+		ImGui::Checkbox("Drag", &settings.enable_drag);
+		ImGui::Checkbox("Springs", &settings.enable_springs);
+		ImGui::Checkbox("Particle Movement", &settings.enable_particle_movement);
+		ImGui::Checkbox("Particle Collision", &settings.enable_collision);
 	}
 	ImGui::End();
 }

@@ -32,6 +32,10 @@ static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, i
 		if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) && action == GLFW_PRESS)
 			gui_manager.ToggleAppearanceWindow();
 		break;
+	case GLFW_KEY_S:
+		if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) && action == GLFW_PRESS)
+			gui_manager.ToggleSimulationWindow();
+		break;
 	case GLFW_KEY_R:
 		if (action == GLFW_PRESS)
 			scene_manager.SwitchScene(scene_manager.current_scene_number);

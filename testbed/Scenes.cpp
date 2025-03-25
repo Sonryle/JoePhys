@@ -80,7 +80,7 @@ void Scene::Step()
 			world->sub_steps = settings.sub_steps;
 		if (world->simulation_hertz != settings.simulation_hertz)
 			world->simulation_hertz = settings.simulation_hertz;
-		world->Step();
+		world->Step(settings.enable_gravity, settings.enable_drag, settings.enable_springs, settings.enable_particle_movement, settings.enable_collision);
 	}
 }
 

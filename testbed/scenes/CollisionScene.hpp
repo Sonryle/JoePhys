@@ -13,6 +13,7 @@ struct CollisionScene : public Scene
 	CollisionScene()
 	{
 		SetUpSceneColours();
+		settings.Reset();
 		world->Create(settings.simulation_hertz, settings.sub_steps, vec2(0.0f, 0.0f));
 		settings.circle_res = 25;
 		double PI = 3.141592653589;

@@ -13,6 +13,7 @@ struct RopeScene : public Scene
 	RopeScene()
 	{
 		SetUpSceneColours();
+		settings.Reset();
 		world->Create(settings.simulation_hertz, settings.sub_steps, vec2(0.0f, -9.8f));
 		settings.circle_res = 25;
 		double PI = 3.141592653589;
@@ -51,7 +52,7 @@ struct RopeScene : public Scene
 			// Add the particle to the physics object
 			rope->particles.push_back(myParticle);
 
-			real stiffness = 10000.0f;
+			real stiffness = 2500.0f;
 			if (old_part != nullptr)
 			{
 				real len = length(old_part->pos_in_meters - myParticle->pos_in_meters);

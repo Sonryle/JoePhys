@@ -18,7 +18,7 @@ struct World
 
 	// functions
 	void Create(int simulation_hertz, int sub_steps, vec2 gravity);
-	void Step();
+	void Step(bool enable_gravity, bool enable_drag, bool enable_springs, bool enable_particle_movement, bool enable_collision);
 
 	// variables
 	std::vector<Cluster*> clusters;
