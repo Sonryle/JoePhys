@@ -22,7 +22,7 @@ struct RopeScene : public Scene
 		Cluster* obstacles = new Cluster;
 
 		// Add two particles to the cluster
-		vec2 posA(-2, -0);
+		vec2 posA(-2.66f, -0);
 		vec2 velA(0.0f, 0.0f);
 		real elasticityA = 0.2f;
 		real radiusA = 1.5f;

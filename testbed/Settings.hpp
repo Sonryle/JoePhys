@@ -1,6 +1,8 @@
 #ifndef JP_SETTINGS
 #define JP_SETTINGS
 
+typedef float real;
+
 struct Settings
 {
 	
@@ -29,6 +31,7 @@ struct Settings
 	bool enable_springs;
 	bool enable_particle_movement;
 	bool enable_collision;
+	int time_divisor;
 	int simulation_hertz;
 	int sub_steps;
 };

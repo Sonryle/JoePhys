@@ -19,7 +19,6 @@ void GUIManager::Init(GLFWwindow* window)
 	ImGuiStyle& style = ImGui::GetStyle();
 	style.Alpha = 0.85f;
 	style.FrameRounding = 4.0f;
-	/* style.Colors[ImGuiCol_WindowBg] = ImVec4(0.94f, 0.94f, 0.94f, 0.94f); */
 }
 // Toggles the "appearance" window on and off
 void GUIManager::ToggleAppearanceWindow()
@@ -171,7 +170,9 @@ void GUIManager::DrawSimulationWindow()
 	// Create Contents of simulation window
 	if (ImGui::CollapsingHeader("World"))
 	{
+		ImGui::Separator();
 		ImGui::SliderInt("Sub Steps", &settings.sub_steps, 4, 64);
+		ImGui::SliderInt("Time Divisor", &settings.time_divisor, 1, 50);
 		ImGui::Separator();
 		ImGui::Checkbox("Gravity", &settings.enable_gravity);
 		ImGui::Checkbox("Drag", &settings.enable_drag);

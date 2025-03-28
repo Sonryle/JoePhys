@@ -50,26 +50,13 @@ struct NewtonsCradleScene : public Scene
 			if (x == 0)
 			{
 				real len = 6.0f;
-				real radian = PI;
-				radian = -3;
+				real radian = -3;
 				real posx = cos(radian) * len;
 				real posy = sin(radian) * len;
 				posx += anchors->particles[x]->pos_in_meters.x;
 				posy += 4.0f;
 
 				pos.Set(posx, posy);
-			}
-			if (x == 1)
-			{
-				real len = 6.0f;
-				real radian = (7.0f*PI) / 6.0f;
-				radian = -2.5f;
-				real xpos = cos(radian) * len;
-				real ypos = sin(radian) * len;
-				xpos += anchors->particles[x]->pos_in_meters.x;
-				ypos += 4.0f;
-
-				pos.Set(xpos, ypos);
 			}
 			Particle* p = new Particle(pos, vel, elas, rad, mass);
 			

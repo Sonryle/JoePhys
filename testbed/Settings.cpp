@@ -26,6 +26,7 @@ void Settings::Reset()
 	enable_springs = 1;
 	enable_particle_movement = 1;
 	enable_collision = 1;
+	time_divisor = 1.0f;
 	simulation_hertz = 120;
 	sub_steps = 4;
 }

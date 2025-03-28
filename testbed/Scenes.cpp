@@ -55,15 +55,16 @@ void Scene::Render()
 			renderer.AddSolidCircle(pos, rad, segments, col, outline_col);
 		}
 		// loop over every spring in each cluster
-		for (Spring* s : world->clusters[c]->springs)
-		{
-			// Render each spring
-			vec2 posA = s->particleA->pos_in_meters;
-			vec2 posB = s->particleB->pos_in_meters;
-			colour col = palette.colours[colours.spring];
+		if (settings.enable_springs)
+			for (Spring* s : world->clusters[c]->springs)
+			{
+				// Render each spring
+				vec2 posA = s->particleA->pos_in_meters;
+				vec2 posB = s->particleB->pos_in_meters;
+				colour col = palette.colours[colours.spring];
 
-			renderer.AddLine(posA, posB, col);
-		}
+				renderer.AddLine(posA, posB, col);
+			}
 	}
 }
 
@@ -80,8 +81,8 @@ void Scene::Step()
 	{
 		if (world->sub_steps != settings.sub_steps)
 			world->sub_steps = settings.sub_steps;
-		if (world->simulation_hertz != settings.simulation_hertz)
-			world->simulation_hertz = settings.simulation_hertz;
+		if (world->simulation_hertz != settings.simulation_hertz * settings.time_divisor)
+			world->simulation_hertz = settings.simulation_hertz * settings.time_divisor;
 
 		int flags = 0;
 		if (!settings.enable_gravity)
