@@ -4,6 +4,7 @@
 #include "../Scenes.hpp"
 #include "../Colour.hpp"
 #include "../Renderer.hpp"
+#include "../Settings.hpp"
 
 struct ColourDebugScene : public Scene
 {
@@ -11,6 +12,7 @@ struct ColourDebugScene : public Scene
 	ColourDebugScene()
 	{
 		SetUpSceneColours();
+		settings.Reset();
 		world = nullptr;
 	}
 

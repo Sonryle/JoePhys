@@ -73,8 +73,10 @@ void GUIManager::DrawGui()
 				scene_manager.SwitchScene(5);
 			if (ImGui::MenuItem("Rope Scene", NULL, (scene_manager.current_scene_number == 6)))
 				scene_manager.SwitchScene(6);
-			if (ImGui::MenuItem("Colour Pallete Test Scene", NULL, (scene_manager.current_scene_number == 7)))
+			if (ImGui::MenuItem("Pendulum Clock Scene", NULL, (scene_manager.current_scene_number == 7)))
 				scene_manager.SwitchScene(7);
+			if (ImGui::MenuItem("Colour Pallete Test Scene", NULL, (scene_manager.current_scene_number == 8)))
+				scene_manager.SwitchScene(8);
 
 			ImGui::EndMenu();
 		}

@@ -1,6 +1,7 @@
 #include "SceneManager.hpp"
 #include "imgui.h"
 #include "scenes/NewtonsCradleScene.hpp"
+#include "scenes/PendulumClockScene.hpp"
 
 void SceneManager::SwitchScene(int scene_number)
 {
@@ -30,6 +31,9 @@ void SceneManager::SwitchScene(int scene_number)
 		current_scene = new RopeScene();
 		break;
 	case 7:
+		current_scene = new PendulumClockScene();
+		break;
+	case 8:
 		current_scene = new ColourDebugScene();
 		break;
 	default:

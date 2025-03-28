@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cstdio>	// for "stderr" file path constant
 
 #include "Scenes.hpp"
@@ -114,6 +115,12 @@ void Scene::AddRepulsionForce(vec2 pos, real amplitude)
 {
 	if (world == nullptr)
 		return;
+	
+	// Render visualisation
+	colour fill_col = palette.colours[colours.background];
+	fill_col.Set(fill_col.r*0.5f, fill_col.g*0.5f, fill_col.b*0.5f, fill_col.a*0.25f);
+	colour outline_col = palette.colours[colours.particle_outline];
+	renderer.AddSolidCircle(pos, amplitude, (int)amplitude * 5, fill_col, outline_col);
 
 	// loop over every particle in every cluster and add repulsion force
 	for (Cluster* c : world->clusters)
@@ -130,6 +137,12 @@ void Scene::AddAttractionForce(vec2 pos, real amplitude)
 {
 	if (world == nullptr)
 		return;
+
+	// Render visualisation
+	colour fill_col = palette.colours[colours.particle];
+	fill_col.Set(fill_col.r*0.5f, fill_col.g*0.5f, fill_col.b*0.5f, fill_col.a*0.25f);
+	colour outline_col = palette.colours[colours.particle_outline];
+	renderer.AddSolidCircle(pos, amplitude, (int)amplitude * 5, fill_col, outline_col);
 
 	// loop over every particle in every cluster and add repulsion force
 	for (Cluster* c : world->clusters)
