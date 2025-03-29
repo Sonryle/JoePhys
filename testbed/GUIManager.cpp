@@ -173,6 +173,8 @@ void GUIManager::DrawSimulationWindow()
 		ImGui::Separator();
 		ImGui::SliderInt("Sub Steps", &settings.sub_steps, 4, 64);
 		ImGui::SliderInt("Time Divisor", &settings.time_divisor, 1, 50);
+		ImGui::SliderFloat("TEMPORARY A", &settings.attraction_tool_strength, 1, 50);
+		ImGui::SliderFloat("TEMPORARY R", &settings.repulsion_tool_strength, 1, 50);
 		ImGui::Separator();
 		ImGui::Checkbox("Gravity", &settings.enable_gravity);
 		ImGui::Checkbox("Drag", &settings.enable_drag);

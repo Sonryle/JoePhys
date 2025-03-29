@@ -31,6 +31,8 @@ struct Settings
 	bool enable_springs;
 	bool enable_particle_movement;
 	bool enable_collision;
+	real repulsion_tool_strength;
+	real attraction_tool_strength;
 	int time_divisor;
 	int simulation_hertz;
 	int sub_steps;

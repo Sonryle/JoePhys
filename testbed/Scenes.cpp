@@ -3,6 +3,7 @@
 
 #include "Scenes.hpp"
 #include "Colour.hpp"
+#include "GLFW/glfw3.h"
 #include "JoePhys/Vec2.hpp"
 #include "JoePhys/World.hpp"
 #include "Renderer.hpp"
@@ -23,7 +24,7 @@ Scene::~Scene()
 	delete world;
 }
 
-void Scene::Render()
+void Scene::Render(GLFWwindow* window, vec2 cursor_pos)
 {
 	// if there is no world, don't try to render
 	if (world == nullptr)
@@ -67,6 +68,12 @@ void Scene::Render()
 				renderer.AddLine(posA, posB, col);
 			}
 	}
+	
+	// Render a circle around nearest particle
+	Particle* n = GetNearestParticle(camera.ScreenSpaceToWorldSpace(cursor_pos));
+	colour outline_col(1.0f, 1.0f, 1.0f, 1.0f);
+	if (n != nullptr && glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) != GLFW_PRESS)
+		renderer.AddCircle(n->pos_in_meters, n->radius_in_meters * 1.2f, settings.circle_res, outline_col);
 }
 
 
@@ -122,7 +129,7 @@ void Scene::AddRepulsionForce(vec2 pos, real amplitude)
 	colour fill_col = palette.colours[colours.background];
 	fill_col.Set(fill_col.r*0.5f, fill_col.g*0.5f, fill_col.b*0.5f, fill_col.a*0.25f);
 	colour outline_col = palette.colours[colours.particle_outline];
-	renderer.AddSolidCircle(pos, amplitude, (int)amplitude * 5, fill_col, outline_col);
+	renderer.AddSolidCircle(pos, amplitude, (int)amplitude * 5 + 10, fill_col, outline_col);
 
 	// loop over every particle in every cluster and add repulsion force
 	for (Cluster* c : world->clusters)
@@ -144,7 +151,7 @@ void Scene::AddAttractionForce(vec2 pos, real amplitude)
 	colour fill_col = palette.colours[colours.particle];
 	fill_col.Set(fill_col.r*0.5f, fill_col.g*0.5f, fill_col.b*0.5f, fill_col.a*0.25f);
 	colour outline_col = palette.colours[colours.particle_outline];
-	renderer.AddSolidCircle(pos, amplitude, (int)amplitude * 5, fill_col, outline_col);
+	renderer.AddSolidCircle(pos, amplitude, (int)amplitude * 5 + 10, fill_col, outline_col);
 
 	// loop over every particle in every cluster and add repulsion force
 	for (Cluster* c : world->clusters)

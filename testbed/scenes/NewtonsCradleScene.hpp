@@ -19,6 +19,8 @@ struct NewtonsCradleScene : public Scene
 		settings.Reset();
 		world->Create(settings.simulation_hertz, settings.sub_steps, vec2(0.0f, -9.8f));
 		settings.circle_res = 20;
+		settings.attraction_tool_strength = 25.0f;
+		settings.repulsion_tool_strength = 25.0f;
 		camera.zoom = 2.0f;
 		double PI = 3.141592653589;
 

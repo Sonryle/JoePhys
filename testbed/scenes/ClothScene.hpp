@@ -17,8 +17,10 @@ struct ClothScene : public Scene
 	{
 		SetUpSceneColours();
 		settings.Reset();
-		settings.enable_collision = 0;
 		world->Create(settings.simulation_hertz, settings.sub_steps, vec2(0.0f, -9.8f));
+		settings.enable_collision = 0;
+		settings.attraction_tool_strength = 2.0f;
+		settings.repulsion_tool_strength = 4.0f;
 		settings.circle_res = 5;
 		camera.zoom = 1.0f;
 		double PI = 3.141592653589;

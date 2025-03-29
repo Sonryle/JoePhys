@@ -7,23 +7,54 @@
 #include "Settings.hpp"
 #include "SceneManager.hpp"
 #include "GUIManager.hpp"
+#include "imgui.h"
 
 GLFWwindow* jp_window = nullptr;
+GLFWmonitor* monitor = nullptr;
+const GLFWvidmode* mode = nullptr;
+bool isFullscreen = false;
 
-double time_at_last_render = 0.0f;	// for FPS limit
+Particle* selected_particle = nullptr;
+bool selected_particle_is_static = 0;
 
+double time_at_last_render = 0.0f;
+vec2 cursor_pos(0.0f, 0.0f);
+
+
+void toggleFullscreen()
+{
+	isFullscreen = !isFullscreen;
+	if (isFullscreen)
+	{
+		monitor = glfwGetPrimaryMonitor();
+		mode = glfwGetVideoMode(monitor);
+
+		glfwSetWindowMonitor(jp_window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+	}
+	else
+	{
+		glfwSetWindowMonitor(jp_window, nullptr, 0, 0, 800, 800, 0);
+	}
+}
+
+// Is called when window is resized
 static void FramebufferResizeCallback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
 	camera.WindowResize(width, height);
 }
 
+// Is called when a key is pressed
 static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	switch(key)
 	{
 	case GLFW_KEY_ESCAPE:
 		glfwSetWindowShouldClose(window, GL_TRUE);
+		break;
+	case GLFW_KEY_SPACE:
+		if (glfwGetKey(jp_window, GLFW_KEY_LEFT_CONTROL) && action == GLFW_PRESS)
+			toggleFullscreen();
 		break;
 	case GLFW_KEY_A:
 		if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) && action == GLFW_PRESS)
@@ -35,124 +66,62 @@ static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, i
 		break;
 	case GLFW_KEY_R:
 		if (action == GLFW_PRESS)
-			scene_manager.SwitchScene(scene_manager.current_scene_number);
+			if (glfwGetKey(jp_window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+				scene_manager.SwitchScene(scene_manager.current_scene_number);
 		break;
 	case GLFW_KEY_LEFT:
 		if (action == GLFW_PRESS && scene_manager.current_scene_number != 0)
-			scene_manager.SwitchScene(scene_manager.current_scene_number - 1);
+			if (glfwGetKey(jp_window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+				scene_manager.SwitchScene(scene_manager.current_scene_number - 1);
 		break;
 	case GLFW_KEY_RIGHT:
 		if (action == GLFW_PRESS && scene_manager.current_scene_number < SCENE_COUNT - 1)
-			scene_manager.SwitchScene(scene_manager.current_scene_number + 1);
+			if (glfwGetKey(jp_window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+				scene_manager.SwitchScene(scene_manager.current_scene_number + 1);
 		break;
 	}
 }
 
-vec2 cursor_pos(0.0f, 0.0f);
-Particle* selected_particle = nullptr;
-bool selected_particle_is_static = 0;
+// Is called when mouse position changes
 static void MousePosCallback(GLFWwindow* window, double dx, double dy)
 {
-	ImGuiIO& io = ImGui::GetIO();
-	bool left_mouse_button_down = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
-	bool GUI_not_being_interacted_with = !(io.WantCaptureMouse);
-
-	// If the 'G' key is pressed and the GUI is not being interacted with then move the camera by
-	// the difference between the new cursor position (dx & dy) and the old cursor position (cursor_pos)
-	if (left_mouse_button_down && GUI_not_being_interacted_with && glfwGetKey(jp_window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-	{
-		vec2 offset(cursor_pos.x - (float)dx, (float)dy - cursor_pos.y);
-		camera.center += offset * camera.zoom / 100.0f;
-	}
-	
-	// Update cursor position variable
+	if (!ImGui::GetIO().WantCaptureMouse)
+		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+			if (glfwGetKey(jp_window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+				camera.center += vec2(cursor_pos.x - dx, dy - cursor_pos.y) * camera.zoom / 100.0f;
 	cursor_pos.Set(dx, dy);
-
-	return;
 }
 
-static void MouseButtonCallback(GLFWwindow*, signed int button, signed int action, signed int mods)
-{
-}
-
+// Is called when mouse wheel is scrolled
 static void ScrollCallback(GLFWwindow*, double dx, double dy)
 {
-	ImGuiIO& io = ImGui::GetIO();
-	if (io.WantCaptureMouse == 0)
+	if (ImGui::GetIO().WantCaptureMouse == 0 && glfwGetKey(jp_window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
 	{
 		if (dy < 0)
 			camera.zoom = std::max(camera.zoom * 0.95f, 0.00001f);
-		else if (dy > 0)
+		else
 			camera.zoom = std::min(camera.zoom * 1.05f, 1000.0f);
 	}
-
-	return;
 }
 
-// Initiates GLFW and creates a window
-static void InitGLFW()
+// Is called every frame
+static void FrameCallback()
 {
-	if (!glfwInit())
-	{
-		fprintf(stderr, "Failed to initialize GLFW\n");
-	}
-
-	glfwWindowHint(GLFW_SAMPLES, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-
-#ifdef __APPLE__
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#endif
-
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-	jp_window = glfwCreateWindow(settings.initial_window_width, settings.initial_window_height, "JoePhys", NULL, NULL);
-
-	if (!jp_window)
-	{
-		fprintf(stderr, "Failed to create GLFW window\n");
-		glfwTerminate();
-		return;
-	}
-
-	glfwMakeContextCurrent(jp_window);
-
-	glfwSetFramebufferSizeCallback(jp_window, FramebufferResizeCallback);
-	glfwSetKeyCallback(jp_window, KeyCallback);
-	glfwSetMouseButtonCallback(jp_window, MouseButtonCallback);
-	glfwSetCursorPosCallback(jp_window, MousePosCallback);
-	glfwSetScrollCallback(jp_window, ScrollCallback);
-
-	// Disable GLFW's VSync
-	glfwSwapInterval(0);
-}
-
-// Initiates glad, which loads the openGL functions from our graphics cards
-static void InitGlad()
-{
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-	{ fprintf(stderr, "Failed to initiate GLAD\n");
-		return;
-	}
-}
-
-void ManageInput()
-{
-	// If the 'P' key is pressed, add static particles into the scene at that position of the cursor
+	// If the 'P' key & left CTRL pressed, add static particles into the scene at that position of the cursor
 	if (glfwGetKey(jp_window, GLFW_KEY_P) == GLFW_PRESS)
 		scene_manager.current_scene->AddStaticParticle(camera.ScreenSpaceToWorldSpace(cursor_pos), 0.1f);
 
-	// If the 'M' key is pressed, add add a repulsion force at the location of the mouse pointer
-	if (glfwGetKey(jp_window, GLFW_KEY_M) == GLFW_PRESS)
-		scene_manager.current_scene->AddRepulsionForce(camera.ScreenSpaceToWorldSpace(cursor_pos), 5.0f);
+	// If the 'R' key & left CTRL are pressed, add add a repulsion force at the location of the mouse pointer
+	if (glfwGetKey(jp_window, GLFW_KEY_R) == GLFW_PRESS && glfwGetKey(jp_window, GLFW_KEY_LEFT_CONTROL) != GLFW_PRESS)
+		scene_manager.current_scene->AddRepulsionForce(camera.ScreenSpaceToWorldSpace(cursor_pos), settings.repulsion_tool_strength);
 
-	// If the 'N' key is pressed, add add a repulsion force at the location of the mouse pointer
-	if (glfwGetKey(jp_window, GLFW_KEY_N) == GLFW_PRESS)
-		scene_manager.current_scene->AddAttractionForce(camera.ScreenSpaceToWorldSpace(cursor_pos), 8.0f);
-	
-	ImGuiIO& io = ImGui::GetIO();
-	if (io.WantCaptureMouse == 0 && glfwGetMouseButton(jp_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && glfwGetKey(jp_window, GLFW_KEY_LEFT_CONTROL) != GLFW_PRESS)
+	// If the 'A' key & left CTRL are pressed, add add a repulsion force at the location of the mouse pointer
+	if (glfwGetKey(jp_window, GLFW_KEY_A) == GLFW_PRESS && glfwGetKey(jp_window, GLFW_KEY_LEFT_CONTROL) != GLFW_PRESS)
+		scene_manager.current_scene->AddAttractionForce(camera.ScreenSpaceToWorldSpace(cursor_pos), settings.attraction_tool_strength);
+
+	// If the left mouse button is pressed & left CTLR ISN'T pressed, select particle closest to the cursor,
+	// move it to the mouse cursor and set it to be static while it is being held
+	if (ImGui::GetIO().WantCaptureMouse == 0 && glfwGetMouseButton(jp_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && glfwGetKey(jp_window, GLFW_KEY_LEFT_CONTROL) != GLFW_PRESS)
 	{
 		if (selected_particle == nullptr)
 		{
@@ -174,6 +143,42 @@ void ManageInput()
 		}
 	}
 
+	return;
+}
+
+// Initiates GLFW and creates a window
+static void InitGLFW()
+{
+	if (!glfwInit())
+		fprintf(stderr, "Failed to initialize GLFW\n");
+
+	glfwWindowHint(GLFW_SAMPLES, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+	jp_window = glfwCreateWindow(settings.initial_window_width, settings.initial_window_height, "JoePhys", NULL, NULL);
+
+	if (!jp_window)
+	{
+		fprintf(stderr, "Failed to create GLFW window\n");
+		glfwTerminate();
+		return;
+	}
+
+	glfwMakeContextCurrent(jp_window);
+	glfwSetFramebufferSizeCallback(jp_window, FramebufferResizeCallback);
+	glfwSetKeyCallback(jp_window, KeyCallback);
+	glfwSetCursorPosCallback(jp_window, MousePosCallback);
+	glfwSetScrollCallback(jp_window, ScrollCallback);
+	glfwSwapInterval(0);
+}
+
+// Initiates glad, which loads the openGL functions from the graphics card
+static void InitGlad()
+{
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+		fprintf(stderr, "Failed to initiate GLAD\n");
 }
 
 void Step()
@@ -181,14 +186,8 @@ void Step()
 	// Step the world forward
 	scene_manager.current_scene->Step();
 
-	// Add shapes to be rendered to the renderers stack
-	scene_manager.current_scene->Render();
-
-	// Render A Circle Around Nearest Particle
-	Particle* n = scene_manager.current_scene->GetNearestParticle(camera.ScreenSpaceToWorldSpace(cursor_pos));
-	if (n != nullptr)
-		if (glfwGetKey(jp_window, GLFW_KEY_LEFT_CONTROL) != GLFW_PRESS)
-			renderer.AddCircle(n->pos_in_meters, n->radius_in_meters * 1.2f, settings.circle_res, colour(1.0f, 1.0f, 1.0f, 1.0f));
+	// Add the shapes to be rendered onto the renderer's stack
+	scene_manager.current_scene->Render(jp_window, cursor_pos);
 }
 
 // Program entry point
@@ -222,7 +221,7 @@ int main()
 			Step();
 
 			// Manage Input
-			ManageInput();
+			FrameCallback();
 
 			// Render Frame
 			renderer.Flush();

@@ -1,10 +1,12 @@
 #ifndef JP_SCENE
 #define JP_SCENE
 
-typedef float real;
-
+#define GLFW_INCLUDE_NONE
+#include <GLFW/glfw3.h>
 #include <JoePhys/World.hpp>
 #include "Colour.hpp"
+
+typedef float real;
 
 struct SceneColours
 {
@@ -34,7 +36,7 @@ struct Scene
 	virtual ~Scene();
 
 	// virtual functions (virtual means that it can be overwritten by structs inherited from this struct
-	virtual void Render();
+	virtual void Render(GLFWwindow* window, vec2 cursor_pos);
 	virtual void ResetCamera();
 
 	// functions
