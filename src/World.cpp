@@ -23,7 +23,6 @@ void World::Step(int flags)
 
 	for (int n = 0; n < sub_steps; n++)
 	{
-		fprintf(stderr, "Flags = %d\n", flags);
 		if (!(flags & NO_GRAVITY))
 			ApplyGravityToParticles();
 		if (!(flags & NO_DRAG))

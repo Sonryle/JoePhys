@@ -14,7 +14,7 @@ struct RopeScene : public Scene
 	{
 		SetUpSceneColours();
 		settings.Reset();
-		world->Create(settings.simulation_hertz, settings.sub_steps, vec2(0.0f, -9.8f));
+		world->Create(settings.simulation_hertz, settings.sub_steps, vec2(0.0f, -18.8f));
 		settings.circle_res = 25;
 		double PI = 3.141592653589;
 
@@ -26,16 +26,16 @@ struct RopeScene : public Scene
 		vec2 velA(0.0f, 0.0f);
 		real elasticityA = 0.2f;
 		real radiusA = 1.5f;
-		real massA = 0.0f;
-		Particle* partA = new Particle(posA, velA, elasticityA, radiusA, massA);
+		real massA = 1.0f;
+		Particle* partA = new Particle(posA, velA, elasticityA, radiusA, massA, 1);
 		obstacles->particles.push_back(partA);
 
 		vec2 posB(3, 0);
 		vec2 velB(-0.0f, -0.0f);
 		real elasticityB = 0.2f;
 		real radiusB = 1;
-		real massB = 0.0f;
-		Particle* partB = new Particle(posB, velB, elasticityB, radiusB, massB);
+		real massB = 1.0f;
+		Particle* partB = new Particle(posB, velB, elasticityB, radiusB, massB, 1);
 		obstacles->particles.push_back(partB);
 
 		// Create a rope
@@ -48,7 +48,7 @@ struct RopeScene : public Scene
 			vec2 pos(radius * 3.0f * x, 2.5f);
 			real elasticity = 0.2f;
 			real mass = PI * radius * radius;
-			Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass);
+			Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass, 0);
 			// Add the particle to the physics object
 			rope->particles.push_back(myParticle);
 

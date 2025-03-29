@@ -39,9 +39,10 @@ struct ClothScene : public Scene
 				vec2 vel(0.0f, 0.0f);
 				real elas = 0.5f;
 				real mass = (real)PI * rad * rad;
+				bool is_static = 0;
 				if (y == 13 && (x == 0 || x == 6 || x == 12 || x == 18 || x == 24))
-					mass = 0.0f;
-				hp[x][y] = new Particle(pos, vel, elas, rad, mass);
+					is_static = 1;
+				hp[x][y] = new Particle(pos, vel, elas, rad, mass, is_static);
 				cloth->particles.push_back(hp[x][y]);
 
 				// Add Springs

@@ -36,8 +36,8 @@ struct PendulumClockScene : public Scene
 		vec2 vel(0.0f, 0.0f);
 		real rad = 0.1f;
 		real elas = 0.5f;
-		real mass = 0.0f;
-		Particle* inside_p = new Particle(axel_pos, vel, elas, rad, mass);
+		real mass = 1.0f;
+		Particle* inside_p = new Particle(axel_pos, vel, elas, rad, mass, 1);
 		axel->particles.push_back(inside_p);
 
 		real rotation_increment = 2.0f * (float)PI / axel_segments;
@@ -64,7 +64,7 @@ struct PendulumClockScene : public Scene
 			real rad = 0.07f;
 			real elas = 0.5f;
 			real mass = (real)PI * rad * rad;
-			Particle* p = new Particle(pos, vel, elas, rad, mass);
+			Particle* p = new Particle(pos, vel, elas, rad, mass, 0);
 			axel_parts[i] = p;
 			axel->particles.push_back(p);
 
@@ -95,7 +95,7 @@ struct PendulumClockScene : public Scene
 
 		real w_rad = 0.5f;
 		real w_mass = PI * w_rad * w_rad;
-		Particle* weight = new Particle(vec2(0.0f, -4.0f), vec2(1.0f, 0.0f), 0.5f, w_rad, w_mass);
+		Particle* weight = new Particle(vec2(0.0f, -4.0f), vec2(1.0f, 0.0f), 0.5f, w_rad, w_mass, 0);
 		arm->particles.push_back(weight);
 
 		real stiffness = 1700.0f;
@@ -116,7 +116,7 @@ struct PendulumClockScene : public Scene
 		real h1_rad = 0.07f;
 		real h1_elas = 0.5f;
 		real h1_mass = PI * h1_rad * h1_rad;
-		Particle* h1 = new Particle(h1_pos, vec2(0.0f, 0.0f), h1_elas, h1_rad, h1_mass);
+		Particle* h1 = new Particle(h1_pos, vec2(0.0f, 0.0f), h1_elas, h1_rad, h1_mass, 0);
 		hooks->particles.push_back(h1);
 
 		real h1_stiffness = 1800.0f;

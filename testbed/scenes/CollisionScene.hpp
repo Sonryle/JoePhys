@@ -27,7 +27,7 @@ struct CollisionScene : public Scene
 		real elasticityA = 0.9f;
 		real radiusA = 0.5f;
 		real massA = (float)PI * radiusA * radiusA;
-		Particle* partA = new Particle(posA, velA, elasticityA, radiusA, massA);
+		Particle* partA = new Particle(posA, velA, elasticityA, radiusA, massA, 0);
 		c->particles.push_back(partA);
 
 		vec2 posB(1, 1);
@@ -35,7 +35,7 @@ struct CollisionScene : public Scene
 		real elasticityB = 0.9f;
 		real radiusB = 1;
 		real massB = (float)PI * radiusB * radiusB;
-		Particle* partB = new Particle(posB, velB, elasticityB, radiusB, massB);
+		Particle* partB = new Particle(posB, velB, elasticityB, radiusB, massB, 0);
 		c->particles.push_back(partB);
 
 		// Add cluster to the world

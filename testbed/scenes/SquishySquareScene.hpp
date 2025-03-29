@@ -27,8 +27,8 @@ struct SquishySquareScene : public Scene
 			vec2 pos(x * radius * 2.0f, -2.5f);
 			vec2 vel(0.0f, 0.0f);
 			real elasticity = 0.9f;
-			real mass = 0.0f;
-			Particle* p = new Particle(pos, vel, elasticity, radius, mass);
+			real mass = 1.0f;
+			Particle* p = new Particle(pos, vel, elasticity, radius, mass, 1);
 
 			// Add particle to floor cluster
 			floor->particles.push_back(p);
@@ -46,30 +46,30 @@ struct SquishySquareScene : public Scene
 		vec2 vel(0.0f, 0.0f);
 		real elasticity = 0.9f;
 		real mass = (real)PI * radius * radius;
-		Particle* topLeft = new Particle(pos, vel, elasticity, radius, mass);
+		Particle* topLeft = new Particle(pos, vel, elasticity, radius, mass, 0);
 		square->particles.push_back(topLeft);
 		
 		// Top Right Point
 		pos.Set(1.0f, 1.0f);
 		vel.Set(0.0f, 0.0f);
-		Particle* topRight = new Particle(pos, vel, elasticity, radius, mass);
+		Particle* topRight = new Particle(pos, vel, elasticity, radius, mass, 0);
 		square->particles.push_back(topRight);
 		
 		// Bottom Left Point
 		pos.Set(-1.0f, -1.0f);
-		Particle* bottomLeft = new Particle(pos, vel, elasticity, radius, mass);
+		Particle* bottomLeft = new Particle(pos, vel, elasticity, radius, mass, 0);
 		square->particles.push_back(bottomLeft);
 		
 		// Bottom Right Point
 		pos.Set(-1.0f, 1.0f);
-		Particle* bottomRight = new Particle(pos, vel, elasticity, radius, mass);
+		Particle* bottomRight = new Particle(pos, vel, elasticity, radius, mass, 0);
 		square->particles.push_back(bottomRight);
 
 		// Add Springs To Square
 		// ---------------------
 
 		real len = 3.0f;
-		real stiffness = 10.0f;
+		real stiffness = 1000.0f;
 		Spring* topSpring = new Spring(topLeft, topRight, len, stiffness);
 		Spring* bottomSpring = new Spring(bottomLeft, bottomRight, len, stiffness);
 		Spring* leftSpring = new Spring(topLeft, bottomLeft, len, stiffness);

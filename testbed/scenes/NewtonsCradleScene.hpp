@@ -31,8 +31,8 @@ struct NewtonsCradleScene : public Scene
 			real elas = 1.0f;
 			real rad = 0.25f;
 			vec2 pos((x * 1.5f) - 3.0f, 4.0f);
-			real mass = 0.0f;
-			Particle* p = new Particle(pos, vel, elas, rad, mass);
+			real mass = 1.0f;
+			Particle* p = new Particle(pos, vel, elas, rad, mass, 1);
 			
 			anchors->particles.push_back(p);
 		}
@@ -58,7 +58,7 @@ struct NewtonsCradleScene : public Scene
 
 				pos.Set(posx, posy);
 			}
-			Particle* p = new Particle(pos, vel, elas, rad, mass);
+			Particle* p = new Particle(pos, vel, elas, rad, mass, 0);
 			
 			cradle->particles.push_back(p);
 		}

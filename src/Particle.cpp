@@ -30,7 +30,7 @@ void Particle::ApplyDrag(real dampening)
 void Particle::UpdatePosition(real dt)
 {
 	// if particle is static, skip it
-	if (mass_in_grams == 0.0f)
+	if (is_static == 1)
 		return;
 
 	// since acceleration remains constant over time step, velocity
@@ -69,14 +69,14 @@ void Particle::ResolveCollision(Particle* p)
 		real overlap = dist - (radius_in_meters + p->radius_in_meters);
 		dir *= overlap * 0.5f;
 		// if either particles are static, move opposite particle accordingly
-		if (mass_in_grams != 0.0f && p->mass_in_grams != 0.0f)
+		if (!is_static && !p->is_static)
 		{
 			pos_in_meters += dir;
 			p->pos_in_meters -= dir;
 		}
-		else if (mass_in_grams == 0.0f && p->mass_in_grams != 0.0f)
+		else if (is_static && !p->is_static)
 			p->pos_in_meters -= dir * 2.0f;
-		else if (mass_in_grams != 0.0f && p->mass_in_grams == 0.0f)
+		else if (!is_static && p->is_static)
 			pos_in_meters += dir * 2.0f;
 
 		// Solve for new velocities
@@ -89,10 +89,10 @@ void Particle::ResolveCollision(Particle* p)
 		// so that most of the energy is kept by the object
 		// colliding with it (i know its not the best solution)
 		
-		if (mass_in_grams == 0.0f)
-			pAMass = 100000000000000.0f;
-		if (p->mass_in_grams == 0.0f)
-			pBMass = 100000000000000.0f;
+		/* if (is_static) */
+		/* 	pAMass = 100000000000000.0f; */
+		/* if (p->is_static) */
+		/* 	pBMass = 100000000000000.0f; */
 
 		// Particle A
 
@@ -107,7 +107,7 @@ void Particle::ResolveCollision(Particle* p)
 		denominator = mass_sum * dist * dist;
 		numerator = 2 * pBMass * dot(vel_diff, pos_diff);
 		delta_vel = pos_diff * (numerator / denominator);
-		if (mass_in_grams != 0.0f)
+		if (!is_static)
 			vel_in_meters_per_sec += delta_vel * elasticity;
 
 		// Particle B
@@ -115,7 +115,7 @@ void Particle::ResolveCollision(Particle* p)
 		pos_diff *= -1;
 		numerator = 2 * pAMass * dot(vel_diff, pos_diff);
 		delta_vel = pos_diff * (numerator/ denominator);
-		if (p->mass_in_grams != 0.0f)
+		if (!p->is_static)
 			p->vel_in_meters_per_sec+= delta_vel * p->elasticity;
 
 	}

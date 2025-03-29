@@ -42,6 +42,8 @@ struct Scene
 	void AddStaticParticle(vec2 pos, real radius);
 	void AddRepulsionForce(vec2 pos, real amplitude);
 	void AddAttractionForce(vec2 pos, real amplitude);
+	Particle* GetNearestNonStaticParticle(vec2 pos);
+	void MoveParticle(Particle* particle, vec2 pos);
 
 	// SceneColours class
 	SceneColours colours;

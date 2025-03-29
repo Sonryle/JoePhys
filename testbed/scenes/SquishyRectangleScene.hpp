@@ -33,8 +33,8 @@ struct SquishyRectangleScene : public Scene
 			vec2 pos(x * radius * 2.0f, -2.5f - x * 0.02f);
 			vec2 vel(0.0f, 0.0f);
 			real elasticity = 0.5f;
-			real mass = 0.0f;
-			Particle* p = new Particle(pos, vel, elasticity, radius, mass);
+			real mass = 1.0f;
+			Particle* p = new Particle(pos, vel, elasticity, radius, mass, 1);
 
 			// Add particle to floor cluster
 			/* floor->particles.push_back(p); */
@@ -45,8 +45,8 @@ struct SquishyRectangleScene : public Scene
 			vec2 pos((x * radius * 2.0f) + 4.0f, -4.5f + x * 0.02f);
 			vec2 vel(0.0f, 0.0f);
 			real elasticity = 0.5f;
-			real mass = 0.0f;
-			Particle* p = new Particle(pos, vel, elasticity, radius, mass);
+			real mass = 1.0f;
+			Particle* p = new Particle(pos, vel, elasticity, radius, mass, 1);
 
 			// Add particle to floor cluster
 			floor->particles.push_back(p);
@@ -57,8 +57,8 @@ struct SquishyRectangleScene : public Scene
 	 		vec2 pos((x * radius * 2.0f) + 0.5f, -5.5f - sin((x / 20.0f) + 26.5f) * 0.8f);
 			vec2 vel(0.0f, 0.0f);
 			real elasticity = 0.5f;
-			real mass = 0.0f;
-			Particle* p = new Particle(pos, vel, elasticity, radius, mass);
+			real mass = 1.0f;
+			Particle* p = new Particle(pos, vel, elasticity, radius, mass, 1);
 
 			// Add particle to floor cluster
 			floor->particles.push_back(p);
@@ -81,7 +81,7 @@ struct SquishyRectangleScene : public Scene
 				real elas = 0.5f;
 				real rad = 0.05f;
 				real mass = (real)PI * rad * rad;
-				hp[x][y] = new Particle(pos, vel, elas, rad, mass);
+				hp[x][y] = new Particle(pos, vel, elas, rad, mass, 0);
 				horiz_rect->particles.push_back(hp[x][y]);
 
 				// Add Springs
@@ -119,7 +119,7 @@ struct SquishyRectangleScene : public Scene
 		real rad = 0.1f;
 		real elas = 0.5f;
 		real mass = (real)PI * rad * rad;
-		Particle* inside_p = new Particle(circ_pos, vel, elas, rad, mass);
+		Particle* inside_p = new Particle(circ_pos, vel, elas, rad, mass, 0);
 		circ->particles.push_back(inside_p);
 
 		real rotation_increment = 2.0f * (float)PI / circ_segments;
@@ -146,7 +146,7 @@ struct SquishyRectangleScene : public Scene
 			real rad = 0.07f;
 			real elas = 0.5f;
 			real mass = (real)PI * rad * rad;
-			Particle* p = new Particle(pos, vel, elas, rad, mass);
+			Particle* p = new Particle(pos, vel, elas, rad, mass, 0);
 			circ_parts[i] = p;
 			circ->particles.push_back(p);
 

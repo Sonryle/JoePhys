@@ -31,7 +31,7 @@ struct PinballScene : public Scene
 				real radius = (x + 7) * 0.015f;
 				real mass = (float)PI * radius * radius;
 				real elasticity = 0.8f;
-				Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass);
+				Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass, 0);
 				// Add the particle to the world
 				sand->particles.push_back(myParticle);
 			}
@@ -45,8 +45,8 @@ struct PinballScene : public Scene
 			real radius = 0.1f;
 			vec2 pos(radius * 2.0f * x, -2.5f);
 			real elasticity = 0.9f;
-			real mass = 0.0f;
-			Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass);
+			real mass = 10000000.0f;
+			Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass, 1);
 			// Add the particle to the physics object
 			floor->particles.push_back(myParticle);
 		}
@@ -57,8 +57,8 @@ struct PinballScene : public Scene
 			real radius = 0.1f;
 			vec2 pos(-2.4f, (y * 2.0f * radius) - 0.5f);
 			real elasticity = 0.9f;
-			real mass = 0.0f;
-			Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass);
+			real mass = 10000000.0f;
+			Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass, 1);
 			// Add the particle to the physics object
 			floor->particles.push_back(myParticle);
 		}
@@ -69,8 +69,8 @@ struct PinballScene : public Scene
 			real radius = 0.1f;
 			vec2 pos(2.4f, (y * 2.0f * radius) - 0.5f);
 			real elasticity = 0.9f;
-			real mass = 0.0f;
-			Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass);
+			real mass = 10000000.0f;
+			Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass, 1);
 			// Add the particle to the physics object
 			floor->particles.push_back(myParticle);
 		}
@@ -83,8 +83,8 @@ struct PinballScene : public Scene
 				real radius = 0.15f;
 				vec2 pos(x * 0.9f, y * 2.0f);
 				real elasticity = 0.9f;
-				real mass = 0.0f;
-				Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass);
+				real mass = 10000000.0f;
+				Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass, 1);
 				// Add the particle to the physics object
 				floor->particles.push_back(myParticle);
 			}
@@ -94,8 +94,8 @@ struct PinballScene : public Scene
 				real radius = 0.2f;
 				vec2 pos((x * 0.9f) + 0.45f, (y * 2.0f) - 1.0f);
 				real elasticity = 0.9f;
-				real mass = 0.0f;
-				Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass);
+				real mass = 10000000.0f;
+				Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass, 1);
 				// Add the particle to the physics object
 				floor->particles.push_back(myParticle);
 			}

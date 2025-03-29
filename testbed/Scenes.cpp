@@ -3,6 +3,7 @@
 
 #include "Scenes.hpp"
 #include "Colour.hpp"
+#include "JoePhys/Vec2.hpp"
 #include "JoePhys/World.hpp"
 #include "Renderer.hpp"
 #include "Settings.hpp"
@@ -40,7 +41,7 @@ void Scene::Render()
 			vec2 pos = p->pos_in_meters;
 			colour col;
 			colour outline_col;
-			if (p->mass_in_grams == 0.0f)
+			if (p->is_static)
 			{
 				col = palette.colours[colours.static_particle];
 				outline_col = palette.colours[colours.static_particle_outline];
@@ -106,8 +107,8 @@ void Scene::AddStaticParticle(vec2 pos, real radius)
 
 	vec2 vel(0.0f, 0.0f);
 	real elas = 0.5f;
-	real mass = 0.0f;
-	Particle* p = new Particle(pos, vel, elas, radius, mass);
+	real mass = 1.0f;
+	Particle* p = new Particle(pos, vel, elas, radius, mass, 1);
 	world->clusters[0]->particles.push_back(p);
 	return;
 }
@@ -154,4 +155,38 @@ void Scene::AddAttractionForce(vec2 pos, real amplitude)
 			real force = std::max(0.0f, amplitude - (dist));
 			p->Accelerate(force * (pos - p->pos_in_meters));
 		}
+}
+
+Particle* Scene::GetNearestNonStaticParticle(vec2 pos)
+{
+	if (world == nullptr)
+		return nullptr;
+
+	Particle* nearest = nullptr;
+
+	// loop over every non static particle in every cluster
+	for (Cluster* c : world->clusters)
+		for (Particle* p : c->particles)
+		{
+			if (p->is_static)
+				continue;
+
+			if (nearest == nullptr)
+				nearest = p;
+
+			if (lengthSquared(p->pos_in_meters - pos) < lengthSquared(nearest->pos_in_meters - pos))
+				nearest = p;
+		}
+	
+	return nearest;
+}
+
+void Scene::MoveParticle(Particle* part, vec2 pos)
+{
+	vec2 old_pos = part->pos_in_meters;
+
+	part->ResetAcceleration();
+	part->vel_in_meters_per_sec = (pos - old_pos) * world->simulation_hertz;
+	part->pos_in_meters = pos;
+	return;
 }

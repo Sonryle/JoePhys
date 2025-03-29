@@ -1,6 +1,3 @@
-#include <cstdio>	// for "stderr" file path constant
-#include <algorithm>	// for std::max & std::min
-
 // include glad openGL function loader & GLFW window manager
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -139,6 +136,7 @@ static void InitGlad()
 	}
 }
 
+Particle* selected_particle = nullptr;
 void ManageInput()
 {
 	// If the 'P' key is pressed, add static particles into the scene at that position of the cursor
@@ -152,6 +150,28 @@ void ManageInput()
 	// If the 'N' key is pressed, add add a repulsion force at the location of the mouse pointer
 	if (glfwGetKey(jp_window, GLFW_KEY_N) == GLFW_PRESS)
 		scene_manager.current_scene->AddAttractionForce(camera.ScreenSpaceToWorldSpace(cursor_pos), 8.0f);
+	
+	// If the 'F' key is pressed, find the particle which is closest to the mouse cursor and highlight it with another circle
+	if (glfwGetKey(jp_window, GLFW_KEY_F) == GLFW_PRESS)
+	{
+		if (selected_particle == nullptr)
+			selected_particle = scene_manager.current_scene->GetNearestNonStaticParticle(camera.ScreenSpaceToWorldSpace(cursor_pos));
+		selected_particle->is_static = 1;
+		colour fill(1.0f, 1.0f, 1.0f, 0.6f);
+		colour outl(0.1f, 0.3f, 0.3f, 1.0f);
+		renderer.AddSolidCircle(selected_particle->pos_in_meters, selected_particle->radius_in_meters * 1.0f, 20, fill, outl);
+
+		scene_manager.current_scene->MoveParticle(selected_particle, camera.ScreenSpaceToWorldSpace(cursor_pos));
+	}
+	else
+	{
+		if (selected_particle != nullptr)
+		{
+			selected_particle->is_static = 0;
+			selected_particle = nullptr;
+		}
+	}
+
 }
 
 void Step()
@@ -189,12 +209,12 @@ int main()
 			colour bg = palette.colours[scene_manager.current_scene->colours.background];
 			glClearColor(bg.r, bg.g, bg.b, bg.a);
 			glClear(GL_COLOR_BUFFER_BIT);
-
-			// Manage Input
-			ManageInput();
 		
 			// Update Physics Sim
 			Step();
+
+			// Manage Input
+			ManageInput();
 
 			// Render Frame
 			renderer.Flush();
