@@ -71,7 +71,7 @@ struct NewtonsCradleScene : public Scene
 			Particle* pA = cradle->particles[n];
 			Particle* pB = anchors->particles[n];
 			real len = 6.0f;
-			real stiffness = 20000.0f;
+			real stiffness = 10000.0f;
 			Spring* s = new Spring(pA, pB, len, stiffness);
 
 			anchors->springs.push_back(s);
@@ -84,9 +84,8 @@ struct NewtonsCradleScene : public Scene
 
 	void SetUpSceneColours() override
 	{
-		colours.background = Palette::JP_DARK_YELLOW;
+		colours.background = Palette::JP_DARK_PURPLE;
 		colours.spring = Palette::JP_DARK_GRAY;
-		/* colours.particle = Palette::JP_DARK_BLUE; */
 		colours.particle = Palette::JP_GREEN;
 		colours.particle_outline = Palette::JP_DARK_GRAY;
 		colours.static_particle = Palette::JP_GRAY;

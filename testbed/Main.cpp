@@ -49,6 +49,8 @@ static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, i
 }
 
 vec2 cursor_pos(0.0f, 0.0f);
+Particle* selected_particle = nullptr;
+bool selected_particle_is_static = 0;
 static void MousePosCallback(GLFWwindow* window, double dx, double dy)
 {
 	ImGuiIO& io = ImGui::GetIO();
@@ -57,7 +59,7 @@ static void MousePosCallback(GLFWwindow* window, double dx, double dy)
 
 	// If the 'G' key is pressed and the GUI is not being interacted with then move the camera by
 	// the difference between the new cursor position (dx & dy) and the old cursor position (cursor_pos)
-	if (left_mouse_button_down && GUI_not_being_interacted_with)
+	if (left_mouse_button_down && GUI_not_being_interacted_with && glfwGetKey(jp_window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
 	{
 		vec2 offset(cursor_pos.x - (float)dx, (float)dy - cursor_pos.y);
 		camera.center += offset * camera.zoom / 100.0f;
@@ -71,7 +73,6 @@ static void MousePosCallback(GLFWwindow* window, double dx, double dy)
 
 static void MouseButtonCallback(GLFWwindow*, signed int button, signed int action, signed int mods)
 {
-	return;
 }
 
 static void ScrollCallback(GLFWwindow*, double dx, double dy)
@@ -136,7 +137,6 @@ static void InitGlad()
 	}
 }
 
-Particle* selected_particle = nullptr;
 void ManageInput()
 {
 	// If the 'P' key is pressed, add static particles into the scene at that position of the cursor
@@ -151,23 +151,25 @@ void ManageInput()
 	if (glfwGetKey(jp_window, GLFW_KEY_N) == GLFW_PRESS)
 		scene_manager.current_scene->AddAttractionForce(camera.ScreenSpaceToWorldSpace(cursor_pos), 8.0f);
 	
-	// If the 'F' key is pressed, find the particle which is closest to the mouse cursor and highlight it with another circle
-	if (glfwGetKey(jp_window, GLFW_KEY_F) == GLFW_PRESS)
+	ImGuiIO& io = ImGui::GetIO();
+	if (io.WantCaptureMouse == 0 && glfwGetMouseButton(jp_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && glfwGetKey(jp_window, GLFW_KEY_LEFT_CONTROL) != GLFW_PRESS)
 	{
 		if (selected_particle == nullptr)
-			selected_particle = scene_manager.current_scene->GetNearestNonStaticParticle(camera.ScreenSpaceToWorldSpace(cursor_pos));
-		selected_particle->is_static = 1;
-		colour fill(1.0f, 1.0f, 1.0f, 0.6f);
-		colour outl(0.1f, 0.3f, 0.3f, 1.0f);
-		renderer.AddSolidCircle(selected_particle->pos_in_meters, selected_particle->radius_in_meters * 1.0f, 20, fill, outl);
-
-		scene_manager.current_scene->MoveParticle(selected_particle, camera.ScreenSpaceToWorldSpace(cursor_pos));
+		{
+			selected_particle = scene_manager.current_scene->GetNearestParticle(camera.ScreenSpaceToWorldSpace(cursor_pos));
+			selected_particle_is_static = selected_particle->is_static;
+		}
+		if (selected_particle != nullptr)
+		{
+			selected_particle->is_static = 1;
+			scene_manager.current_scene->MoveParticle(selected_particle, camera.ScreenSpaceToWorldSpace(cursor_pos));
+		}
 	}
 	else
 	{
 		if (selected_particle != nullptr)
 		{
-			selected_particle->is_static = 0;
+			selected_particle->is_static = selected_particle_is_static;
 			selected_particle = nullptr;
 		}
 	}
@@ -178,9 +180,15 @@ void Step()
 {
 	// Step the world forward
 	scene_manager.current_scene->Step();
-	
+
 	// Add shapes to be rendered to the renderers stack
 	scene_manager.current_scene->Render();
+
+	// Render A Circle Around Nearest Particle
+	Particle* n = scene_manager.current_scene->GetNearestParticle(camera.ScreenSpaceToWorldSpace(cursor_pos));
+	if (n != nullptr)
+		if (glfwGetKey(jp_window, GLFW_KEY_LEFT_CONTROL) != GLFW_PRESS)
+			renderer.AddCircle(n->pos_in_meters, n->radius_in_meters * 1.2f, settings.circle_res, colour(1.0f, 1.0f, 1.0f, 1.0f));
 }
 
 // Program entry point

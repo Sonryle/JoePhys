@@ -157,7 +157,7 @@ void Scene::AddAttractionForce(vec2 pos, real amplitude)
 		}
 }
 
-Particle* Scene::GetNearestNonStaticParticle(vec2 pos)
+Particle* Scene::GetNearestParticle(vec2 pos)
 {
 	if (world == nullptr)
 		return nullptr;
@@ -168,9 +168,6 @@ Particle* Scene::GetNearestNonStaticParticle(vec2 pos)
 	for (Cluster* c : world->clusters)
 		for (Particle* p : c->particles)
 		{
-			if (p->is_static)
-				continue;
-
 			if (nearest == nullptr)
 				nearest = p;
 
