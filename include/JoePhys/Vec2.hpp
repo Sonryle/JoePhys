@@ -52,6 +52,11 @@ inline real length(vec2 v)
 	return sqrt(v.x * v.x + v.y * v.y);
 }
 
+inline real lengthSquared(vec2 v)
+{
+	return (v.x * v.x) + (v.y * v.y);
+}
+
 // return dot product of two vectors.
 inline real dot(const vec2 a, const vec2 b)
 {
