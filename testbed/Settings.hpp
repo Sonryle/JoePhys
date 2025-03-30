@@ -25,6 +25,8 @@ struct Settings
 	// Main Application Vars
 	int frame_limit;
 	bool is_fullscreen;
+	real min_particle_size;
+	real max_particle_size;
 
 	// Simulation vars
 	bool enable_gravity;

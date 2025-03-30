@@ -46,7 +46,7 @@ int main()
 			Step();
 
 			// Manage Input
-			window_manager.FrameCallback();
+			window_manager.InputCallback();
 
 			// Render Frame
 			renderer.Flush();

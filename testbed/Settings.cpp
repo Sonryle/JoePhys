@@ -3,6 +3,7 @@
 // as an extern Settings in "Settings.hpp", but not initialised. It is
 // initialised here in "Settings.cpp")
 #include "Settings.hpp"
+#include <algorithm>
 
 Settings settings;
 
@@ -21,6 +22,8 @@ void Settings::Reset()
 
 	frame_limit = 120;
 	is_fullscreen = 0;
+	min_particle_size = 0.1f;
+	max_particle_size = 5.0f;
 
 	enable_gravity = 1;
 	enable_drag = 1;

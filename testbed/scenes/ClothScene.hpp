@@ -21,6 +21,8 @@ struct ClothScene : public Scene
 		settings.enable_collision = 0;
 		settings.attraction_tool_strength = 2.0f;
 		settings.repulsion_tool_strength = 4.0f;
+		settings.min_particle_size = 0.05f;
+		settings.max_particle_size = 1.0f;
 		settings.circle_res = 5;
 		camera.zoom = 1.0f;
 		double PI = 3.141592653589;

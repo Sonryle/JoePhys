@@ -25,7 +25,7 @@ struct WindowManager
 	static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	static void MousePosCallback(GLFWwindow* window, double dx, double dy);
 	static void ScrollCallback(GLFWwindow*, double dx, double dy);
-	static void FrameCallback();
+	static void InputCallback();
 
 	vec2 cursor_pos;
 	GLFWwindow* window;

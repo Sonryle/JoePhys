@@ -1,4 +1,7 @@
 #include "WindowManager.hpp"
+#include "GLFW/glfw3.h"
+#include "SceneManager.hpp"
+double PI = 3.141592653589;
 
 WindowManager::WindowManager()
 {
@@ -89,9 +92,9 @@ void WindowManager::KeyCallback(GLFWwindow* window, int key, int scancode, int a
 			else
 			{
 				Particle* p = scene_manager.current_scene->GetNearestParticle(camera.ScreenSpaceToWorldSpace(window_manager.cursor_pos));
-				p->is_static = !p->is_static;
 				p->vel_in_meters_per_sec.Set(0.0f, 0.0f);
 				p->ResetAcceleration();
+				p->is_static = !p->is_static;
 			}
 		}
 		break;
@@ -130,19 +133,37 @@ void WindowManager::MousePosCallback(GLFWwindow* window, double dx, double dy)
 // Is called when mouse wheel is scrolled
 void WindowManager::ScrollCallback(GLFWwindow*, double dx, double dy)
 {
-	if (ImGui::GetIO().WantCaptureMouse == 0 && glfwGetKey(window_manager.window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+	if (glfwGetKey(window_manager.window, GLFW_KEY_LEFT_CONTROL))
 	{
-		if (dy < 0)
-			camera.zoom = std::max(camera.zoom * 0.95f, 0.00001f);
-		else
-			camera.zoom = std::min(camera.zoom * 1.05f, 1000.0f);
+		if (ImGui::GetIO().WantCaptureMouse == 0)
+		{
+			if (dy < 0)
+				camera.zoom = std::max(camera.zoom * 0.95f, 0.00001f);
+			else
+				camera.zoom = std::min(camera.zoom * 1.05f, 1000.0f);
+		}
+	}
+	else
+	{
+		if (ImGui::GetIO().WantCaptureMouse == 0)
+		{
+			Particle* p = scene_manager.current_scene->GetNearestParticle(camera.ScreenSpaceToWorldSpace(window_manager.cursor_pos));
+			p->radius_in_meters += dy / 10.0f;
+
+			if (p->radius_in_meters < settings.min_particle_size)
+				p->radius_in_meters = settings.min_particle_size;
+			if (p->radius_in_meters > settings.max_particle_size)
+				p->radius_in_meters = settings.max_particle_size;
+
+			p->mass_in_grams = PI * p->radius_in_meters * p->radius_in_meters;
+		}
 	}
 }
 
 // Is called every frame
 Particle* selected_particle = nullptr;
 bool selected_particle_is_static = 0;
-void WindowManager::FrameCallback()
+void WindowManager::InputCallback()
 {
 	// If the 'P' key & left CTRL pressed, add static particles into the scene at that position of the cursor
 	if (glfwGetKey(window_manager.window, GLFW_KEY_P) == GLFW_PRESS)
