@@ -30,6 +30,7 @@ void SceneManager::SwitchScene(int scene_number)
 	ImGuiStyle& style = ImGui::GetStyle();
 
 	colour bg = palette.colours[current_scene->colours.background];
+	glClearColor(bg.r, bg.g, bg.b, bg.a);
 	real w = 0.45f;	// Window darken
 	real m = 0.6f;	// Menu darken
 	real t = 0.6f;	// Title darken
