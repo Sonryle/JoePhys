@@ -132,14 +132,20 @@ void GUIManager::DrawAppearanceWindow()
 		if(ImGui::Button("Set Autumn"))
 		{
 			palette.SetAutumn();
+			colour bg = palette.colours[scene_manager.current_scene->colours.background];
+			glClearColor(bg.r, bg.g, bg.b, bg.a);
 		}
 		if(ImGui::Button("Set Gruvbox"))
 		{
 			palette.SetGruvbox();
+			colour bg = palette.colours[scene_manager.current_scene->colours.background];
+			glClearColor(bg.r, bg.g, bg.b, bg.a);
 		}
 		if(ImGui::Button("Set Pastel"))
 		{
 			palette.SetPastel();
+			colour bg = palette.colours[scene_manager.current_scene->colours.background];
+			glClearColor(bg.r, bg.g, bg.b, bg.a);
 		}
 	}
 	// Create Renderer options
