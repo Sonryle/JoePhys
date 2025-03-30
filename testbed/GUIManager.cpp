@@ -60,7 +60,7 @@ void GUIManager::DrawGui()
 			{ 
 				simulation_window_shown = !simulation_window_shown;
 			}
-			if (ImGui::MenuItem("Options", "\tCtrl+W", options_window_shown))
+			if (ImGui::MenuItem("Options", "\tCtrl+O", options_window_shown))
 			{ 
 				options_window_shown = !options_window_shown;
 			}

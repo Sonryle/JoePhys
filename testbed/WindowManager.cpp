@@ -54,7 +54,7 @@ void WindowManager::SetFullscreen(bool is_fullscreen)
 	}
 	else
 	{
-		glfwSetWindowMonitor(window, nullptr, 0, 0, 800, 800, 0);
+		glfwSetWindowMonitor(window, nullptr, 50, 50, settings.initial_window_width, settings.initial_window_height, 0);
 	}
 }
 
