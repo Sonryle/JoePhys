@@ -19,6 +19,8 @@ void Particle::ApplyDrag(real dampening)
 {
 		if (vel_in_meters_per_sec.GetLength() < 0.0001f)
 			return;
+		if (is_static)
+			return;
 
 		real vel_magnitude = vel_in_meters_per_sec.GetLength();
 		real drag_magnitude = vel_magnitude * vel_magnitude * dampening;
@@ -30,8 +32,11 @@ void Particle::ApplyDrag(real dampening)
 void Particle::UpdatePosition(real dt)
 {
 	// if particle is static, skip it
-	if (is_static == 1)
+	if (is_static)
+	{
+		ResetAcceleration();
 		return;
+	}
 
 	// since acceleration remains constant over time step, velocity
 	// can be updated using euler's integration
@@ -89,10 +94,10 @@ void Particle::ResolveCollision(Particle* p)
 		// so that most of the energy is kept by the object
 		// colliding with it (i know its not the best solution)
 		
-		/* if (is_static) */
-		/* 	pAMass = 100000000000000.0f; */
-		/* if (p->is_static) */
-		/* 	pBMass = 100000000000000.0f; */
+		if (is_static)
+			pAMass = 100000000000000.0f;
+		if (p->is_static)
+			pBMass = 100000000000000.0f;
 
 		// Particle A
 

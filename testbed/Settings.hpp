@@ -24,6 +24,7 @@ struct Settings
 
 	// Main Application Vars
 	int frame_limit;
+	bool is_fullscreen;
 
 	// Simulation vars
 	bool enable_gravity;

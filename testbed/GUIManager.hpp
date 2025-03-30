@@ -19,6 +19,7 @@ struct GUIManager
 	void Init(GLFWwindow* window);
 	void ToggleAppearanceWindow();
 	void ToggleSimulationWindow();
+	void ToggleOptionsWindow();
 	void DrawGui();
 	
 private:
@@ -26,10 +27,12 @@ private:
 	// functions
 	void DrawAppearanceWindow();
 	void DrawSimulationWindow();
+	void DrawOptionsWindow();
 
 	// variables
 	bool appearance_window_shown;
 	bool simulation_window_shown;
+	bool options_window_shown;
 };
 
 extern GUIManager gui_manager;

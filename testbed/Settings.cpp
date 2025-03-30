@@ -20,6 +20,7 @@ void Settings::Reset()
 	circle_res = 7;
 
 	frame_limit = 120;
+	is_fullscreen = 0;
 
 	enable_gravity = 1;
 	enable_drag = 1;

@@ -1,9 +1,10 @@
 #include "GUIManager.hpp"
 #include "SceneManager.hpp"
+#include "WindowManager.hpp"
 #include "imgui.h"
 
 // Constructor
-GUIManager::GUIManager() : appearance_window_shown(0), simulation_window_shown(0)
+GUIManager::GUIManager() : appearance_window_shown(0), simulation_window_shown(0), options_window_shown(0)
 {
 	return;
 }
@@ -32,6 +33,11 @@ void GUIManager::ToggleSimulationWindow()
 	simulation_window_shown = !simulation_window_shown;
 }
 
+void GUIManager::ToggleOptionsWindow()
+{
+	options_window_shown = !options_window_shown;
+}
+
 // Draws a menu bar at the top of the program, and calls functions to draw every other
 // imgui window as well, (e.g. the appearance window).
 void GUIManager::DrawGui()
@@ -48,11 +54,15 @@ void GUIManager::DrawGui()
 		{
 			if (ImGui::MenuItem("Appearance", "\tCtrl+A", appearance_window_shown))
 			{ 
-				appearance_window_shown = (appearance_window_shown == 1)? 0 : 1;
+				appearance_window_shown = !appearance_window_shown;
 			}
 			if (ImGui::MenuItem("Simulation", "\tCtrl+S", simulation_window_shown))
 			{ 
-				simulation_window_shown = (simulation_window_shown == 1)? 0 : 1;
+				simulation_window_shown = !simulation_window_shown;
+			}
+			if (ImGui::MenuItem("Options", "\tCtrl+W", options_window_shown))
+			{ 
+				options_window_shown = !options_window_shown;
 			}
 			ImGui::EndMenu();
 		}
@@ -93,6 +103,7 @@ void GUIManager::DrawGui()
 	// Call the functions which draw all other windows
 	DrawAppearanceWindow();
 	DrawSimulationWindow();
+	DrawOptionsWindow();
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -168,20 +179,44 @@ void GUIManager::DrawSimulationWindow()
 	ImGui::SetWindowPos(initial_pos, ImGuiCond_None);
 
 	// Create Contents of simulation window
+	ImGui::Separator();
+	ImGui::SliderInt("Sub Steps", &settings.sub_steps, 4, 64);
+	ImGui::SliderInt("Time Divisor", &settings.time_divisor, 1, 50);
+	ImGui::Separator();
 	if (ImGui::CollapsingHeader("World"))
 	{
-		ImGui::Separator();
-		ImGui::SliderInt("Sub Steps", &settings.sub_steps, 4, 64);
-		ImGui::SliderInt("Time Divisor", &settings.time_divisor, 1, 50);
-		ImGui::SliderFloat("TEMPORARY A", &settings.attraction_tool_strength, 1, 50);
-		ImGui::SliderFloat("TEMPORARY R", &settings.repulsion_tool_strength, 1, 50);
-		ImGui::Separator();
 		ImGui::Checkbox("Gravity", &settings.enable_gravity);
 		ImGui::Checkbox("Drag", &settings.enable_drag);
 		ImGui::Checkbox("Springs", &settings.enable_springs);
 		ImGui::Checkbox("Particle Movement", &settings.enable_particle_movement);
 		ImGui::Checkbox("Particle Collision", &settings.enable_collision);
 	}
+	ImGui::End();
+}
+
+// Draws the "simulation" imgui window (only if simulationWindowHidden is false)
+void GUIManager::DrawOptionsWindow()
+{
+	if (!options_window_shown)
+		return;
+	
+	// Begin the window
+	ImGui::Begin("Options", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+
+	// Set the correct position & scale
+	ImGuiIO& io = ImGui::GetIO();
+	ImVec2 initial_size(500, 250);
+	ImVec2 initial_pos(io.DisplaySize.x - ImGui::GetWindowWidth() - 10, 295 + 250 + 15);
+	ImGui::SetWindowSize(initial_size, ImGuiCond_None);
+	ImGui::SetWindowPos(initial_pos, ImGuiCond_None);
+
+	// Create Contents of simulation window
+	ImGui::Separator();
+	ImGui::SliderFloat("TEMPORARY A", &settings.attraction_tool_strength, 1, 50);
+	ImGui::SliderFloat("TEMPORARY R", &settings.repulsion_tool_strength, 1, 50);
+	ImGui::Separator();
+	if (ImGui::Checkbox("Fullscreen", &settings.is_fullscreen))
+		window_manager.SetFullscreen(settings.is_fullscreen);
 	ImGui::End();
 }
 
