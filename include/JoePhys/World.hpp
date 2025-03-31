@@ -34,6 +34,7 @@ struct World
 	std::vector<Cluster*> clusters;
 	int simulation_hertz;
 	int sub_steps;
+	vec2 gravity;
 private:
 
 	// functions
@@ -43,8 +44,6 @@ private:
 	void ResolveAllCollisions();
 	void UpdateSprings(real dt);
 
-	// variables
-	vec2 gravity;
 };
 
 #endif

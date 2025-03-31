@@ -13,18 +13,10 @@
 struct ClothScene : public Scene
 {
 	// constructors & destructors
-	ClothScene()
+	void SetUpScene() override
 	{
 		SetUpSceneColours();
-		settings.Reset();
-		world->Create(settings.simulation_hertz, settings.sub_steps, vec2(0.0f, -9.8f));
-		settings.enable_collision = 0;
-		settings.attraction_tool_strength = 2.0f;
-		settings.repulsion_tool_strength = 4.0f;
-		settings.min_particle_size = 0.05f;
-		settings.max_particle_size = 1.0f;
-		settings.circle_res = 5;
-		camera.zoom = 1.0f;
+		world->Create(settings.simulation_hertz, settings.sub_steps, settings.gravity);
 		double PI = 3.141592653589;
 		
 		// Create the cloth
@@ -78,6 +70,20 @@ struct ClothScene : public Scene
 		colours.particle_outline = Palette::JP_DARK_GRAY;
 		colours.static_particle = Palette::JP_GRAY;
 		colours.static_particle_outline = Palette::JP_DARK_GRAY;
+	}
+
+	void SetUpSceneSettings() override
+	{
+		settings.Reset();
+		settings.gravity.Set(0.0f, -9.8f);
+		settings.enable_collision = 0;
+		settings.attraction_tool_strength = 2.0f;
+		settings.repulsion_tool_strength = 4.0f;
+		settings.min_particle_size = 0.05f;
+		settings.max_particle_size = 1.0f;
+		settings.circle_res = 5;
+		camera.center.Set(0.0f, 0.0f);
+		camera.zoom = 1.0f;
 	}
 };
 

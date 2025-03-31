@@ -3,7 +3,6 @@
 // as an extern Settings in "Settings.hpp", but not initialised. It is
 // initialised here in "Settings.cpp")
 #include "Settings.hpp"
-#include <algorithm>
 
 Settings settings;
 
@@ -25,6 +24,7 @@ void Settings::Reset()
 	min_particle_size = 0.1f;
 	max_particle_size = 5.0f;
 
+	gravity.Set(0.0f, 0.0f);
 	enable_gravity = 1;
 	enable_drag = 1;
 	enable_springs = 1;

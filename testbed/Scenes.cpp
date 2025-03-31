@@ -11,7 +11,6 @@
 
 Scene::Scene()
 {
-	ResetCamera();
 	world = new World();
 	
 	// Will contain the particles added by the user
@@ -83,6 +82,16 @@ void Scene::ResetCamera()
 	camera.zoom = 1.0f;
 }
 
+void Scene::SetUpScene()
+{
+	return;
+}
+
+void Scene::SetUpSceneSettings()
+{
+	settings.Reset();
+}
+
 void Scene::Step()
 {
 	if (world != nullptr)
@@ -91,6 +100,8 @@ void Scene::Step()
 			world->sub_steps = settings.sub_steps;
 		if (world->simulation_hertz != settings.simulation_hertz * settings.time_divisor)
 			world->simulation_hertz = settings.simulation_hertz * settings.time_divisor;
+		if (world->gravity != settings.gravity)
+			world->gravity = settings.gravity;
 
 		int flags = 0;
 		if (!settings.enable_gravity)

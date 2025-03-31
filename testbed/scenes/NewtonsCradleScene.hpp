@@ -13,17 +13,11 @@
 struct NewtonsCradleScene : public Scene
 {
 	// constructors & destructors
-	NewtonsCradleScene()
+	void SetUpScene() override
 	{
 		SetUpSceneColours();
-		settings.Reset();
-		world->Create(settings.simulation_hertz, settings.sub_steps, vec2(0.0f, -9.8f));
-		settings.circle_res = 20;
-		settings.attraction_tool_strength = 25.0f;
-		settings.repulsion_tool_strength = 25.0f;
-		camera.zoom = 2.0f;
+		world->Create(settings.simulation_hertz, settings.sub_steps, settings.gravity);
 		double PI = 3.141592653589;
-
 
 		// Create a cluster for the anchor points of the balls
 		Cluster* anchors = new Cluster;
@@ -92,6 +86,17 @@ struct NewtonsCradleScene : public Scene
 		colours.particle_outline = Palette::JP_DARK_GRAY;
 		colours.static_particle = Palette::JP_GRAY;
 		colours.static_particle_outline = Palette::JP_DARK_GRAY;
+	}
+
+	void SetUpSceneSettings() override
+	{
+		settings.Reset();
+		settings.gravity.Set(0.0f, -9.8f);
+		settings.circle_res = 20;
+		settings.attraction_tool_strength = 25.0f;
+		settings.repulsion_tool_strength = 25.0f;
+		camera.center.Set(0.0f, 0.0f);
+		camera.zoom = 2.0f;
 	}
 };
 

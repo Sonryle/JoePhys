@@ -16,11 +16,27 @@ void GUIManager::Init(GLFWwindow* window)
 	ImGui_ImplGlfw_InitForOpenGL(window, 1);
 	ImGui_ImplOpenGL3_Init();
 
-
 	ImGuiStyle& style = ImGui::GetStyle();
 	style.Alpha = 0.85f;
 	style.FrameRounding = 4.0f;
 }
+
+// Renders the UI
+void GUIManager::Render()
+{
+	AddMenuBar();
+
+	if (appearance_window_shown)
+		AddAppearanceWindow();
+	if (simulation_window_shown)
+		AddSimulationWindow();
+	if (options_window_shown)
+		AddOptionsWindow();
+
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
 // Toggles the "appearance" window on and off
 void GUIManager::ToggleAppearanceWindow()
 {
@@ -33,14 +49,16 @@ void GUIManager::ToggleSimulationWindow()
 	simulation_window_shown = !simulation_window_shown;
 }
 
+// Toggles the "options" window on and off
 void GUIManager::ToggleOptionsWindow()
 {
 	options_window_shown = !options_window_shown;
 }
 
+
 // Draws a menu bar at the top of the program, and calls functions to draw every other
 // imgui window as well, (e.g. the appearance window).
-void GUIManager::DrawGui()
+void GUIManager::AddMenuBar()
 {
 	// Begin New Frame
 	ImGui_ImplGlfw_NewFrame();
@@ -99,29 +117,16 @@ void GUIManager::DrawGui()
 		}
 		ImGui::EndMainMenuBar();
 	}
-
-	// Call the functions which draw all other windows
-	DrawAppearanceWindow();
-	DrawSimulationWindow();
-	DrawOptionsWindow();
-
-	ImGui::Render();
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-
-// Draws the "appearance" imgui window (only if appearanceWindowHidden is false)
-void GUIManager::DrawAppearanceWindow()
+void GUIManager::AddAppearanceWindow()
 {
-	if (!appearance_window_shown)
-		return;
-	
 	// Begin the window
 	ImGui::Begin("Appearance", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 
 	// Set the correct position & scale
 	ImGuiIO& io = ImGui::GetIO();
-	ImVec2 initial_size(500, 250);
+	ImVec2 initial_size(550, 250);
 	ImVec2 initial_pos(io.DisplaySize.x - ImGui::GetWindowWidth() - 10, 30);
 	ImGui::SetWindowSize(initial_size, ImGuiCond_None);
 	ImGui::SetWindowPos(initial_pos, ImGuiCond_None);
@@ -167,59 +172,130 @@ void GUIManager::DrawAppearanceWindow()
 	ImGui::End();
 }
 
-
-// Draws the "simulation" imgui window (only if simulationWindowHidden is false)
-void GUIManager::DrawSimulationWindow()
+// Draws a circle and allows user to edit the value of a vector inside it
+void AddArrowDiagram(float* input, float max_val)
 {
-	if (!simulation_window_shown)
-		return;
+	float canvas_radius = 50.0f;  // Canvas circle radius
+	ImVec2 canvas_pos = ImGui::GetCursorScreenPos();
+	ImVec2 canvas_center = ImVec2(canvas_pos.x + canvas_radius + 15, canvas_pos.y + canvas_radius + 15);
+	ImVec2 arrow_pos = ImVec2(((input[0] / max_val) * canvas_radius) + canvas_center.x, ((input[1] / max_val) * -canvas_radius) + canvas_center.y);
+	ImDrawList* draw_list = ImGui::GetWindowDrawList();
+
+	ImGui::InvisibleButton("circular_canvas", ImVec2(canvas_radius * 2 + 15, canvas_radius * 2 + 30), ImGuiButtonFlags_MouseButtonLeft);
 	
+	// Draw the circular canvas
+	colour g = palette.colours[palette.JP_DARK_GRAY];
+	draw_list->AddCircle(canvas_center, canvas_radius, IM_COL32(g.r * 255, g.g * 255, g.b * 255, g.a * 255), 64, 2.0f);
+	draw_list->AddCircleFilled(canvas_center, 3.0f, IM_COL32(g.r * 255, g.g * 255, g.b * 255, g.a * 255));
+	
+	if (settings.enable_gravity)
+	{
+		// Draw arrow
+		colour p = palette.colours[scene_manager.current_scene->colours.particle];
+		draw_list->AddLine(canvas_center, arrow_pos, IM_COL32(p.r * 255, p.g * 255, p.b * 255, p.a * 255), 2.0f);
+		draw_list->AddCircleFilled(arrow_pos, 5.0f, IM_COL32(p.r * 255, p.g * 255, p.b * 255, p.a * 255));
+
+		// If cursor is inside circle
+		if (length(window_manager.cursor_pos - vec2(canvas_center.x, canvas_center.y)) <= canvas_radius)
+		{
+			// Draw vector coordinates near the arrow tip
+			char buffer[32];
+			snprintf(buffer, sizeof(buffer), "(%.1f, %.1f)", input[0], input[1]);
+			draw_list->AddText(ImVec2(arrow_pos.x + 5, arrow_pos.y - 10), IM_COL32(255, 255, 255, 255), buffer);
+		}
+	}
+
+	// Update the input
+	if (ImGui::IsItemActive() && ImGui::IsMouseDragging(0))
+	{
+		settings.enable_gravity = 1;
+		vec2 new_pos((window_manager.cursor_pos - vec2(canvas_center.x, canvas_center.y)) / canvas_radius);
+
+		if (length(new_pos) > 1.0f)
+			new_pos = new_pos.GetNormalized();
+
+		// Apply new vector to our input
+		input[0] = new_pos.x * max_val;
+		input[1] = -new_pos.y * max_val;
+	}
+
+}
+
+void GUIManager::AddSimulationWindow()
+{
 	// Begin the window
 	ImGui::Begin("Simulation", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 
 	// Set the correct position & scale
 	ImGuiIO& io = ImGui::GetIO();
-	ImVec2 initial_size(500, 250);
+	ImVec2 initial_size(550, 360);
 	ImVec2 initial_pos(io.DisplaySize.x - ImGui::GetWindowWidth() - 10, 295);
 	ImGui::SetWindowSize(initial_size, ImGuiCond_None);
 	ImGui::SetWindowPos(initial_pos, ImGuiCond_None);
 
-	// Create Contents of simulation window
-	ImGui::Separator();
-	ImGui::SliderInt("Sub Steps", &settings.sub_steps, 4, 64);
-	ImGui::SliderInt("Time Divisor", &settings.time_divisor, 1, 50);
-	ImGui::Separator();
-	if (ImGui::CollapsingHeader("World"))
+	// If there is no world, then skip
+	if (scene_manager.current_scene->world == nullptr)
 	{
-		ImGui::Checkbox("Gravity", &settings.enable_gravity);
-		ImGui::Checkbox("Drag", &settings.enable_drag);
-		ImGui::Checkbox("Springs", &settings.enable_springs);
-		ImGui::Checkbox("Particle Movement", &settings.enable_particle_movement);
-		ImGui::Checkbox("Particle Collision", &settings.enable_collision);
+		ImGui::End();
+		return;
 	}
+
+	// Create Contents of simulation window
+	
+	if (ImGui::Button("Set Default Scene Settings"))
+		scene_manager.current_scene->SetUpSceneSettings();
+
+	// Add a slider for the substeps and a description of what substeps do
+	ImGui::SliderInt("Sub Steps", &settings.sub_steps, 4, 64);
+	ImGui::SameLine();
+	ImGui::TextDisabled("(?)");
+    	if (ImGui::IsItemHovered(ImGuiHoveredFlags_DelayShort))
+	{
+		const char* desc = "If sub steps is set to 4 for example, then the physics simulation will\n"
+				   "break up one physics step into 4 smaller sub steps. This increases the\n"
+				   "accuracy of the simulation, as the computer has to aproximate smaller changes\n"
+				   "in time, but it is more computationally expensive.";
+       		ImGui::SetTooltip("%s", desc);
+	}
+
+	// Add a slider for the time divisor and a description of what it does
+	ImGui::SliderInt("Time Divisor", &settings.time_divisor, 1, 50);
+	ImGui::SameLine();
+	ImGui::TextDisabled("(?)");
+    	if (ImGui::IsItemHovered(ImGuiHoveredFlags_DelayShort))
+	{
+		const char* desc = "Time divisor slows down time. The simulation hertz (number of time steps per simulated second) is multiplied\n"
+				   "by the the time divisor. This slows down time when the time divisor is greater than 1 because the simulation\n"
+				   "hertz becomes out of sync with the framerate of the program. (both the framerate limit and the simulation\n"
+				   "hertz are set to 120 by default, and we go forward by one time step every frame, so when the simulation hertz\n"
+				   "is greater than the framerate of the program, time appears to have slowed down)\n";
+       		ImGui::SetTooltip("%s", desc);
+	}
+	ImGui::Checkbox("Gravity (m/s²)", &settings.enable_gravity);
+	AddArrowDiagram(&settings.gravity.x, 50.0f);
+	ImGui::Checkbox("Drag (Air Resistance)", &settings.enable_drag);
+	ImGui::Checkbox("Springs", &settings.enable_springs);
+	ImGui::Checkbox("Particle Movement", &settings.enable_particle_movement);
+	ImGui::Checkbox("Particle Collision", &settings.enable_collision);
 	ImGui::End();
 }
 
-// Draws the "simulation" imgui window (only if simulationWindowHidden is false)
-void GUIManager::DrawOptionsWindow()
+void GUIManager::AddOptionsWindow()
 {
-	if (!options_window_shown)
-		return;
-	
 	// Begin the window
 	ImGui::Begin("Options", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 
 	// Set the correct position & scale
 	ImGuiIO& io = ImGui::GetIO();
-	ImVec2 initial_size(500, 250);
-	ImVec2 initial_pos(io.DisplaySize.x - ImGui::GetWindowWidth() - 10, 295 + 250 + 15);
+	ImVec2 initial_size(550, 150);
+	ImVec2 initial_pos(io.DisplaySize.x - ImGui::GetWindowWidth() - 10, 295 + 375);
 	ImGui::SetWindowSize(initial_size, ImGuiCond_None);
 	ImGui::SetWindowPos(initial_pos, ImGuiCond_None);
 
 	// Create Contents of simulation window
 	ImGui::Separator();
-	ImGui::SliderFloat("TEMPORARY A", &settings.attraction_tool_strength, 1, 50);
-	ImGui::SliderFloat("TEMPORARY R", &settings.repulsion_tool_strength, 1, 50);
+	ImGui::SliderFloat("Attraction Tool Strength", &settings.attraction_tool_strength, 1, 50, "%g");
+	ImGui::SliderFloat("Repulsion Tool Strength", &settings.repulsion_tool_strength, 1, 50, "%g");
 	ImGui::Separator();
 	if (ImGui::Checkbox("Fullscreen", &settings.is_fullscreen))
 		window_manager.SetFullscreen(settings.is_fullscreen);

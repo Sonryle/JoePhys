@@ -25,6 +25,13 @@ struct ColourDebugScene : public Scene
 	{
 		colours.background = Palette::JP_DARK_GRAY;
 	}
+
+	void SetUpSceneSettings() override
+	{
+		settings.Reset();
+		camera.center.Set(0.0f, 0.0f);
+		camera.zoom = 1.0f;
+	}
 };
 
 #endif

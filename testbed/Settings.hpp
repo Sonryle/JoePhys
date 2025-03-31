@@ -3,6 +3,8 @@
 
 typedef float real;
 
+#include "JoePhys/Vec2.hpp"
+
 struct Settings
 {
 	
@@ -29,6 +31,7 @@ struct Settings
 	real max_particle_size;
 
 	// Simulation vars
+	vec2 gravity;
 	bool enable_gravity;
 	bool enable_drag;
 	bool enable_springs;

@@ -20,15 +20,12 @@ struct GUIManager
 	void ToggleAppearanceWindow();
 	void ToggleSimulationWindow();
 	void ToggleOptionsWindow();
-	void DrawGui();
+	void AddMenuBar();
+	void AddAppearanceWindow();
+	void AddSimulationWindow();
+	void AddOptionsWindow();
+	void Render();
 	
-private:
-	
-	// functions
-	void DrawAppearanceWindow();
-	void DrawSimulationWindow();
-	void DrawOptionsWindow();
-
 	// variables
 	bool appearance_window_shown;
 	bool simulation_window_shown;

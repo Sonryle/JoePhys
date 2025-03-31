@@ -148,14 +148,17 @@ void WindowManager::ScrollCallback(GLFWwindow*, double dx, double dy)
 		if (ImGui::GetIO().WantCaptureMouse == 0)
 		{
 			Particle* p = scene_manager.current_scene->GetNearestParticle(camera.ScreenSpaceToWorldSpace(window_manager.cursor_pos));
-			p->radius_in_meters += dy / 10.0f;
+			if (p != nullptr)
+			{
+				p->radius_in_meters += dy / 10.0f;
 
-			if (p->radius_in_meters < settings.min_particle_size)
-				p->radius_in_meters = settings.min_particle_size;
-			if (p->radius_in_meters > settings.max_particle_size)
-				p->radius_in_meters = settings.max_particle_size;
+				if (p->radius_in_meters < settings.min_particle_size)
+					p->radius_in_meters = settings.min_particle_size;
+				if (p->radius_in_meters > settings.max_particle_size)
+					p->radius_in_meters = settings.max_particle_size;
 
-			p->mass_in_grams = PI * p->radius_in_meters * p->radius_in_meters;
+				p->mass_in_grams = PI * p->radius_in_meters * p->radius_in_meters;
+			}
 		}
 	}
 }
@@ -184,7 +187,8 @@ void WindowManager::InputCallback()
 		if (selected_particle == nullptr)
 		{
 			selected_particle = scene_manager.current_scene->GetNearestParticle(camera.ScreenSpaceToWorldSpace(window_manager.cursor_pos));
-			selected_particle_is_static = selected_particle->is_static;
+			if (selected_particle != nullptr)
+				selected_particle_is_static = selected_particle->is_static;
 		}
 		if (selected_particle != nullptr)
 		{

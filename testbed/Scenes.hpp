@@ -38,6 +38,8 @@ struct Scene
 	// virtual functions (virtual means that it can be overwritten by structs inherited from this struct
 	virtual void Render(GLFWwindow* window, vec2 cursor_pos);
 	virtual void ResetCamera();
+	virtual void SetUpScene();
+	virtual void SetUpSceneSettings();
 
 	// functions
 	void Step();
@@ -50,13 +52,14 @@ struct Scene
 	// SceneColours class
 	SceneColours colours;
 
+	// our world struct
+	World* world;
+
 protected:
 	
 	// functions
 	virtual void SetUpSceneColours() = 0;
 	
-	// our world struct
-	World* world;
 };
 
 #endif

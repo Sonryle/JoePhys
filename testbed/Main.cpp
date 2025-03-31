@@ -50,7 +50,7 @@ int main()
 
 			// Render Frame
 			renderer.Flush();
-			gui_manager.DrawGui();
+			gui_manager.Render();
 			glfwSwapBuffers(window_manager.window);
 
 			// Update time at last render

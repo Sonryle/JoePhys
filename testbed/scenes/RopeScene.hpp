@@ -3,6 +3,7 @@
 
 #include "../Scenes.hpp"
 #include "../Settings.hpp"
+#include "../Renderer.hpp"
 #include "JoePhys/Particle.hpp"
 
 #include <cstdio>	// for "stderr" file path constant
@@ -10,12 +11,10 @@
 struct RopeScene : public Scene
 {
 	// constructors & destructors
-	RopeScene()
+	void SetUpScene() override
 	{
 		SetUpSceneColours();
-		settings.Reset();
-		world->Create(settings.simulation_hertz, settings.sub_steps, vec2(0.0f, -18.8f));
-		settings.circle_res = 25;
+		world->Create(settings.simulation_hertz, settings.sub_steps, settings.gravity);
 		double PI = 3.141592653589;
 
 		// Create a cluster for the particles to live in
@@ -75,6 +74,15 @@ struct RopeScene : public Scene
 		colours.particle_outline = Palette::JP_DARK_GRAY;
 		colours.static_particle = Palette::JP_DARK_GREEN;
 		colours.static_particle_outline = Palette::JP_DARK_GRAY;
+	}
+
+	void SetUpSceneSettings() override
+	{
+		settings.Reset();
+		settings.gravity.Set(0.0f, -9.8f);
+		settings.circle_res = 25;
+		camera.center.Set(0.0f, 0.0f);
+		camera.zoom = 1.0f;
 	}
 };
 

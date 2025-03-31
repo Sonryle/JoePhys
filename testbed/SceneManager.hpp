@@ -8,7 +8,7 @@
 struct SceneManager
 {
 	// Constructors & destructors
-	SceneManager() : current_scene(nullptr), current_scene_number(0) {}
+	SceneManager() : current_scene(nullptr), current_scene_number(-1) {}
 	~SceneManager() {}
 
 	// functions
