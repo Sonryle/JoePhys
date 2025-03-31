@@ -44,8 +44,8 @@ struct Scene
 	// functions
 	void Step();
 	void AddStaticParticle(vec2 pos, real radius);
-	void AddRepulsionForce(vec2 pos, real amplitude);
-	void AddAttractionForce(vec2 pos, real amplitude);
+	void AddRepulsionForce(vec2 pos, real radius, real strength);
+	void AddAttractionForce(vec2 pos, real radius, real strength);
 	Particle* GetNearestParticle(vec2 pos);
 	void MoveParticle(Particle* particle, vec2 pos);
 

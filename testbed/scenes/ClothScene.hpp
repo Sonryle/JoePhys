@@ -77,8 +77,10 @@ struct ClothScene : public Scene
 		settings.Reset();
 		settings.gravity.Set(0.0f, -9.8f);
 		settings.enable_collision = 0;
-		settings.attraction_tool_strength = 2.0f;
-		settings.repulsion_tool_strength = 4.0f;
+		settings.attraction_tool_radius = 2.0f;
+		settings.attraction_tool_strength = 1.0f;
+		settings.repulsion_tool_radius = 2.0f;
+		settings.repulsion_tool_strength = 8.0f;
 		settings.min_particle_size = 0.05f;
 		settings.max_particle_size = 1.0f;
 		settings.circle_res = 5;

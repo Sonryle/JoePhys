@@ -287,15 +287,23 @@ void GUIManager::AddOptionsWindow()
 
 	// Set the correct position & scale
 	ImGuiIO& io = ImGui::GetIO();
-	ImVec2 initial_size(550, 150);
+	ImVec2 initial_size(550, 210);
 	ImVec2 initial_pos(io.DisplaySize.x - ImGui::GetWindowWidth() - 10, 295 + 375);
 	ImGui::SetWindowSize(initial_size, ImGuiCond_None);
 	ImGui::SetWindowPos(initial_pos, ImGuiCond_None);
 
 	// Create Contents of simulation window
 	ImGui::Separator();
-	ImGui::SliderFloat("Attraction Tool Strength", &settings.attraction_tool_strength, 1, 50, "%g");
-	ImGui::SliderFloat("Repulsion Tool Strength", &settings.repulsion_tool_strength, 1, 50, "%g");
+	if (ImGui::CollapsingHeader("Attraction Tool"))
+	{
+		ImGui::SliderFloat("Strength ", &settings.attraction_tool_strength, 1, 50, "%g");
+		ImGui::SliderFloat("Radius ", &settings.attraction_tool_radius, 1, 50, "%g");
+	} 
+	if (ImGui::CollapsingHeader("Repulsion Tool"))
+	{
+		ImGui::SliderFloat("Strength", &settings.repulsion_tool_strength, 1, 50, "%g");
+		ImGui::SliderFloat("Radius", &settings.repulsion_tool_radius, 1, 50, "%g");
+	}
 	ImGui::Separator();
 	if (ImGui::Checkbox("Fullscreen", &settings.is_fullscreen))
 		window_manager.SetFullscreen(settings.is_fullscreen);

@@ -131,29 +131,7 @@ void Scene::AddStaticParticle(vec2 pos, real radius)
 	return;
 }
 
-void Scene::AddRepulsionForce(vec2 pos, real amplitude)
-{
-	if (world == nullptr)
-		return;
-	
-	// Render visualisation
-	colour fill_col = palette.colours[colours.background];
-	fill_col.Set(fill_col.r*0.5f, fill_col.g*0.5f, fill_col.b*0.5f, fill_col.a*0.25f);
-	colour outline_col = palette.colours[colours.particle_outline];
-	renderer.AddSolidCircle(pos, amplitude, (int)amplitude * 5 + 10, fill_col, outline_col);
-
-	// loop over every particle in every cluster and add repulsion force
-	for (Cluster* c : world->clusters)
-		for (Particle* p : c->particles)
-		{
-			// Add repulsion force to every particle
-			real dist = length(p->pos_in_meters - pos);
-			real force = std::max(0.0f, amplitude - (dist));
-			p->Accelerate(force * (p->pos_in_meters - pos));
-		}
-}
-
-void Scene::AddAttractionForce(vec2 pos, real amplitude)
+void Scene::AddRepulsionForce(vec2 pos, real radius, real strength)
 {
 	if (world == nullptr)
 		return;
@@ -162,16 +140,46 @@ void Scene::AddAttractionForce(vec2 pos, real amplitude)
 	colour fill_col = palette.colours[colours.particle];
 	fill_col.Set(fill_col.r*0.5f, fill_col.g*0.5f, fill_col.b*0.5f, fill_col.a*0.25f);
 	colour outline_col = palette.colours[colours.particle_outline];
-	renderer.AddSolidCircle(pos, amplitude, (int)amplitude * 5 + 10, fill_col, outline_col);
+	renderer.AddSolidCircle(pos, radius, (int)radius * 5 + 10, fill_col, outline_col);
 
 	// loop over every particle in every cluster and add repulsion force
 	for (Cluster* c : world->clusters)
 		for (Particle* p : c->particles)
 		{
-			// Add repulsion force to every particle
-			real dist = length(p->pos_in_meters - pos);
-			real force = std::max(0.0f, amplitude - (dist));
-			p->Accelerate(force * (pos - p->pos_in_meters));
+
+			// If particle is inside of the radius
+			if (length(pos - p->pos_in_meters) <= radius) 
+			{
+				// Add repulsion force to every particle
+				vec2 force = normalize(pos - p->pos_in_meters) * strength;
+				p->Accelerate(-force);
+			}
+		}
+}
+
+void Scene::AddAttractionForce(vec2 pos, real radius, real strength)
+{
+	if (world == nullptr)
+		return;
+
+	// Render visualisation
+	colour fill_col = palette.colours[colours.particle];
+	fill_col.Set(fill_col.r*0.5f, fill_col.g*0.5f, fill_col.b*0.5f, fill_col.a*0.25f);
+	colour outline_col = palette.colours[colours.particle_outline];
+	renderer.AddSolidCircle(pos, radius, (int)radius * 5 + 10, fill_col, outline_col);
+
+	// loop over every particle in every cluster and add repulsion force
+	for (Cluster* c : world->clusters)
+		for (Particle* p : c->particles)
+		{
+
+			// If particle is inside of the radius
+			if (length(pos - p->pos_in_meters) <= radius) 
+			{
+				// Add attraction force to every particle
+				vec2 force = normalize(pos - p->pos_in_meters) * strength;
+				p->Accelerate(force);
+			}
 		}
 }
 

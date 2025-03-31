@@ -174,11 +174,11 @@ void WindowManager::InputCallback()
 
 	// If the 'R' key & left CTRL are pressed, add add a repulsion force at the location of the mouse pointer
 	if (glfwGetKey(window_manager.window, GLFW_KEY_R) == GLFW_PRESS && glfwGetKey(window_manager.window, GLFW_KEY_LEFT_CONTROL) != GLFW_PRESS)
-		scene_manager.current_scene->AddRepulsionForce(camera.ScreenSpaceToWorldSpace(window_manager.cursor_pos), settings.repulsion_tool_strength);
+		scene_manager.current_scene->AddRepulsionForce(camera.ScreenSpaceToWorldSpace(window_manager.cursor_pos), settings.repulsion_tool_radius, settings.repulsion_tool_strength);
 
 	// If the 'A' key & left CTRL are pressed, add add a repulsion force at the location of the mouse pointer
 	if (glfwGetKey(window_manager.window, GLFW_KEY_A) == GLFW_PRESS && glfwGetKey(window_manager.window, GLFW_KEY_LEFT_CONTROL) != GLFW_PRESS)
-		scene_manager.current_scene->AddAttractionForce(camera.ScreenSpaceToWorldSpace(window_manager.cursor_pos), settings.attraction_tool_strength);
+		scene_manager.current_scene->AddAttractionForce(camera.ScreenSpaceToWorldSpace(window_manager.cursor_pos), settings.attraction_tool_radius, settings.attraction_tool_strength);
 
 	// If the left mouse button is pressed & left CTLR ISN'T pressed, select particle closest to the cursor,
 	// move it to the mouse cursor and set it to be static while it is being held

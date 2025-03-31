@@ -115,6 +115,10 @@ struct PinballScene : public Scene
 	void SetUpSceneSettings() override
 	{
 		settings.Reset();
+		settings.attraction_tool_radius = 2.0f;
+		settings.attraction_tool_strength = 3.0f;
+		settings.repulsion_tool_radius = 2.0f;
+		settings.repulsion_tool_strength = 3.0f;
 		settings.gravity.Set(0.0f, -9.8f);
 		settings.circle_res = 20; //20
 		camera.center.Set( 0.0f, 3.5f);
