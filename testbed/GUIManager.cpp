@@ -196,7 +196,7 @@ void AddArrowDiagram(float* input, float max_val)
 		vec2 new_pos((window_manager.cursor_pos - vec2(canvas_center.x, canvas_center.y)) / canvas_radius);
 
 		if (length(new_pos) > 1.0f)
-			new_pos = new_pos.GetNormalized();
+			new_pos = normalize(new_pos);
 
 		// Apply new vector to our input
 		input[0] = new_pos.x * max_val;

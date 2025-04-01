@@ -46,7 +46,7 @@ struct NewtonsCradleScene : public Scene
 			if (x == 0)
 			{
 				real len = 6.0f;
-				real radian = -3;
+				real radian = PI;
 				real posx = cos(radian) * len;
 				real posy = sin(radian) * len;
 				posx += anchors->particles[x]->pos_in_meters.x;

@@ -3,6 +3,7 @@
 
 // cmath for sqrt
 #include <cmath>
+#include <cstdio>	// for "stderr" file path constant
 
 typedef float real;
 
@@ -19,11 +20,9 @@ struct vec2
 
 	// functions
 	void Set(real x_in, real y_in) { x = x_in; y = y_in; }
+	void Set(real in) { x = in; y = in; }
 	void Set(vec2* vec) { x = vec->x, y = vec->y; }
 	void Set(vec2 vec) { x = vec.x, y = vec.y; }
-
-	real GetLength() { return std::sqrt(x*x + y*y); }
-	vec2 GetNormalized() { return vec2(x / GetLength(), y / GetLength()); }
 
 	// operator functions for vec2
 	// ---------------------------
@@ -67,6 +66,12 @@ inline real dot(const vec2 a, const vec2 b)
 inline vec2 normalize(vec2 a)
 {
 	return vec2(a.x / length(a), a.y / length(a));
+}
+
+// returns the angle of the vector
+inline real angleInRadians(vec2 a)
+{
+	return real(atan2(a.y, a.x));
 }
 
 // operator functions for vec2
