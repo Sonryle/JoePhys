@@ -72,7 +72,17 @@ void World::ResolveAllCollisions()
 			// compair it to every other particle in every other cluster
 			for (int c2 = c1; c2 < clusters.size(); c2++)
 				for (int p2 = (c2 == c1)? p1 + 1 : 0; p2 < clusters[c2]->particles.size(); p2++)
-					clusters[c1]->particles[p1]->ResolveCollision(clusters[c2]->particles[p2]);
+				{
+					// Solve collision between the two particles only if they collide
+
+					Particle* particle_one = clusters[c1]->particles[p1];
+					Particle* particle_two = clusters[c2]->particles[p2];
+					real dist = length(particle_one->pos_in_meters - particle_two->pos_in_meters);
+
+					// If dist between particles is less than their radii then they have collided
+					if (dist < particle_one->radius_in_meters + particle_two->radius_in_meters)
+						particle_one->ResolveCollision(particle_two);
+				}
 }
 
 void World::UpdateSprings(real dt)

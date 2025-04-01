@@ -43,6 +43,7 @@ struct Scene
 
 	// functions
 	void Step();
+	void UpdateSelectedParticle(vec2 cursor_pos);
 	void AddStaticParticle(vec2 pos, real radius);
 	void AddRepulsionForce(vec2 pos, real radius, real strength);
 	void AddAttractionForce(vec2 pos, real radius, real strength);
@@ -54,6 +55,7 @@ struct Scene
 
 	// our world struct
 	World* world;
+	Particle* selected_particle;
 
 protected:
 	

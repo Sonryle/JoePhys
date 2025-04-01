@@ -328,7 +328,9 @@ void GUIManager::AddLearnUIWindow()
 	ImGui::SeparatorText("World Interaction:");
 	ImGui::Spacing();
 
-	ImGui::BulletText("");
+	ImGui::Text("You will notice that the closest particle to your cursor is always highlighted");
+	ImGui::Spacing();
+	ImGui::BulletText("You can click on the scene to teleport the selected particle to your cursor");
 
 
 	ImGui::End();

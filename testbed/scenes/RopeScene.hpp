@@ -25,7 +25,7 @@ struct RopeScene : public Scene
 		vec2 velA(0.0f, 0.0f);
 		real elasticityA = 0.2f;
 		real radiusA = 1.5f;
-		real massA = 1.0f;
+		real massA = PI * radiusA * radiusA;
 		Particle* partA = new Particle(posA, velA, elasticityA, radiusA, massA, 1);
 		obstacles->particles.push_back(partA);
 
@@ -33,7 +33,7 @@ struct RopeScene : public Scene
 		vec2 velB(-0.0f, -0.0f);
 		real elasticityB = 0.2f;
 		real radiusB = 1;
-		real massB = 1.0f;
+		real massB = PI * radiusB * radiusB;
 		Particle* partB = new Particle(posB, velB, elasticityB, radiusB, massB, 1);
 		obstacles->particles.push_back(partB);
 

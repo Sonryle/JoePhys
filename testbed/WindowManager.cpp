@@ -172,8 +172,6 @@ void WindowManager::ScrollCallback(GLFWwindow*, double dx, double dy)
 }
 
 // Is called every frame
-Particle* selected_particle = nullptr;
-bool selected_particle_is_static = 0;
 void WindowManager::InputCallback()
 {
 	// If the 'R' key & left CTRL are pressed, add add a repulsion force at the location of the mouse pointer
@@ -187,27 +185,9 @@ void WindowManager::InputCallback()
 	// If the left mouse button is pressed & left CTLR ISN'T pressed, select particle closest to the cursor,
 	// move it to the mouse cursor and set it to be static while it is being held
 	if (ImGui::GetIO().WantCaptureMouse == 0 && glfwGetMouseButton(window_manager.window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && glfwGetKey(window_manager.window, GLFW_KEY_LEFT_CONTROL) != GLFW_PRESS)
-	{
-		if (selected_particle == nullptr)
-		{
-			selected_particle = scene_manager.current_scene->GetNearestParticle(camera.ScreenSpaceToWorldSpace(window_manager.cursor_pos));
-			if (selected_particle != nullptr)
-				selected_particle_is_static = selected_particle->is_static;
-		}
-		if (selected_particle != nullptr)
-		{
-			/* selected_particle->is_static = 1; */
-			scene_manager.current_scene->MoveParticle(selected_particle, camera.ScreenSpaceToWorldSpace(window_manager.cursor_pos));
-		}
-	}
+		scene_manager.current_scene->MoveParticle(scene_manager.current_scene->selected_particle, camera.ScreenSpaceToWorldSpace(window_manager.cursor_pos));
 	else
-	{
-		if (selected_particle != nullptr)
-		{
-			/* selected_particle->is_static = selected_particle_is_static; */
-			selected_particle = nullptr;
-		}
-	}
+		scene_manager.current_scene->UpdateSelectedParticle(window_manager.cursor_pos);
 
 	return;
 }

@@ -12,6 +12,8 @@
 Scene::Scene()
 {
 	world = new World();
+	selected_particle = nullptr;
+
 	
 	// Will contain the particles added by the user
 	Cluster* user_particles = new Cluster();
@@ -69,10 +71,9 @@ void Scene::Render(GLFWwindow* window, vec2 cursor_pos)
 	}
 	
 	// Render a circle around nearest particle
-	Particle* n = GetNearestParticle(camera.ScreenSpaceToWorldSpace(cursor_pos));
 	colour outline_col(1.0f, 1.0f, 1.0f, 1.0f);
-	if (n != nullptr && glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) != GLFW_PRESS)
-		renderer.AddCircle(n->pos_in_meters, n->radius_in_meters * 1.2f, settings.circle_res, outline_col);
+	if (selected_particle != nullptr && glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) != GLFW_PRESS)
+		renderer.AddCircle(selected_particle->pos_in_meters, selected_particle->radius_in_meters * 1.2f, settings.circle_res, outline_col);
 }
 
 
@@ -116,6 +117,11 @@ void Scene::Step()
 			flags |= NO_SPRING_FORCES;
 		world->Step(flags);
 	}
+}
+
+void Scene::UpdateSelectedParticle(vec2 cursor_pos)
+{
+	selected_particle = GetNearestParticle(camera.ScreenSpaceToWorldSpace(cursor_pos));
 }
 
 void Scene::AddStaticParticle(vec2 pos, real radius)
@@ -208,8 +214,13 @@ void Scene::MoveParticle(Particle* part, vec2 pos)
 {
 	vec2 old_pos = part->pos_in_meters;
 
+	// Reset and velocity or acceleration
 	part->ResetAcceleration();
-	part->vel_in_meters_per_sec = (pos - old_pos) * world->simulation_hertz;
+	part->vel_in_meters_per_sec.Set(0.0f, 0.0f);
+
+	// Teleport particle to position
 	part->pos_in_meters = pos;
-	return;
+
+	// Calculate new acceleration
+	part->Accelerate((pos - old_pos) * part->mass_in_grams * world->simulation_hertz * 100);
 }

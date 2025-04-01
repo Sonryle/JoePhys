@@ -54,74 +54,35 @@ void Particle::UpdatePosition(real dt)
 	ResetAcceleration();
 }
 
-// Solves collision between two particles, pA & pB
-void Particle::ResolveCollision(Particle* p)
+// Solves collision between itself and another particle
+void Particle::ResolveCollision(Particle* other_particle)
 {
-	// Credit for Particle Collision Resolution goes to "The Coding Train"
-	// https://www.youtube.com/watch?v=dJNFPv9Mj-Y&t=1421s
+	Particle* p1 = this;
+	Particle* p2 = other_particle;
+	vec2 impact_axis = normalize(p1->pos_in_meters - p2->pos_in_meters);
+	real dist_between_parts = length(p1->pos_in_meters - p2->pos_in_meters);
+
+	// Move particles away from eachother along their impact axis
+	// ----------------------------------------------------------
 	
-	// If dist between particles is less than their radii then they have collided
-	real dist = length(pos_in_meters - p->pos_in_meters);
-	if (dist < radius_in_meters + p->radius_in_meters)
+	real overlap = (p1->radius_in_meters + p2->radius_in_meters) - dist_between_parts;
+
+	// consider whether each particle is static or dynamic.
+	if ( p1->is_static && !p2->is_static)
+		p2->pos_in_meters -= impact_axis * overlap;
+	if (!p1->is_static &&  p2->is_static)
+		p1->pos_in_meters += impact_axis * overlap;
+	if (!p1->is_static && !p2->is_static)
 	{
-		// difference in position between particles
-		vec2 pos_diff = p->pos_in_meters - pos_in_meters;
-
-		// Move particles away from eachother along their impact axis
-		// ----------------------------------------------------------
-
-		vec2 dir = pos_diff.GetNormalized();
-		real overlap = dist - (radius_in_meters + p->radius_in_meters);
-		dir *= overlap * 0.5f;
-		// if either particles are static, move opposite particle accordingly
-		if (!is_static && !p->is_static)
-		{
-			pos_in_meters += dir;
-			p->pos_in_meters -= dir;
-		}
-		else if (is_static && !p->is_static)
-			p->pos_in_meters -= dir * 2.0f;
-		else if (!is_static && p->is_static)
-			pos_in_meters += dir * 2.0f;
-
-		// Solve for new velocities
-		// ------------------------
-
-		real pAMass = mass_in_grams;
-		real pBMass = p->mass_in_grams;
-
-		// change mass to be insanely high if object is static
-		// so that most of the energy is kept by the object
-		// colliding with it (i know its not the best solution)
-		
-		if (is_static)
-			pAMass = 100000000000000.0f;
-		if (p->is_static)
-			pBMass = 100000000000000.0f;
-
-		// Particle A
-
-		real mass_sum;
-		vec2 vel_diff;
-		real denominator;
-		real numerator;
-		vec2 delta_vel;
-
-		mass_sum = pAMass + pBMass;
-		vel_diff = p->vel_in_meters_per_sec - vel_in_meters_per_sec;
-		denominator = mass_sum * dist * dist;
-		numerator = 2 * pBMass * dot(vel_diff, pos_diff);
-		delta_vel = pos_diff * (numerator / denominator);
-		if (!is_static)
-			vel_in_meters_per_sec += delta_vel * elasticity;
-
-		// Particle B
-		vel_diff *= -1;
-		pos_diff *= -1;
-		numerator = 2 * pAMass * dot(vel_diff, pos_diff);
-		delta_vel = pos_diff * (numerator/ denominator);
-		if (!p->is_static)
-			p->vel_in_meters_per_sec+= delta_vel * p->elasticity;
-
+		p1->pos_in_meters += impact_axis * overlap * 0.5f;
+		p2->pos_in_meters -= impact_axis * overlap * 0.5f;
 	}
+	
+
+	// Solve for new velocities
+	// ------------------------
+	
+	real coefficient_of_restituation = (p1->elasticity + p2->elasticity) * 0.5f;
+	// VCoM = Velocity of Center of Mass
+	vec2 VCoM
 }
