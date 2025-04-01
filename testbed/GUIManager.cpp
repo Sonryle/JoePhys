@@ -4,8 +4,15 @@
 #include "imgui.h"
 
 // Constructor
-GUIManager::GUIManager() : appearance_window_shown(0), simulation_window_shown(0), options_window_shown(0)
+GUIManager::GUIManager()
 {
+	appearance_window_shown = 0;
+	simulation_window_shown = 0;
+	options_window_shown = 0;
+
+	learn_ui_window_shown = 0;
+	learn_joephys_window_shown = 0;
+	programmer_guide_window_shown = 0;
 	return;
 }
 
@@ -33,28 +40,16 @@ void GUIManager::Render()
 	if (options_window_shown)
 		AddOptionsWindow();
 
+	if (learn_ui_window_shown)
+		AddLearnUIWindow();
+	if (learn_joephys_window_shown)
+		AddLearnJoePhysWindow();
+	if (programmer_guide_window_shown)
+		AddProgrammerGuideWindow();
+
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
-
-// Toggles the "appearance" window on and off
-void GUIManager::ToggleAppearanceWindow()
-{
-	appearance_window_shown = !appearance_window_shown;
-}
-
-// Toggles the "appearance" window on and off
-void GUIManager::ToggleSimulationWindow()
-{
-	simulation_window_shown = !simulation_window_shown;
-}
-
-// Toggles the "options" window on and off
-void GUIManager::ToggleOptionsWindow()
-{
-	options_window_shown = !options_window_shown;
-}
-
 
 // Draws a menu bar at the top of the program, and calls functions to draw every other
 // imgui window as well, (e.g. the appearance window).
@@ -71,48 +66,37 @@ void GUIManager::AddMenuBar()
 		if (ImGui::BeginMenu("Settings"))
 		{
 			if (ImGui::MenuItem("Appearance", "\tCtrl+A", appearance_window_shown))
-			{ 
 				appearance_window_shown = !appearance_window_shown;
-			}
 			if (ImGui::MenuItem("Simulation", "\tCtrl+S", simulation_window_shown))
-			{ 
 				simulation_window_shown = !simulation_window_shown;
-			}
 			if (ImGui::MenuItem("Options", "\tCtrl+O", options_window_shown))
-			{ 
 				options_window_shown = !options_window_shown;
-			}
+
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Scenes"))
 		{
-			if (ImGui::MenuItem("Collision Scene", NULL, (scene_manager.current_scene_number == 0)))
+			if (ImGui::MenuItem("Newtons Cradle Scene", NULL, (scene_manager.current_scene_number == 0)))
 				scene_manager.SwitchScene(0);
-			if (ImGui::MenuItem("Pinball Scene", NULL, (scene_manager.current_scene_number == 1)))
+			if (ImGui::MenuItem("Cloth Scene", NULL, (scene_manager.current_scene_number == 1)))
 				scene_manager.SwitchScene(1);
-			if (ImGui::MenuItem("Squishy Square Scene", NULL, (scene_manager.current_scene_number == 2)))
+			if (ImGui::MenuItem("Pinball Scene", NULL, (scene_manager.current_scene_number == 2)))
 				scene_manager.SwitchScene(2);
-			if (ImGui::MenuItem("Squishy Rectangle Scene", NULL, (scene_manager.current_scene_number == 3)))
+			if (ImGui::MenuItem("Rope Scene", NULL, (scene_manager.current_scene_number == 3)))
 				scene_manager.SwitchScene(3);
-			if (ImGui::MenuItem("Newtons Cradle Scene", NULL, (scene_manager.current_scene_number == 4)))
+			if (ImGui::MenuItem("Colour Pallete Test Scene", NULL, (scene_manager.current_scene_number == 4)))
 				scene_manager.SwitchScene(4);
-			if (ImGui::MenuItem("Cloth Scene", NULL, (scene_manager.current_scene_number == 5)))
-				scene_manager.SwitchScene(5);
-			if (ImGui::MenuItem("Rope Scene", NULL, (scene_manager.current_scene_number == 6)))
-				scene_manager.SwitchScene(6);
-			if (ImGui::MenuItem("Pendulum Clock Scene", NULL, (scene_manager.current_scene_number == 7)))
-				scene_manager.SwitchScene(7);
-			if (ImGui::MenuItem("Colour Pallete Test Scene", NULL, (scene_manager.current_scene_number == 8)))
-				scene_manager.SwitchScene(8);
 
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Help"))
 		{
-			if (ImGui::MenuItem("Help Is Coming Soon (But Not Yet!!!)"))
-			{
-
-			}
+			if (ImGui::MenuItem("Learn How To Use JoePhys", NULL, learn_ui_window_shown))
+				learn_ui_window_shown = !learn_ui_window_shown;
+			if (ImGui::MenuItem("Learn How JoePhys Was Made", NULL, learn_joephys_window_shown))
+				learn_joephys_window_shown = !learn_joephys_window_shown;
+			if (ImGui::MenuItem("Programmer Guide", NULL, programmer_guide_window_shown))
+				programmer_guide_window_shown = !programmer_guide_window_shown;
 			ImGui::EndMenu();
 		}
 		ImGui::EndMainMenuBar();
@@ -307,6 +291,75 @@ void GUIManager::AddOptionsWindow()
 	ImGui::Separator();
 	if (ImGui::Checkbox("Fullscreen", &settings.is_fullscreen))
 		window_manager.SetFullscreen(settings.is_fullscreen);
+	ImGui::End();
+}
+
+void GUIManager::AddLearnUIWindow()
+{
+	// Begin the window
+	ImGui::Begin("Learn How To Use JoePhys", NULL, ImGuiWindowFlags_None);
+
+	// Set the correct position & scale
+	ImGuiIO io = ImGui::GetIO();
+	ImVec2 initial_size(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f);
+	ImVec2 initial_pos(io.DisplaySize.x / 2 - initial_size.x / 2, io.DisplaySize.y / 2 - initial_size.y / 2);
+	ImGui::SetWindowSize(initial_size, ImGuiCond_FirstUseEver);
+	ImGui::SetWindowPos(initial_pos, ImGuiCond_FirstUseEver);
+
+	// Describe how to use program
+	ImGui::SeparatorText("Scene Navigation:");
+	ImGui::Spacing();
+
+	ImGui::BulletText("Switch between scenes using the \"Scenes\" dropdown at the top of the program");
+	ImGui::Indent();
+	ImGui::BulletText("Alternatively, hold CTRL and press the left or right arrow keys to navigate through scenes");
+	ImGui::Unindent();
+	ImGui::Spacing();
+	ImGui::BulletText("To restart any scene, hold CTRL and press the R key");
+	ImGui::BulletText("To pan the camera, hold CTRL, then click and drag");
+	ImGui::BulletText("To zoom the camera, hold CTRL and use the scroll wheel");
+	ImGui::Spacing();
+	ImGui::Spacing();
+	ImGui::Spacing();
+	ImGui::Spacing();
+	ImGui::Spacing();
+	ImGui::Spacing();
+
+	ImGui::SeparatorText("World Interaction:");
+	ImGui::Spacing();
+
+	ImGui::BulletText("");
+
+
+	ImGui::End();
+}
+void GUIManager::AddLearnJoePhysWindow()
+{
+	// Begin the window
+	ImGui::Begin("Learn How JoePhys Was Made", NULL, ImGuiWindowFlags_None);
+
+	// Set the correct position & scale
+	ImGuiIO io = ImGui::GetIO();
+	ImVec2 initial_size(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f);
+	ImVec2 initial_pos(io.DisplaySize.x / 2 - initial_size.x / 2, io.DisplaySize.y / 2 - initial_size.y / 2);
+	ImGui::SetWindowSize(initial_size, ImGuiCond_FirstUseEver);
+	ImGui::SetWindowPos(initial_pos, ImGuiCond_FirstUseEver);
+
+	ImGui::End();
+}
+
+void GUIManager::AddProgrammerGuideWindow()
+{
+	// Begin the window
+	ImGui::Begin("Programmer Guide", NULL, ImGuiWindowFlags_None);
+
+	// Set the correct position & scale
+	ImGuiIO io = ImGui::GetIO();
+	ImVec2 initial_size(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f);
+	ImVec2 initial_pos(io.DisplaySize.x / 2 - initial_size.x / 2, io.DisplaySize.y / 2 - initial_size.y / 2);
+	ImGui::SetWindowSize(initial_size, ImGuiCond_FirstUseEver);
+	ImGui::SetWindowPos(initial_pos, ImGuiCond_FirstUseEver);
+
 	ImGui::End();
 }
 

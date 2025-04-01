@@ -17,19 +17,24 @@ struct GUIManager
 
 	// functions
 	void Init(GLFWwindow* window);
-	void ToggleAppearanceWindow();
-	void ToggleSimulationWindow();
-	void ToggleOptionsWindow();
 	void AddMenuBar();
 	void AddAppearanceWindow();
 	void AddSimulationWindow();
 	void AddOptionsWindow();
+	void AddLearnUIWindow();
+	void AddLearnJoePhysWindow();
+	void AddProgrammerGuideWindow();
 	void Render();
 	
 	// variables
+
 	bool appearance_window_shown;
 	bool simulation_window_shown;
 	bool options_window_shown;
+
+	bool learn_ui_window_shown;
+	bool learn_joephys_window_shown;
+	bool programmer_guide_window_shown;
 };
 
 extern GUIManager gui_manager;

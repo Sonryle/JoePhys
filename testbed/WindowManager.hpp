@@ -28,6 +28,8 @@ struct WindowManager
 	static void InputCallback();
 
 	vec2 cursor_pos;
+	int window_width;
+	int window_height;
 	GLFWwindow* window;
 	GLFWmonitor* monitor;
 	const GLFWvidmode* mode;
