@@ -74,6 +74,13 @@ inline real angleInRadians(vec2 a)
 	return real(atan2(a.y, a.x));
 }
 
+// returns projection of A onto B
+inline vec2 project(vec2 a, vec2 b)
+{
+	real c = dot(a, b) / dot(b, b);
+	return vec2(b.x * c, b.y * c);
+}
+
 // operator functions for vec2
 // ---------------------------
 

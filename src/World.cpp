@@ -74,16 +74,15 @@ void World::ResolveAllCollisions()
 				for (int p2 = (c2 == c1)? p1 + 1 : 0; p2 < clusters[c2]->particles.size(); p2++)
 				{
 					// Solve collision between the two particles only if they collide
-
 					Particle* particle_one = clusters[c1]->particles[p1];
 					Particle* particle_two = clusters[c2]->particles[p2];
-					real dist = length(particle_one->pos_in_meters - particle_two->pos_in_meters);
 
 					// If both particles are static, skip
 					if (particle_one->is_static && particle_two->is_static)
 						continue;
 
 					// If dist between particles is less than their radii then they have collided
+					real dist = length(particle_one->pos_in_meters - particle_two->pos_in_meters);
 					if (dist < particle_one->radius_in_meters + particle_two->radius_in_meters)
 						particle_one->ResolveCollision(particle_two);
 				}

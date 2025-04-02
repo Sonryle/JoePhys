@@ -59,13 +59,20 @@ void Particle::ResolveCollision(Particle* other_particle)
 {
 	Particle* p1 = this;
 	Particle* p2 = other_particle;
-	vec2 impact_axis = normalize(p1->pos_in_meters - p2->pos_in_meters);
-	real dist_between_particles = length(p1->pos_in_meters - p2->pos_in_meters);
-	real PI = 3.141592653589;
+	real CoR = (p1->elasticity + p2->elasticity) * 0.5f;	// Coefficient of Restitution
+	vec2 p1_v = p1->vel_in_meters_per_sec;
+	vec2 p2_v = p2->vel_in_meters_per_sec;
+	vec2 p1_p = p1->pos_in_meters;
+	vec2 p2_p = p2->pos_in_meters;
+	real p1_m = p1->mass_in_grams;
+	real p2_m = p2->mass_in_grams;
+
 
 	// Move particles away from eachother along their impact axis
 	// ----------------------------------------------------------
 	
+	vec2 impact_axis = normalize(p1->pos_in_meters - p2->pos_in_meters);
+	real dist_between_particles = length(p1->pos_in_meters - p2->pos_in_meters);
 	real overlap = (p1->radius_in_meters + p2->radius_in_meters) - dist_between_particles;
 
 	// consider whether each particle is static or dynamic.
@@ -78,35 +85,46 @@ void Particle::ResolveCollision(Particle* other_particle)
 		p1->pos_in_meters += impact_axis * overlap * 0.5f;
 		p2->pos_in_meters -= impact_axis * overlap * 0.5f;
 	}
-	
+
 
 	// Solve for new velocities
 	// ------------------------
 	
-	real mass_sum = p1->mass_in_grams + p2->mass_in_grams;
-	real mass_diff = p1->mass_in_grams - p2->mass_in_grams;
-	real impact_angle = angleInRadians(impact_axis);
-	
-	real p1m = p1->mass_in_grams;
-	real p2m = p2->mass_in_grams;
-	real p1v = length(p1->vel_in_meters_per_sec);
-	real p2v = length(p2->vel_in_meters_per_sec);
-	real p1dir = angleInRadians(p1->vel_in_meters_per_sec);
-	real p2dir = angleInRadians(p2->vel_in_meters_per_sec);
-	
-	// Solve for the first particle
-	real p1numerator = p1v * cos(p1dir - impact_angle) * mass_diff + 2.0f * p2m * p2v * cos(p2dir - impact_angle);
-	real p1denominator = mass_sum;
-	real p1x = p1numerator / p1denominator * cos(impact_angle) + p1v * sin(p1dir - impact_angle) * cos(impact_angle + PI * 0.5f);
-	real p1y = p1numerator / p1denominator * sin(impact_angle) + p1v * sin(p1dir - impact_angle) * sin(impact_angle + PI * 0.5f);
-	if (!p1->is_static)
-		p1->vel_in_meters_per_sec.Set(p1x, p1y);
-
-	// Solve for second particle
-	real p2numerator = p2v * cos(p2dir - impact_angle) * mass_diff + 2.0f * p1m * p1v * cos(p1dir - impact_angle);
-	real p2denominator = mass_sum;
-	real p2x = p2numerator / p2denominator * cos(impact_angle) + p2v * sin(p2dir - impact_angle) * cos(impact_angle + PI * 0.5f);
-	real p2y = p2numerator / p2denominator * sin(impact_angle) + p2v * sin(p2dir - impact_angle) * sin(impact_angle + PI * 0.5f);
-	if (!p2->is_static)
-		p2->vel_in_meters_per_sec.Set(p2x, p2y);
+	// if particle one is NOT static and particle two IS static
+	if (!p1->is_static && p2->is_static)
+	{
+		// solve for particle one
+		real m_ratio = 1+CoR;
+		vec2 v_diff = p1_v - p2_v;
+		vec2 p_diff = p1_p - p2_p;
+		vec2 proj = project(v_diff, p_diff);
+		p1->vel_in_meters_per_sec -= (proj * m_ratio);
+	}
+	// if particle one IS static and particle two is NOT static
+	if (p1->is_static && !p2->is_static)
+	{
+		// solve for particle two
+		real m_ratio = 1+CoR;
+		vec2 v_diff = p2_v - p1_v;
+		vec2 p_diff = p2_p - p1_p;
+		vec2 proj = project(v_diff, p_diff);
+		p2->vel_in_meters_per_sec -= (proj * m_ratio);
+	}
+	// if neither particles are static
+	if (!p1->is_static && !p2->is_static)
+	{
+		// solve for particle one
+		real m_ratio = ((1+CoR)*p2_m) / (p1_m + p2_m);
+		vec2 v_diff = p1_v - p2_v;
+		vec2 p_diff = p1_p - p2_p;
+		vec2 proj = project(v_diff, p_diff);
+		p1->vel_in_meters_per_sec -= (proj * m_ratio);
+		
+		// solve for particle two
+		m_ratio = ((1+CoR)*p1_m) / (p1_m + p2_m);
+		v_diff = p2_v - p1_v;
+		p_diff = p2_p - p1_p;
+		proj = project(v_diff, p_diff);
+		p2->vel_in_meters_per_sec -= (proj * m_ratio);
+	}
 }
