@@ -94,7 +94,7 @@ void WindowManager::KeyCallback(GLFWwindow* window, int key, int scancode, int a
 		{
 			if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL))
 				gui_manager.simulation_window_shown = !gui_manager.simulation_window_shown;
-			else
+			else if (scene_manager.current_scene->world != nullptr)
 			{
 				Particle* p = scene_manager.current_scene->GetNearestParticle(camera.ScreenSpaceToWorldSpace(window_manager.cursor_pos));
 				p->vel_in_meters_per_sec.Set(0.0f, 0.0f);
@@ -184,7 +184,7 @@ void WindowManager::InputCallback()
 
 	// If the left mouse button is pressed & left CTLR ISN'T pressed, select particle closest to the cursor,
 	// move it to the mouse cursor and set it to be static while it is being held
-	if (ImGui::GetIO().WantCaptureMouse == 0 && glfwGetMouseButton(window_manager.window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && glfwGetKey(window_manager.window, GLFW_KEY_LEFT_CONTROL) != GLFW_PRESS)
+	if (ImGui::GetIO().WantCaptureMouse == 0 && glfwGetMouseButton(window_manager.window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && glfwGetKey(window_manager.window, GLFW_KEY_LEFT_CONTROL) != GLFW_PRESS && scene_manager.current_scene->world != nullptr)
 		scene_manager.current_scene->MoveParticle(scene_manager.current_scene->selected_particle, camera.ScreenSpaceToWorldSpace(window_manager.cursor_pos));
 	else
 		scene_manager.current_scene->UpdateSelectedParticle(window_manager.cursor_pos);

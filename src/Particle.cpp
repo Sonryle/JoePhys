@@ -2,7 +2,8 @@
 
 void Particle::Accelerate(vec2 force)
 {
-	acc_in_meters_per_sec += force / mass_in_grams;
+	if (!is_static)
+		acc_in_meters_per_sec += force / mass_in_grams;
 }
 
 vec2 Particle::GetAcceleration()
@@ -31,12 +32,8 @@ void Particle::ApplyDrag(real dampening)
 
 void Particle::UpdatePosition(real dt)
 {
-	// if particle is static, skip it
 	if (is_static)
-	{
-		ResetAcceleration();
 		return;
-	}
 
 	// since acceleration remains constant over time step, velocity
 	// can be updated using euler's integration
