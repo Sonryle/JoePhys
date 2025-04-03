@@ -1,4 +1,4 @@
-# JoePhys
+8# JoePhys
 
 This is a simple physics engine which I decided to make for my TY physics project. I hope that my teacher will like it :)
 
@@ -53,7 +53,7 @@ The resulting JoePhys executable will be in JoePhys/build/JoePhys
 
 ### Libraries Used
 
-JoePhys uses libraries to help with creating windows, rendering and displaying GUI.
+JoePhys uses libraries to help with creating windows, communicating with the GPU and displaying GUI.
 I am extremely grateful to all of the developers who spent great time and effort creating
 wonderful open source libraries for the benefit of everyone, and I could not have created JoePhys
 anywhere near as well (or even at all) if it weren't for the hard work and diligence of some of
