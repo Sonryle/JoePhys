@@ -80,3 +80,5 @@ Again, with that being said, here is a list of all of the resources I learned fr
   * Much inspiration was taken from this project's code structure and rendering system. No code was explicitly
     copy pasted, but a select few of the functions are word-for-word exactly the same. (These functions are in Renderer.cpp
     and they are simply used for initiating and handling the renderer)
+
+* Im going to add the rest later
