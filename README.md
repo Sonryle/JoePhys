@@ -12,10 +12,10 @@ Requirements:
 Open powershell and navigate to where you want the JoePhys main folder to be downloaded. You can clone the JoePhys repository using Git:
 ```sh
 git clone https://github.com/Sonryle/JoePhys
-cd JoePhys
 ```
 Then build the project:
 ```sh
+cd JoePhys
 mkdir build
 cd build
 cmake ..
