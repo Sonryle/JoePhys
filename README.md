@@ -59,7 +59,7 @@ wonderful open source libraries for the benefit of everyone, and I could not hav
 anywhere near as well (or even at all) if it weren't for the hard work and diligence of some of
 these people.
 
-With that said, here is the list of all the libraries used in JoePhys:
+With that said, here is the list of all third party libraries used in JoePhys:
 
 * glad - (https://glad.dav1d.de/)
 * GLFW - (https://www.glfw.org/)
