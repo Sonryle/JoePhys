@@ -1,48 +1,48 @@
 #include "SceneManager.hpp"
 #include "imgui.h"
 
-void SceneManager::SwitchScene(int input_scene_number)
+void SceneManager::SwitchScene(int scene_number)
 {
 	// Delete old scene and replace with new scene
-	delete scene;
+	delete current_scene;
 	switch (scene_number)
 	{
 	case 0:
-		scene = new NewtonsCradleScene();
+		current_scene = new NewtonsCradleScene();
 		break;
 	case 1:
-		scene = new ClothScene();
+		current_scene = new ClothScene();
 		break;
 	case 2:
-		scene = new PinballScene();
+		current_scene = new PinballScene();
 		break;
 	case 3:
-		scene = new RopeScene();
+		current_scene = new RopeScene();
 		break;
 	case 4:
-		scene = new ColourDebugScene();
+		current_scene = new ColourDebugScene();
 		break;
 	default:
-		scene = new ColourDebugScene();
+		current_scene = new ColourDebugScene();
 		break;
 	}
 
 	// if its not the same scene as before, set up scene settings
-	if (scene_number != input_scene_number)
+	if (current_scene_number != scene_number)
 	{
 		settings.Reset();
-		scene->SetUpSceneSettings();
+		current_scene->SetUpSceneSettings();
 	}
-	scene_number = input_scene_number;
+	current_scene_number = scene_number;
 
 	// Set Up Scene
-	scene->SetUpScene();
+	current_scene->SetUpScene();
 
 	// Change the GUI to be fit the colour palette of the new scene
 
 	ImGuiStyle& style = ImGui::GetStyle();
 
-	colour bg = palette.colours[scene->colours.background];
+	colour bg = palette.colours[current_scene->colours.background];
 	glClearColor(bg.r, bg.g, bg.b, bg.a);
 
 	real w = 0.45f;	// Window darken
@@ -55,4 +55,4 @@ void SceneManager::SwitchScene(int input_scene_number)
 
 }
 
-SceneManager sm;
+SceneManager scene_manager;

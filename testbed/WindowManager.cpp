@@ -94,9 +94,9 @@ void WindowManager::KeyCallback(GLFWwindow* window, int key, int scancode, int a
 		{
 			if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL))
 				gui_manager.simulation_window_shown = !gui_manager.simulation_window_shown;
-			else if (sm.scene->world != nullptr)
+			else if (scene_manager.current_scene->world != nullptr)
 			{
-				Particle* p = sm.scene->GetNearestParticle(camera.ScreenSpaceToWorldSpace(window_manager.cursor_pos));
+				Particle* p = scene_manager.current_scene->GetNearestParticle(camera.ScreenSpaceToWorldSpace(window_manager.cursor_pos));
 				p->vel_in_meters_per_sec.Set(0.0f, 0.0f);
 				p->ResetAcceleration();
 				p->is_static = !p->is_static;
@@ -110,20 +110,20 @@ void WindowManager::KeyCallback(GLFWwindow* window, int key, int scancode, int a
 	case GLFW_KEY_R:
 		if (action == GLFW_PRESS)
 			if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-				sm.SwitchScene(sm.scene_number);
+				scene_manager.SwitchScene(scene_manager.current_scene_number);
 		break;
 	case GLFW_KEY_P:
 		if (action == GLFW_PRESS)
-			sm.scene->AddStaticParticle(camera.ScreenSpaceToWorldSpace(window_manager.cursor_pos), 0.1f);
+			scene_manager.current_scene->AddStaticParticle(camera.ScreenSpaceToWorldSpace(window_manager.cursor_pos), 0.1f);
 	case GLFW_KEY_LEFT:
-		if (action == GLFW_PRESS && sm.scene_number != 0)
+		if (action == GLFW_PRESS && scene_manager.current_scene_number != 0)
 			if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-				sm.SwitchScene(sm.scene_number - 1);
+				scene_manager.SwitchScene(scene_manager.current_scene_number - 1);
 		break;
 	case GLFW_KEY_RIGHT:
-		if (action == GLFW_PRESS && sm.scene_number < SCENE_COUNT - 1)
+		if (action == GLFW_PRESS && scene_manager.current_scene_number < SCENE_COUNT - 1)
 			if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-				sm.SwitchScene(sm.scene_number + 1);
+				scene_manager.SwitchScene(scene_manager.current_scene_number + 1);
 		break;
 	}
 }
@@ -155,7 +155,7 @@ void WindowManager::ScrollCallback(GLFWwindow*, double dx, double dy)
 	{
 		if (ImGui::GetIO().WantCaptureMouse == 0)
 		{
-			Particle* p = sm.scene->GetNearestParticle(camera.ScreenSpaceToWorldSpace(window_manager.cursor_pos));
+			Particle* p = scene_manager.current_scene->GetNearestParticle(camera.ScreenSpaceToWorldSpace(window_manager.cursor_pos));
 			if (p != nullptr)
 			{
 				p->radius_in_meters += dy / 10.0f;
@@ -176,32 +176,32 @@ void WindowManager::InputCallback()
 {
 	// If the 'R' key & left CTRL are pressed, add add a repulsion force at the location of the mouse pointer
 	if (glfwGetKey(window_manager.window, GLFW_KEY_R) == GLFW_PRESS && glfwGetKey(window_manager.window, GLFW_KEY_LEFT_CONTROL) != GLFW_PRESS)
-		sm.scene->AddRepulsionForce(camera.ScreenSpaceToWorldSpace(window_manager.cursor_pos), settings.repulsion_tool_radius, settings.repulsion_tool_strength);
+		scene_manager.current_scene->AddRepulsionForce(camera.ScreenSpaceToWorldSpace(window_manager.cursor_pos), settings.repulsion_tool_radius, settings.repulsion_tool_strength);
 
 	// If the 'A' key & left CTRL are pressed, add add a repulsion force at the location of the mouse pointer
 	if (glfwGetKey(window_manager.window, GLFW_KEY_A) == GLFW_PRESS && glfwGetKey(window_manager.window, GLFW_KEY_LEFT_CONTROL) != GLFW_PRESS)
-		sm.scene->AddAttractionForce(camera.ScreenSpaceToWorldSpace(window_manager.cursor_pos), settings.attraction_tool_radius, settings.attraction_tool_strength);
+		scene_manager.current_scene->AddAttractionForce(camera.ScreenSpaceToWorldSpace(window_manager.cursor_pos), settings.attraction_tool_radius, settings.attraction_tool_strength);
 
 	// If the left mouse button is pressed & left CTLR ISN'T pressed, select particle closest to the cursor,
 	// move it to the mouse cursor and set it to be static while it is being held
-	if (ImGui::GetIO().WantCaptureMouse == 0 && glfwGetMouseButton(window_manager.window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && glfwGetKey(window_manager.window, GLFW_KEY_LEFT_CONTROL) != GLFW_PRESS && sm.scene->world != nullptr)
+	if (ImGui::GetIO().WantCaptureMouse == 0 && glfwGetMouseButton(window_manager.window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && glfwGetKey(window_manager.window, GLFW_KEY_LEFT_CONTROL) != GLFW_PRESS && scene_manager.current_scene->world != nullptr)
 	{
-		if (sm.scene->s_part.was_static == -1)
+		if (scene_manager.current_scene->selected_particle_is_static == -1)
 		{
-			sm.scene->s_part.was_static = sm.scene->s_part.ptr->is_static;
-			sm.scene->s_part.ptr->is_static = 1;
+			scene_manager.current_scene->selected_particle_is_static = scene_manager.current_scene->selected_particle->is_static;
+			scene_manager.current_scene->selected_particle->is_static = 1;
 		}
-		sm.scene->MoveParticle(sm.scene->s_part.ptr, camera.ScreenSpaceToWorldSpace(window_manager.cursor_pos));
+		scene_manager.current_scene->MoveParticle(scene_manager.current_scene->selected_particle, camera.ScreenSpaceToWorldSpace(window_manager.cursor_pos));
 	}
 	else
 	{
-		if (sm.scene->s_part.was_static != -1)
+		if (scene_manager.current_scene->selected_particle_is_static != -1)
 		{
-			sm.scene->s_part.ptr->is_static = sm.scene->s_part.was_static;
-			sm.scene->s_part.was_static = -1;
+			scene_manager.current_scene->selected_particle->is_static = scene_manager.current_scene->selected_particle_is_static;
+			scene_manager.current_scene->selected_particle_is_static = -1;
 			
 		}
-		sm.scene->UpdateSelectedParticle(window_manager.cursor_pos);
+		scene_manager.current_scene->UpdateSelectedParticle(window_manager.cursor_pos);
 	}
 
 	return;

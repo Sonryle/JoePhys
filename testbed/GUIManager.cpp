@@ -76,16 +76,16 @@ void GUIManager::AddMenuBar()
 		}
 		if (ImGui::BeginMenu("Scenes"))
 		{
-			if (ImGui::MenuItem("Newtons Cradle Scene", NULL, (sm.scene_number == 0)))
-				sm.SwitchScene(0);
-			if (ImGui::MenuItem("Cloth Scene", NULL, (sm.scene_number == 1)))
-				sm.SwitchScene(1);
-			if (ImGui::MenuItem("Pinball Scene", NULL, (sm.scene_number == 2)))
-				sm.SwitchScene(2);
-			if (ImGui::MenuItem("Rope Scene", NULL, (sm.scene_number == 3)))
-				sm.SwitchScene(3);
-			if (ImGui::MenuItem("Colour Pallete Test Scene", NULL, (sm.scene_number == 4)))
-				sm.SwitchScene(4);
+			if (ImGui::MenuItem("Newtons Cradle Scene", NULL, (scene_manager.current_scene_number == 0)))
+				scene_manager.SwitchScene(0);
+			if (ImGui::MenuItem("Cloth Scene", NULL, (scene_manager.current_scene_number == 1)))
+				scene_manager.SwitchScene(1);
+			if (ImGui::MenuItem("Pinball Scene", NULL, (scene_manager.current_scene_number == 2)))
+				scene_manager.SwitchScene(2);
+			if (ImGui::MenuItem("Rope Scene", NULL, (scene_manager.current_scene_number == 3)))
+				scene_manager.SwitchScene(3);
+			if (ImGui::MenuItem("Colour Pallete Test Scene", NULL, (scene_manager.current_scene_number == 4)))
+				scene_manager.SwitchScene(4);
 
 			ImGui::EndMenu();
 		}
@@ -121,19 +121,19 @@ void GUIManager::AddAppearanceWindow()
 		if(ImGui::Button("Set Autumn"))
 		{
 			palette.SetAutumn();
-			colour bg = palette.colours[sm.scene->colours.background];
+			colour bg = palette.colours[scene_manager.current_scene->colours.background];
 			glClearColor(bg.r, bg.g, bg.b, bg.a);
 		}
 		if(ImGui::Button("Set Gruvbox"))
 		{
 			palette.SetGruvbox();
-			colour bg = palette.colours[sm.scene->colours.background];
+			colour bg = palette.colours[scene_manager.current_scene->colours.background];
 			glClearColor(bg.r, bg.g, bg.b, bg.a);
 		}
 		if(ImGui::Button("Set Pastel"))
 		{
 			palette.SetPastel();
-			colour bg = palette.colours[sm.scene->colours.background];
+			colour bg = palette.colours[scene_manager.current_scene->colours.background];
 			glClearColor(bg.r, bg.g, bg.b, bg.a);
 		}
 	}
@@ -175,7 +175,7 @@ void AddArrowDiagram(float* input, float max_val)
 	if (settings.enable_gravity)
 	{
 		// Draw arrow
-		colour p = palette.colours[sm.scene->colours.particle];
+		colour p = palette.colours[scene_manager.current_scene->colours.particle];
 		draw_list->AddLine(canvas_center, arrow_pos, IM_COL32(p.r * 255, p.g * 255, p.b * 255, p.a * 255), 2.0f);
 		draw_list->AddCircleFilled(arrow_pos, 5.0f, IM_COL32(p.r * 255, p.g * 255, p.b * 255, p.a * 255));
 
@@ -218,7 +218,7 @@ void GUIManager::AddSimulationWindow()
 	ImGui::SetWindowPos(initial_pos, ImGuiCond_None);
 
 	// If there is no world, then skip
-	if (sm.scene->world == nullptr)
+	if (scene_manager.current_scene->world == nullptr)
 	{
 		ImGui::End();
 		return;
@@ -227,7 +227,7 @@ void GUIManager::AddSimulationWindow()
 	// Create Contents of simulation window
 	
 	if (ImGui::Button("Set Default Scene Settings"))
-		sm.scene->SetUpSceneSettings();
+		scene_manager.current_scene->SetUpSceneSettings();
 
 	// Add a slider for the substeps and a description of what substeps do
 	ImGui::SliderInt("Sub Steps", &settings.sub_steps, 4, 64);
