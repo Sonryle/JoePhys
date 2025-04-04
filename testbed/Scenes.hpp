@@ -27,6 +27,16 @@ struct SceneColours
 	int static_particle_outline;
 };
 
+struct SelectedParticle
+{
+	SelectedParticle() : ptr(nullptr), was_static(-1) {}
+	// Pointer to the selected particle
+	Particle* ptr;
+	// whether particle was static or not
+	// when it was first selected
+	int was_static;
+};
+
 // Base struct for all scene structs. Every scene struct will
 // inherit from this base Scene struct
 struct Scene
@@ -53,10 +63,11 @@ struct Scene
 	// SceneColours class
 	SceneColours colours;
 
-	// our world struct
+	// Our world struct
 	World* world;
-	Particle* selected_particle;
-	int selected_particle_is_static;
+
+	// Selected Particle struct
+	SelectedParticle s_part;
 
 protected:
 	

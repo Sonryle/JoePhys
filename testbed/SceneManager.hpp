@@ -8,17 +8,17 @@
 struct SceneManager
 {
 	// Constructors & destructors
-	SceneManager() : current_scene(nullptr), current_scene_number(-1) {}
+	SceneManager() : scene(nullptr), scene_number(-1) {}
 	~SceneManager() {}
 
 	// functions
 	void SwitchScene(int scene_number);
 	
 	// variables
-	Scene* current_scene;
-	unsigned int current_scene_number;
+	Scene* scene;
+	unsigned int scene_number;
 };
 
-extern SceneManager scene_manager;
+extern SceneManager sm;
 
 #endif

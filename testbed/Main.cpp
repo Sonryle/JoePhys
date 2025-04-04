@@ -11,10 +11,10 @@ double current_time = 0.0f;
 void Step()
 {
 	// Step the world forward
-	scene_manager.current_scene->Step();
+	sm.scene->Step();
 
 	// Add the shapes to be rendered onto the renderer's stack
-	scene_manager.current_scene->Render(window_manager.window, window_manager.cursor_pos);
+	sm.scene->Render(window_manager.window, window_manager.cursor_pos);
 }
 
 // Program entry point
@@ -26,7 +26,7 @@ int main()
 	gui_manager.Init(window_manager.window);
 
 	// Set scene
-	scene_manager.SwitchScene(0);
+	sm.SwitchScene(0);
 
 	// Create our camera and renderer
 	camera.Create(settings.initial_window_width, settings.initial_window_height);
