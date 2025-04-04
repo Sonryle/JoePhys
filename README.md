@@ -12,10 +12,10 @@ Requirements:
 Open powershell and navigate to where you want the JoePhys main folder to be downloaded. You can clone the JoePhys repository using Git:
 ```sh
 git clone https://github.com/Sonryle/JoePhys
-cd JoePhys
 ```
 Then build the project:
 ```sh
+cd JoePhys
 mkdir build
 cd build
 cmake ..
@@ -53,13 +53,13 @@ The resulting JoePhys executable will be in JoePhys/build/JoePhys
 
 ### Libraries Used
 
-JoePhys uses libraries to help with creating windows, rendering and displaying GUI.
+The JoePhys physics engine uses no libraries outside of the C++ Standard Library, however the testing environment uses third party libraries help with creating windows, communicating with the GPU and displaying GUI.
 I am extremely grateful to all of the developers who spent great time and effort creating
 wonderful open source libraries for the benefit of everyone, and I could not have created JoePhys
 anywhere near as well (or even at all) if it weren't for the hard work and diligence of some of
 these people.
 
-With that said, here is the list of all the libraries used in JoePhys:
+With that said, here is the list of all third party libraries used in JoePhys:
 
 * glad - (https://glad.dav1d.de/)
 * GLFW - (https://www.glfw.org/)
@@ -80,3 +80,5 @@ Again, with that being said, here is a list of all of the resources I learned fr
   * Much inspiration was taken from this project's code structure and rendering system. No code was explicitly
     copy pasted, but a select few of the functions are word-for-word exactly the same. (These functions are in Renderer.cpp
     and they are simply used for initiating and handling the renderer)
+
+* Im going to add the rest later
