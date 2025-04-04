@@ -13,6 +13,7 @@ Scene::Scene()
 {
 	world = new World();
 	selected_particle = nullptr;
+	selected_particle_is_static = -1;
 
 	
 	// Will contain the particles added by the user
@@ -220,7 +221,4 @@ void Scene::MoveParticle(Particle* part, vec2 pos)
 
 	// Teleport particle to position
 	part->pos_in_meters = pos;
-
-	// Calculate new acceleration
-	part->Accelerate((pos - old_pos) * part->mass_in_grams * world->simulation_hertz * 100);
 }

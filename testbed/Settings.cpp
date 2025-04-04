@@ -36,6 +36,6 @@ void Settings::Reset()
 	attraction_tool_radius = 10;
 	time_divisor = 1.0f;
 	simulation_hertz = 120;
-	sub_steps = 4;
+	sub_steps = 8;
 }
 

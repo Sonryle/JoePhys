@@ -35,19 +35,33 @@ void Particle::UpdatePosition(real dt)
 	if (is_static)
 		return;
 
-	// since acceleration remains constant over time step, velocity
-	// can be updated using euler's integration
+	// Update particle position using Runge-Kutta fourth order
+	// -------------------------------------------------------
+	
+	// We do not need to implement runge-kutta on the velocity,
+	// because the acceleration remains the same over the time step
 	vel_in_meters_per_sec += GetAcceleration() * dt;
 
-	vec2 v = vel_in_meters_per_sec;
-	vec2 a = GetAcceleration();
+	// Returns the derivative of the position (aka velocity) at a
+	// certain time, traveling at a certain velocity
+	auto f_x = [this] (vec2 slope, real time)
+	{
+		return slope + (time * GetAcceleration());
+	};
 
-	vec2 k1 = v;
-	vec2 k2 = v + (a * dt / 2.0f);
-	vec2 k3 = v + (a * dt / 2.0f);
-	vec2 k4 = v + (a * dt);
+	// slope of position (aka velocity) at four different time
+	// intervals and velocities
+	vec2 x1 = f_x(vel_in_meters_per_sec, 0) * dt;
+	vec2 x2 = f_x(vel_in_meters_per_sec + x1/2, dt/2) * dt;
+	vec2 x3 = f_x(vel_in_meters_per_sec + x2/2, dt/2) * dt;
+	vec2 x4 = f_x(vel_in_meters_per_sec + x3, dt) * dt;
 
-	pos_in_meters += ((k1 + 2.0f*k2 + 2.0f*k3 + k4) / 6.0f) * dt;
+	// Weighted average of four slope gives us a good aproximation
+	// of the optimal velocity to move our particle by
+	vec2 delta_x = (x1 + 2*x2 + 2*x3 + x4) / 6;
+
+	pos_in_meters += delta_x;
+
 	ResetAcceleration();
 }
 
@@ -56,14 +70,6 @@ void Particle::ResolveCollision(Particle* other_particle)
 {
 	Particle* p1 = this;
 	Particle* p2 = other_particle;
-	real CoR = (p1->elasticity + p2->elasticity) * 0.5f;	// Coefficient of Restitution
-	vec2 p1_v = p1->vel_in_meters_per_sec;
-	vec2 p2_v = p2->vel_in_meters_per_sec;
-	vec2 p1_p = p1->pos_in_meters;
-	vec2 p2_p = p2->pos_in_meters;
-	real p1_m = p1->mass_in_grams;
-	real p2_m = p2->mass_in_grams;
-
 
 	// Move particles away from eachother along their impact axis
 	// ----------------------------------------------------------
@@ -85,7 +91,15 @@ void Particle::ResolveCollision(Particle* other_particle)
 
 
 	// Solve for new velocities
-	// ------------------------
+	// -----------------------
+
+	real CoR = (p1->elasticity + p2->elasticity) * 0.5f;	// Coefficient of Restitution
+	vec2 p1_v = p1->vel_in_meters_per_sec;
+	vec2 p2_v = p2->vel_in_meters_per_sec;
+	vec2 p1_p = p1->pos_in_meters;
+	vec2 p2_p = p2->pos_in_meters;
+	real p1_m = p1->mass_in_grams;
+	real p2_m = p2->mass_in_grams;
 	
 	// if particle one is NOT static and particle two IS static
 	if (!p1->is_static && p2->is_static)

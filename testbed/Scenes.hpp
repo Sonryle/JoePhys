@@ -56,6 +56,7 @@ struct Scene
 	// our world struct
 	World* world;
 	Particle* selected_particle;
+	int selected_particle_is_static;
 
 protected:
 	
