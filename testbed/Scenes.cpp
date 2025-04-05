@@ -7,13 +7,14 @@
 #include "JoePhys/Vec2.hpp"
 #include "JoePhys/World.hpp"
 #include "Renderer.hpp"
+#include "SceneManager.hpp"
 #include "Settings.hpp"
 
 Scene::Scene()
 {
 	world = new World();
 	selected_particle = nullptr;
-	selected_particle_is_static = -1;
+	selected_particle_state = -1;
 
 	
 	// Will contain the particles added by the user
@@ -26,7 +27,7 @@ Scene::~Scene()
 	delete world;
 }
 
-void Scene::Render(GLFWwindow* window, vec2 cursor_pos)
+void Scene::Render()
 {
 	// if there is no world, don't try to render
 	if (world == nullptr)
@@ -62,19 +63,34 @@ void Scene::Render(GLFWwindow* window, vec2 cursor_pos)
 		if (settings.enable_springs)
 			for (Spring* s : world->clusters[c]->springs)
 			{
-				// Render each spring
+				// Render each spring if they are not torn
 				vec2 posA = s->particleA->pos_in_meters;
 				vec2 posB = s->particleB->pos_in_meters;
 				colour col = palette.colours[colours.spring];
-
-				renderer.AddLine(posA, posB, col);
+				if (!s->is_broken)
+					renderer.AddLine(posA, posB, col);
 			}
 	}
 	
-	// Render a circle around nearest particle
+	// Render a circle around selected particle
 	colour outline_col(1.0f, 1.0f, 1.0f, 1.0f);
-	if (selected_particle != nullptr && glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) != GLFW_PRESS)
+	if (selected_particle != nullptr)
 		renderer.AddCircle(selected_particle->pos_in_meters, selected_particle->radius_in_meters * 1.2f, settings.circle_res, outline_col);
+	
+	// Render chunks
+	for (auto& [key, particles] : world->grid)
+	{
+		int32_t x = (uint32_t)(key >> 32) * settings.chunk_scale;
+		int32_t y = (uint32_t)(key)* settings.chunk_scale;
+
+		int32_t left = x;
+		int32_t right = x + settings.chunk_scale;
+		int32_t top = y + settings.chunk_scale;
+		int32_t bottom = y;
+		colour col(1.0f, 1.0f, 0.0f, 0.25f);
+		renderer.AddTriangle(vec2(left, top), vec2(right, top), vec2(left, bottom), col);
+		renderer.AddTriangle(vec2(right, top), vec2(left, bottom), vec2(right, bottom), col);
+	}
 }
 
 

@@ -180,7 +180,7 @@ void AddArrowDiagram(float* input, float max_val)
 		draw_list->AddCircleFilled(arrow_pos, 5.0f, IM_COL32(p.r * 255, p.g * 255, p.b * 255, p.a * 255));
 
 		// If cursor is inside circle
-		if (length(window_manager.cursor_pos - vec2(canvas_center.x, canvas_center.y)) <= canvas_radius)
+		if (length(window_mgr.cursor_pos - vec2(canvas_center.x, canvas_center.y)) <= canvas_radius)
 		{
 			// Draw vector coordinates near the arrow tip
 			char buffer[32];
@@ -193,7 +193,7 @@ void AddArrowDiagram(float* input, float max_val)
 	if (ImGui::IsItemActive() && ImGui::IsMouseDragging(0))
 	{
 		settings.enable_gravity = 1;
-		vec2 new_pos((window_manager.cursor_pos - vec2(canvas_center.x, canvas_center.y)) / canvas_radius);
+		vec2 new_pos((window_mgr.cursor_pos - vec2(canvas_center.x, canvas_center.y)) / canvas_radius);
 
 		if (length(new_pos) > 1.0f)
 			new_pos = normalize(new_pos);
@@ -290,7 +290,7 @@ void GUIManager::AddOptionsWindow()
 	}
 	ImGui::Separator();
 	if (ImGui::Checkbox("Fullscreen", &settings.is_fullscreen))
-		window_manager.SetFullscreen(settings.is_fullscreen);
+		window_mgr.SetFullscreen(settings.is_fullscreen);
 	ImGui::End();
 }
 

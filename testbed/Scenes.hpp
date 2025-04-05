@@ -36,7 +36,7 @@ struct Scene
 	virtual ~Scene();
 
 	// virtual functions (virtual means that it can be overwritten by structs inherited from this struct
-	virtual void Render(GLFWwindow* window, vec2 cursor_pos);
+	virtual void Render();
 	virtual void ResetCamera();
 	virtual void SetUpScene();
 	virtual void SetUpSceneSettings();
@@ -56,7 +56,7 @@ struct Scene
 	// our world struct
 	World* world;
 	Particle* selected_particle;
-	int selected_particle_is_static;
+	int selected_particle_state;
 
 protected:
 	

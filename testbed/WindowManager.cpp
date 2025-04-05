@@ -69,8 +69,8 @@ void WindowManager::FramebufferResizeCallback(GLFWwindow* window, int width, int
 {
 	glViewport(0, 0, width, height);
 	camera.WindowResize(width, height);
-	window_manager.window_height = height;
-	window_manager.window_height = width;
+	window_mgr.window_height = height;
+	window_mgr.window_height = width;
 }
 
 // Is called when a key is pressed
@@ -82,29 +82,26 @@ void WindowManager::KeyCallback(GLFWwindow* window, int key, int scancode, int a
 		glfwSetWindowShouldClose(window, GL_TRUE);
 		break;
 	case GLFW_KEY_SPACE:
-		if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) && action == GLFW_PRESS)
-			window_manager.SetFullscreen(settings.is_fullscreen = !settings.is_fullscreen);
+		if (action == GLFW_PRESS && window_mgr.ctrl_pressed)
+			window_mgr.SetFullscreen(settings.is_fullscreen = !settings.is_fullscreen);
 		break;
 	case GLFW_KEY_A:
 		if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) && action == GLFW_PRESS)
 			gui_manager.appearance_window_shown = !gui_manager.appearance_window_shown;
 		break;
 	case GLFW_KEY_S:
-		if (action == GLFW_PRESS)
-		{
-			if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL))
+			if (action == GLFW_PRESS && window_mgr.ctrl_pressed)
 				gui_manager.simulation_window_shown = !gui_manager.simulation_window_shown;
-			else if (scene_manager.current_scene->world != nullptr)
+			else if (action == GLFW_PRESS && window_mgr.world_exists)
 			{
-				Particle* p = scene_manager.current_scene->GetNearestParticle(camera.ScreenSpaceToWorldSpace(window_manager.cursor_pos));
+				Particle* p = scene_manager.current_scene->GetNearestParticle(camera.ScreenSpaceToWorldSpace(window_mgr.cursor_pos));
 				p->vel_in_meters_per_sec.Set(0.0f, 0.0f);
 				p->ResetAcceleration();
 				p->is_static = !p->is_static;
 			}
-		}
 		break;
 	case GLFW_KEY_O:
-		if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) && action == GLFW_PRESS)
+		if (action == GLFW_PRESS && window_mgr.ctrl_pressed)
 			gui_manager.options_window_shown = !gui_manager.options_window_shown;
 		break;
 	case GLFW_KEY_R:
@@ -114,15 +111,15 @@ void WindowManager::KeyCallback(GLFWwindow* window, int key, int scancode, int a
 		break;
 	case GLFW_KEY_P:
 		if (action == GLFW_PRESS)
-			scene_manager.current_scene->AddStaticParticle(camera.ScreenSpaceToWorldSpace(window_manager.cursor_pos), 0.1f);
+			scene_manager.current_scene->AddStaticParticle(camera.ScreenSpaceToWorldSpace(window_mgr.cursor_pos), 0.1f);
 	case GLFW_KEY_LEFT:
-		if (action == GLFW_PRESS && scene_manager.current_scene_number != 0)
-			if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+		if (action == GLFW_PRESS && window_mgr.ctrl_pressed)
+			if (scene_manager.current_scene_number != 0)
 				scene_manager.SwitchScene(scene_manager.current_scene_number - 1);
 		break;
 	case GLFW_KEY_RIGHT:
-		if (action == GLFW_PRESS && scene_manager.current_scene_number < SCENE_COUNT - 1)
-			if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+		if (action == GLFW_PRESS && window_mgr.ctrl_pressed)
+			if (scene_manager.current_scene_number < SCENE_COUNT - 1)
 				scene_manager.SwitchScene(scene_manager.current_scene_number + 1);
 		break;
 	}
@@ -134,14 +131,14 @@ void WindowManager::MousePosCallback(GLFWwindow* window, double dx, double dy)
 	if (!ImGui::GetIO().WantCaptureMouse)
 		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 			if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-				camera.center += vec2(window_manager.cursor_pos.x - dx, dy - window_manager.cursor_pos.y) * camera.zoom / 100.0f;
-	window_manager.cursor_pos.Set(dx, dy);
+				camera.center += vec2(window_mgr.cursor_pos.x - dx, dy - window_mgr.cursor_pos.y) * camera.zoom / 100.0f;
+	window_mgr.cursor_pos.Set(dx, dy);
 }
 
 // Is called when mouse wheel is scrolled
 void WindowManager::ScrollCallback(GLFWwindow*, double dx, double dy)
 {
-	if (glfwGetKey(window_manager.window, GLFW_KEY_LEFT_CONTROL))
+	if (glfwGetKey(window_mgr.window, GLFW_KEY_LEFT_CONTROL))
 	{
 		if (ImGui::GetIO().WantCaptureMouse == 0)
 		{
@@ -155,7 +152,7 @@ void WindowManager::ScrollCallback(GLFWwindow*, double dx, double dy)
 	{
 		if (ImGui::GetIO().WantCaptureMouse == 0)
 		{
-			Particle* p = scene_manager.current_scene->GetNearestParticle(camera.ScreenSpaceToWorldSpace(window_manager.cursor_pos));
+			Particle* p = scene_manager.current_scene->GetNearestParticle(camera.ScreenSpaceToWorldSpace(window_mgr.cursor_pos));
 			if (p != nullptr)
 			{
 				p->radius_in_meters += dy / 10.0f;
@@ -174,37 +171,42 @@ void WindowManager::ScrollCallback(GLFWwindow*, double dx, double dy)
 // Is called every frame
 void WindowManager::InputCallback()
 {
+	left_mouse_button = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+	GUI_focused = ImGui::GetIO().WantCaptureMouse;
+	ctrl_pressed = glfwGetKey(window, GLFW_KEY_LEFT_CONTROL);
+	world_exists = scene_manager.current_scene->world != nullptr;
+
 	// If the 'R' key & left CTRL are pressed, add add a repulsion force at the location of the mouse pointer
-	if (glfwGetKey(window_manager.window, GLFW_KEY_R) == GLFW_PRESS && glfwGetKey(window_manager.window, GLFW_KEY_LEFT_CONTROL) != GLFW_PRESS)
-		scene_manager.current_scene->AddRepulsionForce(camera.ScreenSpaceToWorldSpace(window_manager.cursor_pos), settings.repulsion_tool_radius, settings.repulsion_tool_strength);
+	if (glfwGetKey(window, GLFW_KEY_R) && !ctrl_pressed)
+		scene_manager.current_scene->AddRepulsionForce(camera.ScreenSpaceToWorldSpace(cursor_pos), settings.repulsion_tool_radius, settings.repulsion_tool_strength);
 
 	// If the 'A' key & left CTRL are pressed, add add a repulsion force at the location of the mouse pointer
-	if (glfwGetKey(window_manager.window, GLFW_KEY_A) == GLFW_PRESS && glfwGetKey(window_manager.window, GLFW_KEY_LEFT_CONTROL) != GLFW_PRESS)
-		scene_manager.current_scene->AddAttractionForce(camera.ScreenSpaceToWorldSpace(window_manager.cursor_pos), settings.attraction_tool_radius, settings.attraction_tool_strength);
+	if (glfwGetKey(window, GLFW_KEY_A) && !ctrl_pressed)
+		scene_manager.current_scene->AddAttractionForce(camera.ScreenSpaceToWorldSpace(cursor_pos), settings.attraction_tool_radius, settings.attraction_tool_strength);
 
 	// If the left mouse button is pressed & left CTLR ISN'T pressed, select particle closest to the cursor,
 	// move it to the mouse cursor and set it to be static while it is being held
-	if (ImGui::GetIO().WantCaptureMouse == 0 && glfwGetMouseButton(window_manager.window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && glfwGetKey(window_manager.window, GLFW_KEY_LEFT_CONTROL) != GLFW_PRESS && scene_manager.current_scene->world != nullptr)
+	if (left_mouse_button && !GUI_focused && !ctrl_pressed && world_exists)
 	{
-		if (scene_manager.current_scene->selected_particle_is_static == -1)
+		if (scene_manager.current_scene->selected_particle_state == -1)
 		{
-			scene_manager.current_scene->selected_particle_is_static = scene_manager.current_scene->selected_particle->is_static;
+			scene_manager.current_scene->selected_particle_state = scene_manager.current_scene->selected_particle->is_static;
 			scene_manager.current_scene->selected_particle->is_static = 1;
 		}
-		scene_manager.current_scene->MoveParticle(scene_manager.current_scene->selected_particle, camera.ScreenSpaceToWorldSpace(window_manager.cursor_pos));
+		scene_manager.current_scene->MoveParticle(scene_manager.current_scene->selected_particle, camera.ScreenSpaceToWorldSpace(cursor_pos));
 	}
 	else
 	{
-		if (scene_manager.current_scene->selected_particle_is_static != -1)
+		if (scene_manager.current_scene->selected_particle_state != -1)
 		{
-			scene_manager.current_scene->selected_particle->is_static = scene_manager.current_scene->selected_particle_is_static;
-			scene_manager.current_scene->selected_particle_is_static = -1;
+			scene_manager.current_scene->selected_particle->is_static = scene_manager.current_scene->selected_particle_state;
+			scene_manager.current_scene->selected_particle_state = -1;
 			
 		}
-		scene_manager.current_scene->UpdateSelectedParticle(window_manager.cursor_pos);
+		scene_manager.current_scene->UpdateSelectedParticle(cursor_pos);
 	}
 
 	return;
 }
 
-WindowManager window_manager;
+WindowManager window_mgr;

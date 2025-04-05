@@ -16,7 +16,7 @@ struct ClothScene : public Scene
 	void SetUpScene() override
 	{
 		SetUpSceneColours();
-		world->Create(settings.simulation_hertz, settings.sub_steps, settings.gravity);
+		world->Create(settings.simulation_hertz, settings.sub_steps, settings.gravity, settings.chunk_scale);
 		double PI = 3.141592653589;
 		
 		// Create the cloth
@@ -24,35 +24,35 @@ struct ClothScene : public Scene
 	
 		Cluster* cloth = new Cluster;
 
-		Particle* hp[25][14];
-		for (int x = 0; x < 25; x++)
+		Particle* hp[49][28];
+		for (int x = 0; x < 49; x++)
 		{
-			for (int y = 0; y < 14; y++)
+			for (int y = 0; y < 28; y++)
 			{
 				// Add Particles
 				real rad = 0.05f;
-				vec2 pos(((x - 12) * 3) * 0.15f, ((y - 6) * 3) * 0.15f);
+				vec2 pos(((x - 24) * 1.5f) * 0.15f, ((y - 14) * 1.5f) * 0.15f);
 				vec2 vel(0.0f, 0.0f);
 				real elas = 0.5f;
 				real mass = (real)PI * rad * rad;
 				bool is_static = 0;
-				if (y == 13 && (x == 0 || x == 6 || x == 12 || x == 18 || x == 24))
+				if (y == 27 && (x == 0 || x == 6 || x == 12 || x == 18 || x == 24 || x == 30 || x == 36 || x == 42 || x == 48))
 					is_static = 1;
 				hp[x][y] = new Particle(pos, vel, elas, rad, mass, is_static);
 				cloth->particles.push_back(hp[x][y]);
 
 				// Add Springs
-				real stiffness = 25.0f;
+				real stiffness = 100.0f;
 				if (x > 0)
 				{
 					real len = length(hp[x][y]->pos_in_meters - hp[x-1][y]->pos_in_meters);
-					Spring* s = new Spring(hp[x][y], hp[x-1][y], len, stiffness);
+					Spring* s = new Spring(hp[x][y], hp[x-1][y], len, stiffness, -1, -1);
 					cloth->springs.push_back(s);
 				}
 				if (y > 0)
 				{
 					real len = length(hp[x][y]->pos_in_meters - hp[x][y-1]->pos_in_meters);
-					Spring* s = new Spring(hp[x][y], hp[x][y-1], len, stiffness);
+					Spring* s = new Spring(hp[x][y], hp[x][y-1], len, stiffness, -1, -1);
 					cloth->springs.push_back(s);
 				}
 			}
@@ -65,7 +65,8 @@ struct ClothScene : public Scene
 	void SetUpSceneColours() override
 	{
 		colours.background = Palette::JP_RED;
-		colours.spring = Palette::JP_DARK_YELLOW;
+		/* colours.spring = Palette::JP_DARK_YELLOW; */
+		colours.spring = Palette::JP_WHITE;
 		colours.particle = Palette::JP_YELLOW;
 		colours.particle_outline = Palette::JP_DARK_GRAY;
 		colours.static_particle = Palette::JP_GRAY;
@@ -84,6 +85,7 @@ struct ClothScene : public Scene
 		settings.min_particle_size = 0.05f;
 		settings.max_particle_size = 1.0f;
 		settings.circle_res = 5;
+		settings.sub_steps = 4;
 		camera.center.Set(0.0f, 0.0f);
 		camera.zoom = 1.0f;
 	}

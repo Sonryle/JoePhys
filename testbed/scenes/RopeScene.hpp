@@ -14,7 +14,7 @@ struct RopeScene : public Scene
 	void SetUpScene() override
 	{
 		SetUpSceneColours();
-		world->Create(settings.simulation_hertz, settings.sub_steps, settings.gravity);
+		world->Create(settings.simulation_hertz, settings.sub_steps, settings.gravity, settings.chunk_scale);
 		double PI = 3.141592653589;
 
 		// Create a cluster for the particles to live in
@@ -55,7 +55,7 @@ struct RopeScene : public Scene
 			if (old_part != nullptr)
 			{
 				real len = length(old_part->pos_in_meters - myParticle->pos_in_meters);
-				Spring* s = new Spring(old_part, myParticle, len, stiffness);
+				Spring* s = new Spring(old_part, myParticle, len, stiffness , len + 2, -1);
 				rope->springs.push_back(s);
 			}
 			old_part = myParticle;

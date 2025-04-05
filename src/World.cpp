@@ -10,11 +10,12 @@ World::~World()
 		delete n;
 }
 
-void World::Create(int simulation_hertz, int sub_steps, vec2 gravity)
+void World::Create(int simulation_hertz, int sub_steps, vec2 gravity, real chunk_scale)
 {
 	this->simulation_hertz = simulation_hertz;
 	this->sub_steps = sub_steps;
 	this->gravity = gravity;
+	this->chunk_scale = chunk_scale;
 }
 
 void World::Step(int flags)
@@ -35,6 +36,8 @@ void World::Step(int flags)
 
 		if (!(flags & NO_PARTICLE_COLLISIONS))
 			ResolveAllCollisions();
+
+		UpdateGrid();
 	}
 }
 
@@ -94,4 +97,58 @@ void World::UpdateSprings(real dt)
 	for (Cluster* c : clusters)
 		for (Spring* s : c->springs)
 			s->Update();
+}
+
+void World::UpdateGrid()
+{
+	// Clear particles from grid which arent in that chunk anymore
+	std::vector<int64_t> chunks_to_delete;
+	for (auto& [key, particles] : grid)
+	{
+		/* // Decode key into x and y positions */
+		int32_t x = (uint32_t)(key >> 32) * chunk_scale;
+		int32_t y = (uint32_t)(key)* chunk_scale;
+
+		// If particles arent in the chunk that they
+		// used to be in, remove them from the list
+		std::vector<Particle*> particles_to_delete;
+		for (Particle* p : particles)
+			if ((int)(p->pos_in_meters.x / chunk_scale) != x || (int)(p->pos_in_meters.y / chunk_scale) != y)
+				particles_to_delete.push_back(p);
+
+		for (Particle* p : particles_to_delete)
+			particles.erase(p);
+
+		/* // If chunk is empty, delete it */
+		if (particles.empty())
+			chunks_to_delete.push_back(key);
+	}
+
+	// Delete grids
+	for (int64_t key : chunks_to_delete)
+		grid.erase(key);
+
+	// Loop over particles and add them to their chunks (if not already added)
+	for (Cluster* c : clusters)
+		for (Particle* p : c->particles)
+		{
+			int32_t chunk_x_pos = (int)(p->pos_in_meters.x / chunk_scale);
+			int32_t chunk_y_pos = (int)(p->pos_in_meters.y / chunk_scale);
+			if (p->pos_in_meters.x < 0)
+				chunk_x_pos -= 1;
+			if (p->pos_in_meters.y < 0)
+				chunk_y_pos -= 1;
+
+			// Get key for our chunk
+			int64_t key = (int64_t)chunk_x_pos;
+			key <<= 32;
+			key |= (uint32_t)chunk_y_pos;
+			
+			// Skip if particle is already in the set
+			if (grid.find(key) != grid.end())
+					if (std::find(grid[key].begin(), grid[key].end(), p) != grid[key].end())
+						continue;
+
+			grid[key].insert(p);
+		}
 }

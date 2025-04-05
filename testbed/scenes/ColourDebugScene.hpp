@@ -16,7 +16,7 @@ struct ColourDebugScene : public Scene
 		world = nullptr;
 	}
 
-	void Render(GLFWwindow* window, vec2 cursor_pos) override
+	void Render() override
 	{
 		renderer.AddColourTest();
 	}
