@@ -16,7 +16,7 @@ struct NewtonsCradleScene : public Scene
 	void SetUpScene() override
 	{
 		SetUpSceneColours();
-		world->Create(settings.simulation_hertz, settings.sub_steps, settings.gravity, settings.chunk_scale);
+		world->Create(settings.simulation_hertz, settings.sub_steps, settings.gravity);
 		double PI = 3.141592653589;
 
 		// Create a cluster for the anchor points of the balls
@@ -67,7 +67,7 @@ struct NewtonsCradleScene : public Scene
 			Particle* pA = cradle->particles[n];
 			Particle* pB = anchors->particles[n];
 			real len = 6.0f;
-			real stiffness = 100.0f;
+			real stiffness = 10000.0f;
 			Spring* s = new Spring(pA, pB, len, stiffness, -1, -1);
 
 			anchors->springs.push_back(s);

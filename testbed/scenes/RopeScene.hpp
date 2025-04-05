@@ -14,7 +14,7 @@ struct RopeScene : public Scene
 	void SetUpScene() override
 	{
 		SetUpSceneColours();
-		world->Create(settings.simulation_hertz, settings.sub_steps, settings.gravity, settings.chunk_scale);
+		world->Create(settings.simulation_hertz, settings.sub_steps, settings.gravity);
 		double PI = 3.141592653589;
 
 		// Create a cluster for the particles to live in

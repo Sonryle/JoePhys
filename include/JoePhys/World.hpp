@@ -31,8 +31,11 @@ struct World
 	~World();
 
 	// functions
-	void Create(int simulation_hertz, int sub_steps, vec2 gravity, real chunk_scale);
+	void Create(int simulation_hertz, int sub_steps, vec2 gravity);
 	void Step(int flags);
+	void PositionToChunkCoords(vec2 pos, int32_t* chunk_x, int32_t* chunk_y);
+	void ChunkCoordsToGridKey(int64_t* key, int32_t chunk_x, int32_t chunk_y);
+	void GridKeyToChunkCoords(int64_t key, int32_t* chunk_x, int32_t* chunk_y);
 
 	// variables
 	std::vector<Cluster*> clusters;
@@ -40,6 +43,7 @@ struct World
 	int simulation_hertz;
 	int sub_steps;
 	vec2 gravity;
+	real chunk_scale;
 private:
 
 	// functions
@@ -49,9 +53,6 @@ private:
 	void ResolveAllCollisions();
 	void UpdateSprings(real dt);
 	void UpdateGrid();
-
-	// variables
-	real chunk_scale;
 };
 
 #endif

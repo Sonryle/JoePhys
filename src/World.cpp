@@ -10,12 +10,11 @@ World::~World()
 		delete n;
 }
 
-void World::Create(int simulation_hertz, int sub_steps, vec2 gravity, real chunk_scale)
+void World::Create(int simulation_hertz, int sub_steps, vec2 gravity)
 {
 	this->simulation_hertz = simulation_hertz;
 	this->sub_steps = sub_steps;
 	this->gravity = gravity;
-	this->chunk_scale = chunk_scale;
 }
 
 void World::Step(int flags)
@@ -99,22 +98,53 @@ void World::UpdateSprings(real dt)
 			s->Update();
 }
 
+void World::PositionToChunkCoords(vec2 pos, int32_t* chunk_x, int32_t* chunk_y)
+{
+	*chunk_x = (int)(pos.x / chunk_scale);
+	*chunk_y = (int)(pos.y / chunk_scale);
+	if (pos.x < 0)
+		*chunk_x -= 1;
+	if (pos.y < 0)
+		*chunk_y -= 1;
+}
+
+void World::ChunkCoordsToGridKey(int64_t* key, int32_t chunk_x, int32_t chunk_y)
+{
+	// Get key for our chunk
+	*key = (int64_t)chunk_x;
+	*key <<= 32;
+	*key |= (uint32_t)chunk_y;
+}
+
+void World::GridKeyToChunkCoords(int64_t key, int32_t* chunk_x, int32_t* chunk_y)
+{
+	*chunk_x = (int32_t)(key >> 32) * chunk_scale;
+	*chunk_y = (int32_t)(key)* chunk_scale;
+}
+
 void World::UpdateGrid()
 {
 	// Clear particles from grid which arent in that chunk anymore
+	// -----------------------------------------------------------
+
 	std::vector<int64_t> chunks_to_delete;
 	for (auto& [key, particles] : grid)
 	{
 		/* // Decode key into x and y positions */
-		int32_t x = (uint32_t)(key >> 32) * chunk_scale;
-		int32_t y = (uint32_t)(key)* chunk_scale;
+		int32_t chunk_x;
+		int32_t chunk_y;
+		GridKeyToChunkCoords(key, &chunk_x, &chunk_y);
 
 		// If particles arent in the chunk that they
 		// used to be in, remove them from the list
 		std::vector<Particle*> particles_to_delete;
 		for (Particle* p : particles)
-			if ((int)(p->pos_in_meters.x / chunk_scale) != x || (int)(p->pos_in_meters.y / chunk_scale) != y)
+		{
+			int32_t p_x, p_y;
+			PositionToChunkCoords(p->pos_in_meters, &p_x, &p_y);
+			if (p_x != chunk_x || p_y != chunk_y)
 				particles_to_delete.push_back(p);
+		}
 
 		for (Particle* p : particles_to_delete)
 			particles.erase(p);
@@ -128,27 +158,37 @@ void World::UpdateGrid()
 	for (int64_t key : chunks_to_delete)
 		grid.erase(key);
 
+	// Add all particles to grid
+	// -------------------------
+	
 	// Loop over particles and add them to their chunks (if not already added)
 	for (Cluster* c : clusters)
 		for (Particle* p : c->particles)
 		{
-			int32_t chunk_x_pos = (int)(p->pos_in_meters.x / chunk_scale);
-			int32_t chunk_y_pos = (int)(p->pos_in_meters.y / chunk_scale);
-			if (p->pos_in_meters.x < 0)
-				chunk_x_pos -= 1;
-			if (p->pos_in_meters.y < 0)
-				chunk_y_pos -= 1;
-
-			// Get key for our chunk
-			int64_t key = (int64_t)chunk_x_pos;
-			key <<= 32;
-			key |= (uint32_t)chunk_y_pos;
+			// Find the top, bottom, left and right of each particle
+			real top = p->pos_in_meters.y + p->radius_in_meters;
+			real bottom = p->pos_in_meters.y - p->radius_in_meters;
+			real right = p->pos_in_meters.x + p->radius_in_meters;
+			real left = p->pos_in_meters.x - p->radius_in_meters;
+			if (top < -chunk_scale)
+				top += chunk_scale;
+			if (right < -chunk_scale)
+				right += chunk_scale;
 			
-			// Skip if particle is already in the set
-			if (grid.find(key) != grid.end())
+			// Add particles to those extra chunks
+			for (int x = left; x < right; x+=1)
+				for (int y = bottom; y < top; y+=1)
+				{
+					int32_t chunk_x, chunk_y;
+					PositionToChunkCoords(vec2(x, y), &chunk_x, &chunk_y);
+					int64_t key;
+					ChunkCoordsToGridKey(&key, chunk_x, chunk_y);
+			
+					// Skip if particle is already in the set
 					if (std::find(grid[key].begin(), grid[key].end(), p) != grid[key].end())
 						continue;
-
-			grid[key].insert(p);
+		
+					grid[key].insert(p);
+				}
 		}
 }

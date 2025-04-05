@@ -80,8 +80,8 @@ void Scene::Render()
 	// Render chunks
 	for (auto& [key, particles] : world->grid)
 	{
-		int32_t x = (uint32_t)(key >> 32) * settings.chunk_scale;
-		int32_t y = (uint32_t)(key)* settings.chunk_scale;
+		int32_t x, y;
+		world->GridKeyToChunkCoords(key, &x, &y);
 
 		int32_t left = x;
 		int32_t right = x + settings.chunk_scale;
@@ -120,6 +120,8 @@ void Scene::Step()
 			world->simulation_hertz = settings.simulation_hertz * settings.time_divisor;
 		if (world->gravity != settings.gravity)
 			world->gravity = settings.gravity;
+		if (world->chunk_scale != settings.chunk_scale)
+			world->chunk_scale = settings.chunk_scale;
 
 		int flags = 0;
 		if (!settings.enable_gravity)
