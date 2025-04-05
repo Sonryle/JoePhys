@@ -102,10 +102,6 @@ void World::PositionToChunkCoords(vec2 pos, int32_t* chunk_x, int32_t* chunk_y)
 {
 	*chunk_x = (int)(pos.x / chunk_scale);
 	*chunk_y = (int)(pos.y / chunk_scale);
-	if (pos.x < 0)
-		*chunk_x -= 1;
-	if (pos.y < 0)
-		*chunk_y -= 1;
 }
 
 void World::ChunkCoordsToGridKey(int64_t* key, int32_t chunk_x, int32_t chunk_y)
@@ -170,14 +166,14 @@ void World::UpdateGrid()
 			real bottom = p->pos_in_meters.y - p->radius_in_meters;
 			real right = p->pos_in_meters.x + p->radius_in_meters;
 			real left = p->pos_in_meters.x - p->radius_in_meters;
-			if (top < -chunk_scale)
-				top += chunk_scale;
-			if (right < -chunk_scale)
-				right += chunk_scale;
+			if (left < 0)
+				left -= chunk_scale;
+			if (bottom < 0)
+				bottom -= chunk_scale;
 			
 			// Add particles to those extra chunks
-			for (int x = left; x < right; x+=1)
-				for (int y = bottom; y < top; y+=1)
+			for (int x = left; x < right; x+=chunk_scale)
+				for (int y = bottom; y < top; y+=chunk_scale)
 				{
 					int32_t chunk_x, chunk_y;
 					PositionToChunkCoords(vec2(x, y), &chunk_x, &chunk_y);
