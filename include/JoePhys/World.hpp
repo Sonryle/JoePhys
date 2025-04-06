@@ -35,7 +35,7 @@ struct World
 	void Step(int flags);
 	void PositionToChunkCoords(vec2 pos, int32_t* chunk_x, int32_t* chunk_y);
 	void ChunkCoordsToGridKey(int64_t* key, int32_t chunk_x, int32_t chunk_y);
-	void GridKeyToChunkCoords(int64_t key, int32_t* chunk_x, int32_t* chunk_y);
+	void GridKeyToChunkCoords(int64_t key, real* chunk_x, real* chunk_y);
 
 	// variables
 	std::vector<Cluster*> clusters;

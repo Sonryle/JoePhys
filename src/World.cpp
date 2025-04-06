@@ -100,8 +100,8 @@ void World::UpdateSprings(real dt)
 
 void World::PositionToChunkCoords(vec2 pos, int32_t* chunk_x, int32_t* chunk_y)
 {
-	*chunk_x = (int)(pos.x / chunk_scale);
-	*chunk_y = (int)(pos.y / chunk_scale);
+	*chunk_x = (int32_t)(pos.x / chunk_scale);
+	*chunk_y = (int32_t)(pos.y / chunk_scale);
 }
 
 void World::ChunkCoordsToGridKey(int64_t* key, int32_t chunk_x, int32_t chunk_y)
@@ -112,7 +112,7 @@ void World::ChunkCoordsToGridKey(int64_t* key, int32_t chunk_x, int32_t chunk_y)
 	*key |= (uint32_t)chunk_y;
 }
 
-void World::GridKeyToChunkCoords(int64_t key, int32_t* chunk_x, int32_t* chunk_y)
+void World::GridKeyToChunkCoords(int64_t key, real* chunk_x, real* chunk_y)
 {
 	*chunk_x = (int32_t)(key >> 32) * chunk_scale;
 	*chunk_y = (int32_t)(key)* chunk_scale;
@@ -127,8 +127,8 @@ void World::UpdateGrid()
 	for (auto& [key, particles] : grid)
 	{
 		/* // Decode key into x and y positions */
-		int32_t chunk_x;
-		int32_t chunk_y;
+		real chunk_x;
+		real chunk_y;
 		GridKeyToChunkCoords(key, &chunk_x, &chunk_y);
 
 		// If particles arent in the chunk that they

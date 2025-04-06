@@ -37,6 +37,6 @@ void Settings::Reset()
 	time_divisor = 1.0f;
 	simulation_hertz = 120;
 	sub_steps = 8;
-	chunk_scale = 1.0f;
+	chunk_scale = 0.5f;
 }
 
