@@ -38,5 +38,6 @@ void Settings::Reset()
 	simulation_hertz = 120;
 	sub_steps = 8;
 	chunk_scale = 0.5f;
+	render_chunks = 0;
 }
 

@@ -78,19 +78,25 @@ void Scene::Render()
 		renderer.AddCircle(selected_particle->pos_in_meters, selected_particle->radius_in_meters * 1.2f, settings.circle_res, outline_col);
 	
 	// Render chunks
-	for (auto& [key, particles] : world->grid)
-	{
-		real x, y;
-		world->GridKeyToChunkCoords(key, &x, &y);
-
-		real left = x;
-		real right = x + settings.chunk_scale;
-		real top = y + settings.chunk_scale;
-		real bottom = y;
-		colour col(1.0f, 1.0f, 0.0f, 0.25f);
-		renderer.AddTriangle(vec2(left, top), vec2(right, top), vec2(left, bottom), col);
-		renderer.AddTriangle(vec2(right, top), vec2(left, bottom), vec2(right, bottom), col);
-	}
+	if (settings.render_chunks)
+		for (auto& [key, particles] : world->grid)
+		{
+			real x, y;
+			world->GridKeyToChunkCoords(key, &x, &y);
+	
+			real left = x;
+			real right = x + settings.chunk_scale;
+			real top = y + settings.chunk_scale;
+			real bottom = y;
+			colour col(1.0f, 1.0f, 0.0f, 0.25f);
+			colour out_col(0.3f, 0.3f, 0.0f, 1.00f);
+			renderer.AddTriangle(vec2(left, top), vec2(right, top), vec2(left, bottom), col);
+			renderer.AddTriangle(vec2(right, top), vec2(left, bottom), vec2(right, bottom), col);
+			renderer.AddLine(vec2(left, top), vec2(right, top), out_col);
+			renderer.AddLine(vec2(left, top), vec2(left, bottom), out_col);
+			renderer.AddLine(vec2(right, bottom), vec2(right, top), out_col);
+			renderer.AddLine(vec2(right, bottom), vec2(left, bottom), out_col);
+		}
 }
 
 

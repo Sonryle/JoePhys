@@ -34,9 +34,11 @@ void World::Step(int flags)
 			UpdateSprings(dt / sub_steps);
 
 		if (!(flags & NO_PARTICLE_COLLISIONS))
+		{
 			ResolveAllCollisions();
+			UpdateGrid();
+		}
 
-		UpdateGrid();
 	}
 }
 
@@ -68,26 +70,33 @@ void World::UpdateParticlePositions(real dt)
 
 void World::ResolveAllCollisions()
 {
-	// look over every particle in every cluster
-	for (int c1 = 0; c1 < clusters.size(); c1++)
-		for (int p1 = 0; p1 < clusters[c1]->particles.size(); p1++)
-			// compair it to every other particle in every other cluster
-			for (int c2 = c1; c2 < clusters.size(); c2++)
-				for (int p2 = (c2 == c1)? p1 + 1 : 0; p2 < clusters[c2]->particles.size(); p2++)
-				{
-					// Solve collision between the two particles only if they collide
-					Particle* particle_one = clusters[c1]->particles[p1];
-					Particle* particle_two = clusters[c2]->particles[p2];
+	// look over every chunk and compair the particles inside of them
+	for (auto& [key, particles] : grid)
+	{
+		for (auto p1 = particles.begin(); p1 != particles.end(); p1++)
+		{
+			auto p2 = p1;
+			p2++;
+			for (; p2 != particles.end(); p2++)
+			{
+				// Solve collision between the two particles only if they collide
+				Particle* particle_one = *p1;
+				Particle* particle_two = *p2;
 
-					// If both particles are static, skip
-					if (particle_one->is_static && particle_two->is_static)
-						continue;
+				if (particle_one == particle_two)
+					continue;
 
-					// If dist between particles is less than their radii then they have collided
-					real dist = length(particle_one->pos_in_meters - particle_two->pos_in_meters);
-					if (dist < particle_one->radius_in_meters + particle_two->radius_in_meters)
-						particle_one->ResolveCollision(particle_two);
-				}
+				// If both particles are static, skip
+				if (particle_one->is_static && particle_two->is_static)
+					continue;
+
+				// If dist between particles is less than their radii then they have collided
+				real dist = length(particle_one->pos_in_meters - particle_two->pos_in_meters);
+				if (dist < particle_one->radius_in_meters + particle_two->radius_in_meters)
+					particle_one->ResolveCollision(particle_two);
+			}
+		}
+	}
 }
 
 void World::UpdateSprings(real dt)
@@ -123,56 +132,7 @@ void World::UpdateGrid()
 	// Clear particles from grid which arent in that chunk anymore
 	// -----------------------------------------------------------
 
-	std::vector<int64_t> chunks_to_delete;
-	for (auto& [key, particles] : grid)
-	{
-		/* // Decode key into x and y positions */
-		real chunk_x;
-		real chunk_y;
-		GridKeyToChunkCoords(key, &chunk_x, &chunk_y);
-
-		// If particles arent in the chunk that they
-		// used to be in, remove them from the list
-		std::vector<Particle*> particles_to_delete;
-		for (Particle* p : particles)
-		{
-			real top = p->pos_in_meters.y + p->radius_in_meters;
-			real bottom = p->pos_in_meters.y - p->radius_in_meters;
-			real right = p->pos_in_meters.x + p->radius_in_meters;
-			real left = p->pos_in_meters.x - p->radius_in_meters;
-			if (left < 0)
-				left -= chunk_scale;
-			if (right < 0)
-				right -= chunk_scale;
-			if (bottom < 0)
-				bottom -= chunk_scale;
-			if (top < 0)
-				top -= chunk_scale;
-			
-			int32_t top_chunk;
-			int32_t bottom_chunk;
-			int32_t left_chunk;
-			int32_t right_chunk;
-			PositionToChunkCoords(vec2(left, top), &left_chunk, &top_chunk);
-			PositionToChunkCoords(vec2(right, bottom), &right_chunk, &bottom_chunk);
-
-			particles_to_delete.push_back(p);
-			if (chunk_x <= left_chunk && chunk_x >= right_chunk)
-				if (chunk_y >= bottom_chunk && chunk_y <= top_chunk)
-					particles_to_delete.pop_back();
-		}
-
-		for (Particle* p : particles_to_delete)
-			particles.erase(p);
-
-		// If chunk is empty, delete it
-		if (particles.empty())
-			chunks_to_delete.push_back(key);
-	}
-
-	// Delete grids
-	for (int64_t key : chunks_to_delete)
-		grid.erase(key);
+	grid.clear();
 
 	// Add all particles to grid
 	// -------------------------

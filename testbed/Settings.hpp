@@ -45,6 +45,7 @@ struct Settings
 	int simulation_hertz;
 	int sub_steps;
 	real chunk_scale;
+	bool render_chunks;
 };
 
 // This settings struct will be accessable by every file which includes "Settings.hpp".

@@ -290,6 +290,7 @@ void GUIManager::AddOptionsWindow()
 		ImGui::SliderFloat("Radius", &settings.repulsion_tool_radius, 1, 50, "%g");
 	}
 	ImGui::Separator();
+	ImGui::Checkbox("Render Chunks", &settings.render_chunks);
 	if (ImGui::Checkbox("Fullscreen", &settings.is_fullscreen))
 		window_mgr.SetFullscreen(settings.is_fullscreen);
 	ImGui::End();

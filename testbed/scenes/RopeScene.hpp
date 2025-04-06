@@ -79,8 +79,11 @@ struct RopeScene : public Scene
 	void SetUpSceneSettings() override
 	{
 		settings.Reset();
+
 		settings.gravity.Set(0.0f, -9.8f);
 		settings.circle_res = 25;
+		settings.chunk_scale = 1.0f;
+
 		camera.center.Set(0.0f, 0.0f);
 		camera.zoom = 1.0f;
 	}
