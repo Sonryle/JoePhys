@@ -44,7 +44,7 @@ struct Settings
 	int time_divisor;
 	int simulation_hertz;
 	int sub_steps;
-	real chunk_scale;
+	int chunk_scale;
 };
 
 // This settings struct will be accessable by every file which includes "Settings.hpp".

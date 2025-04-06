@@ -141,9 +141,15 @@ void World::UpdateGrid()
 			real right = p->pos_in_meters.x + p->radius_in_meters;
 			real left = p->pos_in_meters.x - p->radius_in_meters;
 			if (left < 0)
+			{
 				left -= chunk_scale;
+				right -= chunk_scale;
+			}
 			if (bottom < 0)
+			{
 				bottom -= chunk_scale;
+				top -= chunk_scale;
+			}
 
 			int32_t top_chunk;
 			int32_t bottom_chunk;
@@ -153,9 +159,9 @@ void World::UpdateGrid()
 			PositionToChunkCoords(vec2(right, bottom), &right_chunk, &bottom_chunk);
 
 			particles_to_delete.push_back(p);
-			/* if (chunk_x <= left_chunk && chunk_x >= right_chunk) */
-				/* if (chunk_y >= bottom_chunk && chunk_y <= top_chunk) */
-				/* 	particles_to_delete.pop_back(); */
+			if (chunk_x <= left_chunk && chunk_x >= right_chunk)
+				if (chunk_y >= bottom_chunk && chunk_y <= top_chunk)
+					particles_to_delete.pop_back();
 		}
 
 		for (Particle* p : particles_to_delete)
