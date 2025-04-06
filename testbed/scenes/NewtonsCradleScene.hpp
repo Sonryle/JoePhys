@@ -91,10 +91,15 @@ struct NewtonsCradleScene : public Scene
 	void SetUpSceneSettings() override
 	{
 		settings.Reset();
-		settings.gravity.Set(0.0f, -9.8f);
-		settings.circle_res = 20;
+
 		settings.attraction_tool_strength = 25.0f;
 		settings.repulsion_tool_strength = 25.0f;
+
+		settings.gravity.Set(0.0f, -9.8f);
+		settings.circle_res = 20;
+		settings.chunk_scale = 1.7f;
+		settings.sub_steps = 64;
+
 		camera.center.Set(0.0f, 0.0f);
 		camera.zoom = 2.0f;
 	}
