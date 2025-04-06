@@ -141,16 +141,14 @@ void World::UpdateGrid()
 			real right = p->pos_in_meters.x + p->radius_in_meters;
 			real left = p->pos_in_meters.x - p->radius_in_meters;
 			if (left < 0)
-			{
 				left -= chunk_scale;
+			if (right < 0)
 				right -= chunk_scale;
-			}
 			if (bottom < 0)
-			{
 				bottom -= chunk_scale;
+			if (top < 0)
 				top -= chunk_scale;
-			}
-
+			
 			int32_t top_chunk;
 			int32_t bottom_chunk;
 			int32_t left_chunk;
@@ -189,15 +187,13 @@ void World::UpdateGrid()
 			real right = p->pos_in_meters.x + p->radius_in_meters;
 			real left = p->pos_in_meters.x - p->radius_in_meters;
 			if (left < 0)
-			{
 				left -= chunk_scale;
+			if (right < 0)
 				right -= chunk_scale;
-			}
 			if (bottom < 0)
-			{
 				bottom -= chunk_scale;
+			if (top < 0)
 				top -= chunk_scale;
-			}
 			
 			int32_t top_chunk;
 			int32_t bottom_chunk;
