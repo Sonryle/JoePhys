@@ -255,7 +255,7 @@ void GUIManager::AddSimulationWindow()
 				   "is greater than the framerate of the program, time appears to have slowed down)\n";
        		ImGui::SetTooltip("%s", desc);
 	}
-	ImGui::SliderInt("Chunk Scale", &settings.chunk_scale, 1, 50);
+	ImGui::SliderFloat("Chunk Scale", &settings.chunk_scale, 0.1f, 50);
 	ImGui::Checkbox("Gravity (m/s²)", &settings.enable_gravity);
 	AddArrowDiagram(&settings.gravity.x, 50.0f);
 	ImGui::Checkbox("Drag (Air Resistance)", &settings.enable_drag);

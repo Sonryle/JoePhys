@@ -136,16 +136,32 @@ void World::UpdateGrid()
 		std::vector<Particle*> particles_to_delete;
 		for (Particle* p : particles)
 		{
-			int32_t p_x, p_y;
-			PositionToChunkCoords(p->pos_in_meters, &p_x, &p_y);
-			if (p_x != chunk_x || p_y != chunk_y)
-				particles_to_delete.push_back(p);
+			real top = p->pos_in_meters.y + p->radius_in_meters;
+			real bottom = p->pos_in_meters.y - p->radius_in_meters;
+			real right = p->pos_in_meters.x + p->radius_in_meters;
+			real left = p->pos_in_meters.x - p->radius_in_meters;
+			if (left < 0)
+				left -= chunk_scale;
+			if (bottom < 0)
+				bottom -= chunk_scale;
+
+			int32_t top_chunk;
+			int32_t bottom_chunk;
+			int32_t left_chunk;
+			int32_t right_chunk;
+			PositionToChunkCoords(vec2(left, top), &left_chunk, &top_chunk);
+			PositionToChunkCoords(vec2(right, bottom), &right_chunk, &bottom_chunk);
+
+			particles_to_delete.push_back(p);
+			/* if (chunk_x <= left_chunk && chunk_x >= right_chunk) */
+				/* if (chunk_y >= bottom_chunk && chunk_y <= top_chunk) */
+				/* 	particles_to_delete.pop_back(); */
 		}
 
 		for (Particle* p : particles_to_delete)
 			particles.erase(p);
 
-		/* // If chunk is empty, delete it */
+		// If chunk is empty, delete it
 		if (particles.empty())
 			chunks_to_delete.push_back(key);
 	}
@@ -167,24 +183,35 @@ void World::UpdateGrid()
 			real right = p->pos_in_meters.x + p->radius_in_meters;
 			real left = p->pos_in_meters.x - p->radius_in_meters;
 			if (left < 0)
+			{
 				left -= chunk_scale;
+				right -= chunk_scale;
+			}
 			if (bottom < 0)
+			{
 				bottom -= chunk_scale;
+				top -= chunk_scale;
+			}
 			
+			int32_t top_chunk;
+			int32_t bottom_chunk;
+			int32_t right_chunk;
+			int32_t left_chunk;
+			PositionToChunkCoords(vec2(left, top), &left_chunk, &top_chunk);
+			PositionToChunkCoords(vec2(right, bottom), &right_chunk, &bottom_chunk);
+
 			// Add particles to those extra chunks
-			for (int x = left; x < right; x+=chunk_scale)
-				for (int y = bottom; y < top; y+=chunk_scale)
+			for (real x = left_chunk; x <= right_chunk; x++)
+			{
+				for (real y = bottom_chunk; y <= top_chunk; y++)
 				{
-					int32_t chunk_x, chunk_y;
-					PositionToChunkCoords(vec2(x, y), &chunk_x, &chunk_y);
 					int64_t key;
-					ChunkCoordsToGridKey(&key, chunk_x, chunk_y);
+					ChunkCoordsToGridKey(&key, x, y);
 			
-					// Skip if particle is already in the set
-					if (std::find(grid[key].begin(), grid[key].end(), p) != grid[key].end())
-						continue;
-		
-					grid[key].insert(p);
+					// Add particle if its not already in the set
+					if (std::find(grid[key].begin(), grid[key].end(), p) == grid[key].end())
+						grid[key].insert(p);
 				}
+			}
 		}
 }
