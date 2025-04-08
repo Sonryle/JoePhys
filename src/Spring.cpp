@@ -2,6 +2,9 @@
 
 void Spring::Update()
 {
+	if (is_broken)
+		return;
+
 	vec2 dp = particleA->pos_in_meters - particleB->pos_in_meters;
 	real dist = length(dp);
 	real diff = resting_length - dist;
@@ -12,13 +15,10 @@ void Spring::Update()
 	if (dist < crushing_length && crushing_length != -1)
 		is_broken = 1;
 
-	if (!is_broken)
-	{
-		real k = stiffness;
-		vec2 x = dn * diff;
-		vec2 force = k * x;
-	
-		particleA->Accelerate(force);
-		particleB->Accelerate(-force);
-	}
+	real k = stiffness;
+	vec2 x = dn * diff;
+	vec2 force = k * x;
+
+	particleA->Accelerate(force);
+	particleB->Accelerate(-force);
 }

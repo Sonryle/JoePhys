@@ -35,8 +35,8 @@ void World::Step(int flags)
 
 		if (!(flags & NO_PARTICLE_COLLISIONS))
 		{
-			ResolveAllCollisions();
 			UpdateGrid();
+			ResolveAllCollisions();
 		}
 
 	}
@@ -86,13 +86,11 @@ void World::ResolveAllCollisions()
 				if (particle_one == particle_two)
 					continue;
 
-				// If both particles are static, skip
-				if (particle_one->is_static && particle_two->is_static)
-					continue;
-
 				// If dist between particles is less than their radii then they have collided
-				real dist = length(particle_one->pos_in_meters - particle_two->pos_in_meters);
-				if (dist < particle_one->radius_in_meters + particle_two->radius_in_meters)
+				real dist_squared = lengthSquared(particle_one->pos_in_meters - particle_two->pos_in_meters);
+				real min_dist = particle_one->radius_in_meters + particle_two->radius_in_meters;
+
+				if (dist_squared < min_dist * min_dist)
 					particle_one->ResolveCollision(particle_two);
 			}
 		}
@@ -164,7 +162,6 @@ void World::UpdateGrid()
 
 			// Add particles to those extra chunks
 			for (real x = left_chunk; x <= right_chunk; x++)
-			{
 				for (real y = bottom_chunk; y <= top_chunk; y++)
 				{
 					int64_t key;
@@ -174,6 +171,5 @@ void World::UpdateGrid()
 					if (std::find(grid[key].begin(), grid[key].end(), p) == grid[key].end())
 						grid[key].insert(p);
 				}
-			}
 		}
 }

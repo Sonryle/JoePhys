@@ -18,9 +18,7 @@ void Particle::ResetAcceleration()
 
 void Particle::ApplyDrag(real dampening)
 {
-		if (length(vel_in_meters_per_sec) < 0.0001f)
-			return;
-		if (is_static)
+		if (is_static || length(vel_in_meters_per_sec) < 0.0001f)
 			return;
 
 		real vel_magnitude = length(vel_in_meters_per_sec);
@@ -30,39 +28,62 @@ void Particle::ApplyDrag(real dampening)
 		Accelerate(drag_force);
 }
 
+vec2 ComputeSpringForce(vec2 pos, vec2 vel)
+{
+	vec2 anchor_position(0.0f, 0.0f);
+	real spring_constant = 1;
+	real damping_coefficient = 0.5f;
+
+	vec2 spring_anchor = anchor_position; // fixed point
+	real k = spring_constant;             // stiffness
+	real d = damping_coefficient;         // damping
+
+	vec2 displacement = pos - spring_anchor;
+	vec2 spring_force = -k * displacement;
+	vec2 damping_force = -d * vel;
+
+	return spring_force + damping_force;
+}
+
 void Particle::UpdatePosition(real dt)
 {
 	if (is_static)
 		return;
 
-	// Update particle position using Runge-Kutta fourth order
-	// -------------------------------------------------------
-	
-	// We do not need to implement runge-kutta on the velocity,
-	// because the acceleration remains the same over the time step
-	vel_in_meters_per_sec += GetAcceleration() * dt;
+	vec2 original_pos = pos_in_meters;
+	vec2 original_vel = vel_in_meters_per_sec;
 
-	// Returns the derivative of the position (aka velocity) at a
-	// certain time, traveling at a certain velocity
-	auto f_x = [this] (vec2 slope, real time)
-	{
-		return slope + (time * GetAcceleration());
+	auto acceleration = [this](vec2 pos, vec2 vel) {
+		/* return ComputeSpringForce(pos, vel) / mass_in_grams; // Replace with your actual spring force logic */
+		return GetAcceleration();
 	};
 
-	// slope of position (aka velocity) at four different time
-	// intervals and velocities
-	vec2 x1 = f_x(vel_in_meters_per_sec, 0) * dt;
-	vec2 x2 = f_x(vel_in_meters_per_sec + x1/2, dt/2) * dt;
-	vec2 x3 = f_x(vel_in_meters_per_sec + x2/2, dt/2) * dt;
-	vec2 x4 = f_x(vel_in_meters_per_sec + x3, dt) * dt;
+	auto f_v = [&](real time, vec2 pos, vec2 vel) {
+		return acceleration(pos, vel); // dv/dt = a(pos, vel)
+	};
 
-	// Weighted average of four slope gives us a good aproximation
-	// of the optimal velocity to move our particle by
-	vec2 delta_x = (x1 + 2*x2 + 2*x3 + x4) / 6;
+	auto f_x = [&](real time, vec2 pos, vec2 vel) {
+		return vel; // dx/dt = vel
+	};
 
-	pos_in_meters += delta_x;
+	// Velocity RK4
+	vec2 kv1 = f_v(0, original_pos, original_vel);
+	vec2 kv2 = f_v(dt/2, original_pos + original_vel * dt/2, original_vel + kv1 * dt/2);
+	vec2 kv3 = f_v(dt/2, original_pos + original_vel * dt/2, original_vel + kv2 * dt/2);
+	vec2 kv4 = f_v(dt,   original_pos + original_vel * dt,   original_vel + kv3 * dt);
+	vec2 dv = (dt / 6) * (kv1 + 2 * kv2 + 2 * kv3 + kv4);
 
-	ResetAcceleration();
+	// Position RK4
+	vec2 kx1 = f_x(0, original_pos, original_vel);
+	vec2 kx2 = f_x(dt/2, original_pos + kx1 * dt/2, original_vel + kv1 * dt/2);
+	vec2 kx3 = f_x(dt/2, original_pos + kx2 * dt/2, original_vel + kv2 * dt/2);
+	vec2 kx4 = f_x(dt,   original_pos + kx3 * dt,   original_vel + kv3 * dt);
+	vec2 dx = (dt / 6) * (kx1 + 2 * kx2 + 2 * kx3 + kx4);
+
+	vel_in_meters_per_sec += dv;
+	pos_in_meters += dx;
+
+	ResetAcceleration(); // if still needed
 }
 
 // Solves collision between itself and another particle
@@ -110,6 +131,8 @@ void Particle::ResolveCollision(Particle* other_particle)
 		vec2 p_diff = p1_p - p2_p;
 		vec2 proj = project(v_diff, p_diff);
 		p1->vel_in_meters_per_sec -= (proj * m_ratio);
+
+		return;
 	}
 	// if particle one IS static and particle two is NOT static
 	if (p1->is_static && !p2->is_static)
@@ -120,6 +143,8 @@ void Particle::ResolveCollision(Particle* other_particle)
 		vec2 p_diff = p2_p - p1_p;
 		vec2 proj = project(v_diff, p_diff);
 		p2->vel_in_meters_per_sec -= (proj * m_ratio);
+
+		return;
 	}
 	// if neither particles are static
 	if (!p1->is_static && !p2->is_static)
@@ -137,5 +162,7 @@ void Particle::ResolveCollision(Particle* other_particle)
 		p_diff = p2_p - p1_p;
 		proj = project(v_diff, p_diff);
 		p2->vel_in_meters_per_sec -= (proj * m_ratio);
+		
+		return;
 	}
 }
