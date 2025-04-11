@@ -47,7 +47,7 @@ void World::ApplyGravityToParticles()
 	// loop over every particle in every cluster and add gravity to its acceleration
 	for (Cluster* c : clusters)
 		for (Particle* p : c->particles)
-			p->Accelerate(p->mass_in_grams * gravity);
+			p->Accelerate(p->mass * gravity);
 }
 
 void World::ApplyDragToParticles()
@@ -62,6 +62,12 @@ void World::ApplyDragToParticles()
 // Move particles forwards along their velocities
 void World::UpdateParticlePositions(real dt)
 {
+	// Implementing runge-kutta is a bit difficult because it requires us to know the acceleration of
+	// each particle at multiple intermediate steps. This would be easy if the acceleration of each
+	// particle was constant but since springs influence the simulation, each particle's acceleration
+	// depends on both its own position and the position of other particles' which are connected to
+	// it by springs.
+
 	// Loop over every particle in every cluster and update its position
 	for (Cluster* c : clusters)
 		for (Particle* p : c->particles)
@@ -87,8 +93,8 @@ void World::ResolveAllCollisions()
 					continue;
 
 				// If dist between particles is less than their radii then they have collided
-				real dist_squared = lengthSquared(particle_one->pos_in_meters - particle_two->pos_in_meters);
-				real min_dist = particle_one->radius_in_meters + particle_two->radius_in_meters;
+				real dist_squared = lengthSquared(particle_one->pos - particle_two->pos);
+				real min_dist = particle_one->radius + particle_two->radius;
 
 				if (dist_squared < min_dist * min_dist)
 					particle_one->ResolveCollision(particle_two);
@@ -102,7 +108,7 @@ void World::UpdateSprings(real dt)
 	// loop over every spring in every cluster and update them
 	for (Cluster* c : clusters)
 		for (Spring* s : c->springs)
-			s->Update();
+			s->Update(dt);
 }
 
 void World::PositionToChunkCoords(vec2 pos, int32_t* chunk_x, int32_t* chunk_y)
@@ -140,10 +146,10 @@ void World::UpdateGrid()
 		for (Particle* p : c->particles)
 		{
 			// Find the top, bottom, left and right of each particle
-			real top = p->pos_in_meters.y + p->radius_in_meters;
-			real bottom = p->pos_in_meters.y - p->radius_in_meters;
-			real right = p->pos_in_meters.x + p->radius_in_meters;
-			real left = p->pos_in_meters.x - p->radius_in_meters;
+			real top = p->pos.y + p->radius;
+			real bottom = p->pos.y - p->radius;
+			real right = p->pos.x + p->radius;
+			real left = p->pos.x - p->radius;
 			if (left < 0)
 				left -= chunk_scale;
 			if (right < 0)

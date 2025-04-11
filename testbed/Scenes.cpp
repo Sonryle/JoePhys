@@ -41,8 +41,8 @@ void Scene::Render()
 		{
 			// Render each particle
 			int segments = settings.circle_res;
-			real rad = p->radius_in_meters;
-			vec2 pos = p->pos_in_meters;
+			real rad = p->radius;
+			vec2 pos = p->pos;
 			colour col;
 			colour outline_col;
 			if (p->is_static)
@@ -64,8 +64,8 @@ void Scene::Render()
 			for (Spring* s : world->clusters[c]->springs)
 			{
 				// Render each spring if they are not torn
-				vec2 posA = s->particleA->pos_in_meters;
-				vec2 posB = s->particleB->pos_in_meters;
+				vec2 posA = s->particleA->pos;
+				vec2 posB = s->particleB->pos;
 				colour col = palette.colours[colours.spring];
 				if (!s->is_broken)
 					renderer.AddLine(posA, posB, col);
@@ -75,7 +75,7 @@ void Scene::Render()
 	// Render a circle around selected particle
 	colour outline_col(1.0f, 1.0f, 1.0f, 1.0f);
 	if (selected_particle != nullptr)
-		renderer.AddCircle(selected_particle->pos_in_meters, selected_particle->radius_in_meters * 1.2f, settings.circle_res, outline_col);
+		renderer.AddCircle(selected_particle->pos, selected_particle->radius * 1.2f, settings.circle_res, outline_col);
 	
 	// Render chunks
 	if (settings.render_chunks)
@@ -179,10 +179,10 @@ void Scene::AddRepulsionForce(vec2 pos, real radius, real strength)
 		{
 
 			// If particle is inside of the radius
-			if (length(pos - p->pos_in_meters) <= radius) 
+			if (length(pos - p->pos) <= radius) 
 			{
 				// Add repulsion force to every particle
-				vec2 force = normalize(pos - p->pos_in_meters) * strength;
+				vec2 force = normalize(pos - p->pos) * strength;
 				p->Accelerate(-force);
 			}
 		}
@@ -205,10 +205,10 @@ void Scene::AddAttractionForce(vec2 pos, real radius, real strength)
 		{
 
 			// If particle is inside of the radius
-			if (length(pos - p->pos_in_meters) <= radius) 
+			if (length(pos - p->pos) <= radius) 
 			{
 				// Add attraction force to every particle
-				vec2 force = normalize(pos - p->pos_in_meters) * strength;
+				vec2 force = normalize(pos - p->pos) * strength;
 				p->Accelerate(force);
 			}
 		}
@@ -228,7 +228,7 @@ Particle* Scene::GetNearestParticle(vec2 pos)
 			if (nearest == nullptr)
 				nearest = p;
 
-			if (lengthSquared(p->pos_in_meters - pos) < lengthSquared(nearest->pos_in_meters - pos))
+			if (lengthSquared(p->pos - pos) < lengthSquared(nearest->pos - pos))
 				nearest = p;
 		}
 	
@@ -237,12 +237,12 @@ Particle* Scene::GetNearestParticle(vec2 pos)
 
 void Scene::MoveParticle(Particle* part, vec2 pos)
 {
-	vec2 old_pos = part->pos_in_meters;
+	vec2 old_pos = part->pos;
 
 	// Reset and velocity or acceleration
 	part->ResetAcceleration();
-	part->vel_in_meters_per_sec.Set(0.0f, 0.0f);
+	part->vel.Set(0.0f, 0.0f);
 
 	// Teleport particle to position
-	part->pos_in_meters = pos;
+	part->pos = pos;
 }

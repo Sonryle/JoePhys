@@ -9,12 +9,14 @@ typedef float real;
 struct Particle
 {
 	// constructors
-	Particle() : pos_in_meters(0), vel_in_meters_per_sec(0), elasticity(0.5f), radius_in_meters(100), mass_in_grams(1.0f), is_static(0) {}
-	Particle(vec2 pos, vec2 vel, real elasticity, real radius, real mass, bool is_static) : pos_in_meters(pos), vel_in_meters_per_sec(vel), elasticity(elasticity), radius_in_meters(radius), mass_in_grams(mass), is_static(is_static) {}
+	Particle() : pos(0), vel(0), elasticity(0.5f), radius(100), mass(1.0f), is_static(0) {}
+	Particle(vec2 pos, vec2 vel, real elasticity, real radius, real mass, bool is_static) : pos(pos), vel(vel), elasticity(elasticity), radius(radius), mass(mass), is_static(is_static) {}
 
 	// functions
 	void Accelerate(vec2 force);
+	void Accelerate(int runge_kutta_sample, vec2 force);
 	vec2 GetAcceleration();
+	vec2 GetSpringAcceleration(int runge_kutta_sample);
 	void ResetAcceleration();
 	void ApplyDrag(real dampening);
 	void UpdatePosition(real dt);
@@ -23,14 +25,16 @@ struct Particle
 	
 	// variables
 	bool is_static;
-	vec2 pos_in_meters;
-	vec2 vel_in_meters_per_sec;
-	real elasticity;
-	real radius_in_meters;
-	real mass_in_grams;
+	vec2 pos;	// in meters
+	vec2 vel;	// in meters/second
+	real elasticity;// 1 == perfectly elastic | 0 == no elasticity
+	real radius;	// in meters
+	real mass;	// in grams
 
 private:
-	vec2 acc_in_meters_per_sec;
+	vec2 acc;
+	// spring acceleration for runge-kutta samples k1 & k2
+	vec2 spring_acc[2];
 };
 
 #endif

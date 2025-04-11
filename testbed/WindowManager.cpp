@@ -95,7 +95,7 @@ void WindowManager::KeyCallback(GLFWwindow* window, int key, int scancode, int a
 			else if (action == GLFW_PRESS && window_mgr.world_exists)
 			{
 				Particle* p = scene_manager.current_scene->GetNearestParticle(camera.ScreenSpaceToWorldSpace(window_mgr.cursor_pos));
-				p->vel_in_meters_per_sec.Set(0.0f, 0.0f);
+				p->vel.Set(0.0f, 0.0f);
 				p->ResetAcceleration();
 				p->is_static = !p->is_static;
 			}
@@ -155,14 +155,14 @@ void WindowManager::ScrollCallback(GLFWwindow*, double dx, double dy)
 			Particle* p = scene_manager.current_scene->GetNearestParticle(camera.ScreenSpaceToWorldSpace(window_mgr.cursor_pos));
 			if (p != nullptr)
 			{
-				p->radius_in_meters += dy / 10.0f;
+				p->radius += dy / 10.0f;
 
-				if (p->radius_in_meters < settings.min_particle_size)
-					p->radius_in_meters = settings.min_particle_size;
-				if (p->radius_in_meters > settings.max_particle_size)
-					p->radius_in_meters = settings.max_particle_size;
+				if (p->radius < settings.min_particle_size)
+					p->radius = settings.min_particle_size;
+				if (p->radius > settings.max_particle_size)
+					p->radius = settings.max_particle_size;
 
-				p->mass_in_grams = PI * p->radius_in_meters * p->radius_in_meters;
+				p->mass = PI * p->radius * p->radius;
 			}
 		}
 	}

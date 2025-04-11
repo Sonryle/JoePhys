@@ -8,7 +8,7 @@ struct Spring
 	Spring(Particle* pA, Particle* pB, real length, real stiffness, real tearing_length, real crushing_length) : particleA(pA), particleB(pB), resting_length(length), stiffness(stiffness), tearing_length(tearing_length), crushing_length(crushing_length), is_broken(0) {}
 	~Spring() {}
 
-	void Update();
+	void Update(double dt);
 	
 	real resting_length;
 	real stiffness;

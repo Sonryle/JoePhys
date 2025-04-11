@@ -54,7 +54,7 @@ struct RopeScene : public Scene
 			real stiffness = 2500.0f;
 			if (old_part != nullptr)
 			{
-				real len = length(old_part->pos_in_meters - myParticle->pos_in_meters);
+				real len = length(old_part->pos - myParticle->pos);
 				Spring* s = new Spring(old_part, myParticle, len, stiffness , -1, -1);
 				rope->springs.push_back(s);
 			}

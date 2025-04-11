@@ -41,7 +41,7 @@ struct NewtonsCradleScene : public Scene
 			vec2 vel(0.0f, 0.0f);
 			real elas = 1.0f;
 			real rad = 0.75f;
-			vec2 pos(anchors->particles[x]->pos_in_meters.x, -2.0f);
+			vec2 pos(anchors->particles[x]->pos.x, -2.0f);
 			real mass = PI * rad * rad;
 			if (x == 0)
 			{
@@ -49,7 +49,7 @@ struct NewtonsCradleScene : public Scene
 				real radian = PI;
 				real posx = cos(radian) * len;
 				real posy = sin(radian) * len;
-				posx += anchors->particles[x]->pos_in_meters.x;
+				posx += anchors->particles[x]->pos.x;
 				posy += 4.0f;
 
 				pos.Set(posx, posy);
