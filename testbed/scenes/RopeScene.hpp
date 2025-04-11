@@ -55,7 +55,7 @@ struct RopeScene : public Scene
 			if (old_part != nullptr)
 			{
 				real len = length(old_part->pos - myParticle->pos);
-				Spring* s = new Spring(old_part, myParticle, len, stiffness , -1, -1);
+				Spring* s = new Spring(old_part, myParticle, len, stiffness);
 				rope->springs.push_back(s);
 			}
 			old_part = myParticle;

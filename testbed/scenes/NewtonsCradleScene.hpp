@@ -68,7 +68,7 @@ struct NewtonsCradleScene : public Scene
 			Particle* pB = anchors->particles[n];
 			real len = 6.0f;
 			real stiffness = 10000.0f;
-			Spring* s = new Spring(pA, pB, len, stiffness, -1, -1);
+			Spring* s = new Spring(pA, pB, len, stiffness);
 
 			anchors->springs.push_back(s);
 		}

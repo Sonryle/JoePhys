@@ -46,13 +46,13 @@ struct ClothScene : public Scene
 				if (x > 0)
 				{
 					real len = length(hp[x][y]->pos - hp[x-1][y]->pos);
-					Spring* s = new Spring(hp[x][y], hp[x-1][y], len, stiffness, -1, -1);
+					Spring* s = new Spring(hp[x][y], hp[x-1][y], len, stiffness);
 					cloth->springs.push_back(s);
 				}
 				if (y > 0)
 				{
 					real len = length(hp[x][y]->pos - hp[x][y-1]->pos);
-					Spring* s = new Spring(hp[x][y], hp[x][y-1], len, stiffness, -1, -1);
+					Spring* s = new Spring(hp[x][y], hp[x][y-1], len, stiffness);
 					cloth->springs.push_back(s);
 				}
 			}

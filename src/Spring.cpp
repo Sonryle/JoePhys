@@ -2,9 +2,6 @@
 
 void Spring::Update(double dt)
 {
-	if (is_broken)
-		return;
-
 	// for runge kutta sample k1
 	// -------------------------
 
@@ -13,18 +10,13 @@ void Spring::Update(double dt)
 	real diff = resting_length - dist;
 	vec2 dn = normalize(dp);
 
-	if (dist > tearing_length && tearing_length != -1)
-		is_broken = 1;
-	if (dist < crushing_length && crushing_length != -1)
-		is_broken = 1;
-
 	real k = stiffness;
 	vec2 x = dn * diff;
 	vec2 force = k * x;
 
 	// Accelerate particle's spring acceleration for runge kutta sample k1
-	particleA->Accelerate(1, force);
-	particleB->Accelerate(1, -force);
+	particleA->spring_acc[0] += force / particleA->mass;
+	particleB->spring_acc[0] += -force / particleB->mass;
 
 	// for runge kutta sample k2
 	// -------------------------
@@ -34,16 +26,11 @@ void Spring::Update(double dt)
 	diff = resting_length - dist;
 	dn = normalize(dp);
 
-	if (dist > tearing_length && tearing_length != -1)
-		is_broken = 1;
-	if (dist < crushing_length && crushing_length != -1)
-		is_broken = 1;
-
 	k = stiffness;
 	x = dn * diff;
 	force = k * x;
 
 	// Accelerate particle's spring acceleration for runge kutta sample k2
-	particleA->Accelerate(2, force);
-	particleB->Accelerate(2, -force);
+	particleA->spring_acc[1] += force / particleA->mass;
+	particleB->spring_acc[1] += -force / particleB->mass;
 }

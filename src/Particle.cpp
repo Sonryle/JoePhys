@@ -2,29 +2,7 @@
 
 void Particle::Accelerate(vec2 force)
 {
-	if (!is_static)
-		acc += force / mass;
-}
-
-void Particle::Accelerate(int runge_kutta_sample, vec2 force)
-{
-	if (!is_static)
-	{
-		if (runge_kutta_sample == 1)
-			spring_acc[0] += force / mass;
-		if (runge_kutta_sample == 2)
-			spring_acc[1] += force / mass;
-	}
-}
-
-vec2 Particle::GetAcceleration()
-{
-	return acc;
-}
-
-vec2 Particle::GetSpringAcceleration(int runge_kutta_sample)
-{
-	return spring_acc[runge_kutta_sample-1];
+	acc += force / mass;
 }
 
 void Particle::ResetAcceleration()
@@ -68,24 +46,14 @@ void Particle::UpdatePosition(real dt)
 	if (is_static)
 		return;
 
-	auto f_v = [&](int runge_kutta_sample)
-	{
-		return GetAcceleration() + GetSpringAcceleration(runge_kutta_sample);
-	};
-
-	auto f_x = [&](real time, vec2 pos, vec2 vel)
-	{
-		return vel;
-	};
-
-	// Velocity RK4
-	vec2 kv1 = f_v(1);
-	vec2 kv2 = f_v(2);
+	// Velocity with runge-kutta 2nd order
+	vec2 kv1 = acc + spring_acc[0];
+	vec2 kv2 = acc + spring_acc[1];
 	vec2 dv = (dt / 2) * (kv1 + kv2);
 
-	// Position RK4
-	vec2 kx1 = f_x(0, pos, vel);
-	vec2 kx2 = f_x(dt, pos + kx1 * dt, vel + kv2 * dt);
+	// Position with runge-kutta 2nd order
+	vec2 kx1 = vel + kv1 * dt;
+	vec2 kx2 = vel + kv2 * dt;
 	vec2 dx = (dt / 2) * (kx1 + kx2);
 
 	vel += dv;

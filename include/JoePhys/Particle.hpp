@@ -14,9 +14,6 @@ struct Particle
 
 	// functions
 	void Accelerate(vec2 force);
-	void Accelerate(int runge_kutta_sample, vec2 force);
-	vec2 GetAcceleration();
-	vec2 GetSpringAcceleration(int runge_kutta_sample);
 	void ResetAcceleration();
 	void ApplyDrag(real dampening);
 	void UpdatePosition(real dt);
@@ -30,11 +27,10 @@ struct Particle
 	real elasticity;// 1 == perfectly elastic | 0 == no elasticity
 	real radius;	// in meters
 	real mass;	// in grams
+	vec2 acc;
+	vec2 spring_acc[2];
 
 private:
-	vec2 acc;
-	// spring acceleration for runge-kutta samples k1 & k2
-	vec2 spring_acc[2];
 };
 
 #endif

@@ -63,12 +63,11 @@ void Scene::Render()
 		if (settings.enable_springs)
 			for (Spring* s : world->clusters[c]->springs)
 			{
-				// Render each spring if they are not torn
+				// Render each spring
 				vec2 posA = s->particleA->pos;
 				vec2 posB = s->particleB->pos;
 				colour col = palette.colours[colours.spring];
-				if (!s->is_broken)
-					renderer.AddLine(posA, posB, col);
+				renderer.AddLine(posA, posB, col);
 			}
 	}
 	

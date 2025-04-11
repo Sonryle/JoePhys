@@ -27,11 +27,10 @@ void World::Step(int flags)
 			ApplyGravityToParticles();
 		if (!(flags & NO_DRAG))
 			ApplyDragToParticles();
-
-		if (!(flags & NO_PARTICLE_MOVEMENT))
-			UpdateParticlePositions(dt / sub_steps);
 		if (!(flags & NO_SPRING_FORCES))
 			UpdateSprings(dt / sub_steps);
+		if (!(flags & NO_PARTICLE_MOVEMENT))
+			UpdateParticlePositions(dt / sub_steps);
 
 		if (!(flags & NO_PARTICLE_COLLISIONS))
 		{
