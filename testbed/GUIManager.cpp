@@ -230,7 +230,7 @@ void GUIManager::AddSimulationWindow()
 		scene_manager.current_scene->SetUpSceneSettings();
 
 	// Add a slider for the substeps and a description of what substeps do
-	ImGui::SliderInt("Sub Steps", &settings.sub_steps, 4, 64);
+	ImGui::SliderInt("Sub Steps", &settings.sub_steps, 1, 64);
 	ImGui::SameLine();
 	ImGui::TextDisabled("(?)");
     	if (ImGui::IsItemHovered(ImGuiHoveredFlags_DelayShort))

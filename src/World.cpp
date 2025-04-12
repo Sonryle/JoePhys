@@ -85,18 +85,18 @@ void World::ResolveAllCollisions()
 			for (; p2 != particles.end(); p2++)
 			{
 				// Solve collision between the two particles only if they collide
-				Particle* particle_one = *p1;
-				Particle* particle_two = *p2;
+				Particle* part1 = *p1;
+				Particle* part2 = *p2;
 
-				if (particle_one == particle_two)
+				if ((part1 == part2) || (part1->is_static && part2->is_static))
 					continue;
 
 				// If dist between particles is less than their radii then they have collided
-				real dist_squared = lengthSquared(particle_one->pos - particle_two->pos);
-				real min_dist = particle_one->radius + particle_two->radius;
+				real dist_squared = lengthSquared(part1->pos - part2->pos);
+				real min_dist = part1->radius + part2->radius;
 
 				if (dist_squared < min_dist * min_dist)
-					particle_one->ResolveCollision(particle_two);
+					part1->ResolveCollision(part2);
 			}
 		}
 	}

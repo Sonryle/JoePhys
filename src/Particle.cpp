@@ -52,8 +52,8 @@ void Particle::UpdatePosition(real dt)
 	vec2 dv = (dt / 2) * (kv1 + kv2);
 
 	// Position with runge-kutta 2nd order
-	vec2 kx1 = vel + kv1 * dt;
-	vec2 kx2 = vel + kv2 * dt;
+	vec2 kx1 = vel;
+	vec2 kx2 = vel + dv;
 	vec2 dx = (dt / 2) * (kx1 + kx2);
 
 	vel += dv;

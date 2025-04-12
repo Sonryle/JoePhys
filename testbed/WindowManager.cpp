@@ -110,7 +110,7 @@ void WindowManager::KeyCallback(GLFWwindow* window, int key, int scancode, int a
 				scene_manager.SwitchScene(scene_manager.current_scene_number);
 		break;
 	case GLFW_KEY_P:
-		if (action == GLFW_PRESS)
+		if (action != GLFW_RELEASE)
 			scene_manager.current_scene->AddStaticParticle(camera.ScreenSpaceToWorldSpace(window_mgr.cursor_pos), 0.1f);
 	case GLFW_KEY_LEFT:
 		if (action == GLFW_PRESS && window_mgr.ctrl_pressed)
