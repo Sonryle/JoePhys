@@ -6,7 +6,8 @@ A testbed application is included to visualize and demonstrate the library’s c
 
 ## Features
 
-### Runge-Kutta 2nd Order
+### Particles
+![particles](https://raw.githubusercontent.com/Sonryle/JoePhys/refs/heads/main/testbed/example_media/particles.gif)
 
 ### Chunking
 ![chunks](https://raw.githubusercontent.com/Sonryle/JoePhys/refs/heads/main/testbed/example_media/chunks.gif)
