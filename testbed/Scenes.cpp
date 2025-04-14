@@ -78,10 +78,10 @@ void Scene::Render()
 	
 	// Render chunks
 	if (settings.render_chunks)
-		for (auto& [key, particles] : world->grid)
+		for (auto& [key, particles] : world->chunks)
 		{
 			real x, y;
-			world->GridKeyToChunkCoords(key, &x, &y);
+			world->HashKeyToChunkCoords(key, &x, &y);
 	
 			real left = x;
 			real right = x + settings.chunk_scale;

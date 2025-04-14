@@ -24,23 +24,6 @@ void Particle::ApplyDrag(real dampening)
 		Accelerate(drag_force);
 }
 
-vec2 ComputeSpringForce(vec2 pos, vec2 vel)
-{
-	vec2 anchor_position(0.0f, 0.0f);
-	real spring_constant = 1;
-	real damping_coefficient = 0.5f;
-
-	vec2 spring_anchor = anchor_position; // fixed point
-	real k = spring_constant;             // stiffness
-	real d = damping_coefficient;         // damping
-
-	vec2 displacement = pos - spring_anchor;
-	vec2 spring_force = -k * displacement;
-	vec2 damping_force = -d * vel;
-
-	return spring_force + damping_force;
-}
-
 void Particle::UpdatePosition(real dt)
 {
 	if (is_static)

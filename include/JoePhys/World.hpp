@@ -5,10 +5,9 @@ typedef float real;
 
 #include <vector>
 #include <JoePhys/Cluster.hpp>
-#include <unordered_map>
-#include <unordered_set>
 #include <cstdint>
-#include <algorithm>
+#include <map>
+#include <unordered_map>
 
 // enum containing options for the "Step()" function
 enum world_options
@@ -34,12 +33,12 @@ struct World
 	void Create(int simulation_hertz, int sub_steps, vec2 gravity);
 	void Step(int flags);
 	void PositionToChunkCoords(vec2 pos, int32_t* chunk_x, int32_t* chunk_y);
-	void ChunkCoordsToGridKey(int64_t* key, int32_t chunk_x, int32_t chunk_y);
-	void GridKeyToChunkCoords(int64_t key, real* chunk_x, real* chunk_y);
+	void HashKeyToChunkCoords(int64_t key, real* chunk_x, real* chunk_y);
+	int64_t ChunkCoordsToHashKey(int32_t chunk_x, int32_t chunk_y);
 
 	// variables
 	std::vector<Cluster*> clusters;
-	std::unordered_map<std::int64_t, std::unordered_set<Particle*>> grid;
+	std::unordered_map<std::int64_t, std::vector<Particle*>> chunks;
 	int simulation_hertz;
 	int sub_steps;
 	vec2 gravity;
@@ -52,7 +51,7 @@ private:
 	void UpdateParticlePositions(real dt);
 	void ResolveAllCollisions();
 	void UpdateSprings(real dt);
-	void UpdateGrid();
+	void UpdateChunks();
 };
 
 #endif

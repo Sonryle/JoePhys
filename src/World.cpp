@@ -34,7 +34,7 @@ void World::Step(int flags)
 
 		if (!(flags & NO_PARTICLE_COLLISIONS))
 		{
-			UpdateGrid();
+			UpdateChunks();
 			ResolveAllCollisions();
 		}
 
@@ -61,12 +61,6 @@ void World::ApplyDragToParticles()
 // Move particles forwards along their velocities
 void World::UpdateParticlePositions(real dt)
 {
-	// Implementing runge-kutta is a bit difficult because it requires us to know the acceleration of
-	// each particle at multiple intermediate steps. This would be easy if the acceleration of each
-	// particle was constant but since springs influence the simulation, each particle's acceleration
-	// depends on both its own position and the position of other particles' which are connected to
-	// it by springs.
-
 	// Loop over every particle in every cluster and update its position
 	for (Cluster* c : clusters)
 		for (Particle* p : c->particles)
@@ -76,17 +70,13 @@ void World::UpdateParticlePositions(real dt)
 void World::ResolveAllCollisions()
 {
 	// look over every chunk and compair the particles inside of them
-	for (auto& [key, particles] : grid)
-	{
-		for (auto p1 = particles.begin(); p1 != particles.end(); p1++)
-		{
-			auto p2 = p1;
-			p2++;
-			for (; p2 != particles.end(); p2++)
+	for (auto& [key, particles] : chunks)
+		for (int p1 = 0; p1 < particles.size(); p1++)
+			for (int p2 = p1+1; p2 < particles.size(); p2++)
 			{
 				// Solve collision between the two particles only if they collide
-				Particle* part1 = *p1;
-				Particle* part2 = *p2;
+				Particle* part1 = particles[p1];
+				Particle* part2 = particles[p2];
 
 				if ((part1 == part2) || (part1->is_static && part2->is_static))
 					continue;
@@ -98,8 +88,6 @@ void World::ResolveAllCollisions()
 				if (dist_squared < min_dist * min_dist)
 					part1->ResolveCollision(part2);
 			}
-		}
-	}
 }
 
 void World::UpdateSprings(real dt)
@@ -116,26 +104,24 @@ void World::PositionToChunkCoords(vec2 pos, int32_t* chunk_x, int32_t* chunk_y)
 	*chunk_y = (int32_t)(pos.y / chunk_scale);
 }
 
-void World::ChunkCoordsToGridKey(int64_t* key, int32_t chunk_x, int32_t chunk_y)
+int64_t World::ChunkCoordsToHashKey(int32_t chunk_x, int32_t chunk_y)
 {
 	// Get key for our chunk
-	*key = (int64_t)chunk_x;
-	*key <<= 32;
-	*key |= (uint32_t)chunk_y;
+	int64_t key = (int64_t)chunk_x;
+	key <<= 32;
+	key |= (uint32_t)chunk_y;
+	return key;
 }
 
-void World::GridKeyToChunkCoords(int64_t key, real* chunk_x, real* chunk_y)
+void World::HashKeyToChunkCoords(int64_t key, real* chunk_x, real* chunk_y)
 {
 	*chunk_x = (int32_t)(key >> 32) * chunk_scale;
 	*chunk_y = (int32_t)(key)* chunk_scale;
 }
 
-void World::UpdateGrid()
+void World::UpdateChunks()
 {
-	// Clear particles from grid which arent in that chunk anymore
-	// -----------------------------------------------------------
-
-	grid.clear();
+	chunks.clear();
 
 	// Add all particles to grid
 	// -------------------------
@@ -149,14 +135,10 @@ void World::UpdateGrid()
 			real bottom = p->pos.y - p->radius;
 			real right = p->pos.x + p->radius;
 			real left = p->pos.x - p->radius;
-			if (left < 0)
-				left -= chunk_scale;
-			if (right < 0)
-				right -= chunk_scale;
-			if (bottom < 0)
-				bottom -= chunk_scale;
-			if (top < 0)
-				top -= chunk_scale;
+			if (left < 0) left -= chunk_scale;
+			if (right < 0) right -= chunk_scale;
+			if (bottom < 0) bottom -= chunk_scale;
+			if (top < 0) top -= chunk_scale;
 			
 			int32_t top_chunk;
 			int32_t bottom_chunk;
@@ -168,13 +150,6 @@ void World::UpdateGrid()
 			// Add particles to those extra chunks
 			for (real x = left_chunk; x <= right_chunk; x++)
 				for (real y = bottom_chunk; y <= top_chunk; y++)
-				{
-					int64_t key;
-					ChunkCoordsToGridKey(&key, x, y);
-			
-					// Add particle if its not already in the set
-					if (std::find(grid[key].begin(), grid[key].end(), p) == grid[key].end())
-						grid[key].insert(p);
-				}
+					chunks[ChunkCoordsToHashKey(x, y)].push_back(p);
 		}
 }
