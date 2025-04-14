@@ -1,7 +1,7 @@
 #include <cstdio>	// for "stderr" file path constant
 
-#include "JoePhys/World.hpp"
-#include "JoePhys/Vec2.hpp"
+#include <JoePhys/World.hpp>
+#include <JoePhys/Vec2.hpp>
 
 World::~World()
 {

@@ -1,4 +1,4 @@
-#include "JoePhys/Vec2.hpp"
+#include <JoePhys/Vec2.hpp>
 #include <JoePhys/Spring.hpp>
 
 void Spring::Update(double dt)

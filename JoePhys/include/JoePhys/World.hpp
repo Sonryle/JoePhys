@@ -6,7 +6,6 @@ typedef float real;
 #include <vector>
 #include <JoePhys/Cluster.hpp>
 #include <cstdint>
-#include <map>
 #include <unordered_map>
 
 // enum containing options for the "Step()" function
