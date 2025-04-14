@@ -13,7 +13,15 @@ A testbed application is included to visualize and demonstrate the library’s c
 ![springs](https://raw.githubusercontent.com/Sonryle/JoePhys/refs/heads/main/testbed/example_media/springs.gif)
 
 ### Chunking
+The world 
 ![chunks](https://raw.githubusercontent.com/Sonryle/JoePhys/refs/heads/main/testbed/example_media/chunks.gif)
+
+### Runge-Kutta 2nd Order
+Particle and spring movement uses runge-kutta 2nd order, a method for .....
+
+### Deterministic
+
+### Air Resistance
 
 ## Installation
 
