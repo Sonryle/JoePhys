@@ -1,2 +1,0 @@
-/usr/bin/ar qc libJoePhys.a CMakeFiles/JoePhys.dir/src/Particle.cpp.o CMakeFiles/JoePhys.dir/src/Spring.cpp.o CMakeFiles/JoePhys.dir/src/World.cpp.o
-/usr/bin/ranlib libJoePhys.a

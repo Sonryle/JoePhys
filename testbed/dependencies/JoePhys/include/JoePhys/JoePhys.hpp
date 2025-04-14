@@ -1,5 +1,0 @@
-#include "Vec2.hpp"
-#include "World.hpp"
-#include "Particle.hpp"
-#include "Cluster.hpp"
-#include "Spring.hpp"
