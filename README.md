@@ -9,7 +9,7 @@ A testbed application is included to visualize and demonstrate the library’s c
 ### Runge-Kutta 2nd Order
 
 ### Chunking
-![hippo](https://media3.giphy.com/media/aUovxH8Vf9qDu/giphy.gif)
+![ih](https://raw.githubusercontent.com/Sonryle/JoePhys/d5dd30dba9eb533e087d0a5bd53ec60504613132/testbed/example_media/chunks.gif)
 
 ## Installation
 
