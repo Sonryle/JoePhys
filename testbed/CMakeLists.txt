@@ -18,3 +18,5 @@ target_link_libraries(testbed PUBLIC glfw)
 target_link_libraries(testbed PUBLIC glad)
 target_link_libraries(testbed PUBLIC imgui)
 
+# Set our project as the Visual Studio startup project
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${CMAKE_PROJECT_NAME})

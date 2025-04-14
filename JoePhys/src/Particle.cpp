@@ -2,7 +2,8 @@
 
 void Particle::Accelerate(vec2 force)
 {
-	acc += force / mass;
+	if (!is_static)
+		acc += force / mass;
 }
 
 void Particle::ResetAcceleration()
@@ -74,20 +75,14 @@ void Particle::ResolveCollision(Particle* other_particle)
 	// -----------------------
 
 	real CoR = (p1->elasticity + p2->elasticity) * 0.5f;	// Coefficient of Restitution
-	vec2 p1_v = p1->vel;
-	vec2 p2_v = p2->vel;
-	vec2 p1_p = p1->pos;
-	vec2 p2_p = p2->pos;
-	real p1_m = p1->mass;
-	real p2_m = p2->mass;
 	
 	// if particle one is NOT static and particle two IS static
 	if (!p1->is_static && p2->is_static)
 	{
 		// solve for particle one
 		real m_ratio = 1+CoR;
-		vec2 v_diff = p1_v - p2_v;
-		vec2 p_diff = p1_p - p2_p;
+		vec2 v_diff = p1->vel - p2->vel;
+		vec2 p_diff = p1->pos - p2->pos;
 		vec2 proj = project(v_diff, p_diff);
 		p1->vel -= (proj * m_ratio);
 
@@ -98,8 +93,8 @@ void Particle::ResolveCollision(Particle* other_particle)
 	{
 		// solve for particle two
 		real m_ratio = 1+CoR;
-		vec2 v_diff = p2_v - p1_v;
-		vec2 p_diff = p2_p - p1_p;
+		vec2 v_diff = p2->vel - p1->vel;
+		vec2 p_diff = p2->pos - p1->pos;
 		vec2 proj = project(v_diff, p_diff);
 		p2->vel -= (proj * m_ratio);
 
@@ -109,18 +104,21 @@ void Particle::ResolveCollision(Particle* other_particle)
 	if (!p1->is_static && !p2->is_static)
 	{
 		// solve for particle one
-		real m_ratio = ((1+CoR)*p2_m) / (p1_m + p2_m);
-		vec2 v_diff = p1_v - p2_v;
-		vec2 p_diff = p1_p - p2_p;
+		real m_ratio = ((1+CoR)*p2->mass) / (p1->mass + p2->mass);
+		vec2 v_diff = p1->vel - p2->vel;
+		vec2 p_diff = p1->pos - p2->pos;
 		vec2 proj = project(v_diff, p_diff);
-		p1->vel -= (proj * m_ratio);
+		vec2 dp1 = (proj * m_ratio);
 		
 		// solve for particle two
-		m_ratio = ((1+CoR)*p1_m) / (p1_m + p2_m);
-		v_diff = p2_v - p1_v;
-		p_diff = p2_p - p1_p;
+		m_ratio = ((1+CoR)*p1->mass) / (p1->mass + p2->mass);
+		v_diff = p2->vel - p1->vel;
+		p_diff = p2->pos - p1->pos;
 		proj = project(v_diff, p_diff);
-		p2->vel -= (proj * m_ratio);
+		vec2 dp2 = (proj * m_ratio);
+		
+		p1->vel -= dp1;
+		p2->vel -= dp2;
 		
 		return;
 	}

@@ -11,8 +11,10 @@ void Spring::Update(double dt)
 	force *= stiffness;
 
 	// Accelerate particle's spring acceleration for runge kutta sample k1
-	particleA->spring_acc[0] += force / particleA->mass;
-	particleB->spring_acc[0] += -force / particleB->mass;
+	if (!particleA->is_static)
+		particleA->spring_acc[0] += force / particleA->mass;
+	if (!particleB->is_static)
+		particleB->spring_acc[0] += -force / particleB->mass;
 
 	// for runge kutta sample k2
 	// -------------------------
@@ -22,6 +24,8 @@ void Spring::Update(double dt)
 	force *= stiffness;
 
 	// Accelerate particle's spring acceleration for runge kutta sample k2
-	particleA->spring_acc[1] += force / particleA->mass;
-	particleB->spring_acc[1] += -force / particleB->mass;
+	if (!particleA->is_static)
+		particleA->spring_acc[1] += force / particleA->mass;
+	if (!particleB->is_static)
+		particleB->spring_acc[1] += -force / particleB->mass;
 }
