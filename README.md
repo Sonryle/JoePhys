@@ -9,6 +9,9 @@ A testbed application is included to visualize and demonstrate the library’s c
 ### Particles
 ![particles](https://raw.githubusercontent.com/Sonryle/JoePhys/refs/heads/main/testbed/example_media/particles.gif)
 
+### Springs
+![springs](https://raw.githubusercontent.com/Sonryle/JoePhys/refs/heads/main/testbed/example_media/springs.gif)
+
 ### Chunking
 ![chunks](https://raw.githubusercontent.com/Sonryle/JoePhys/refs/heads/main/testbed/example_media/chunks.gif)
 
