@@ -1,0 +1,21 @@
+# Hashes of file build rules.
+983fddaca34ca8f017f717882d274b6e dependencies/GLFW/CMakeFiles/uninstall
+8326db93aac27ef9b24384d1bd7d8bb2 dependencies/GLFW/src/CMakeFiles/update_mappings
+86252734ac3494b15fa7096b59b795cc dependencies/GLFW/src/fractional-scale-v1-client-protocol-code.h
+25e6e43f434ab2c31a3d6b96041489a9 dependencies/GLFW/src/fractional-scale-v1-client-protocol.h
+85fe0360371f53f854c0b31d06818cae dependencies/GLFW/src/idle-inhibit-unstable-v1-client-protocol-code.h
+ad61e2351d15b97a91a6a14fcdfb8d4d dependencies/GLFW/src/idle-inhibit-unstable-v1-client-protocol.h
+e63273d0609c6952bde98167a05995ef dependencies/GLFW/src/pointer-constraints-unstable-v1-client-protocol-code.h
+d46654481ef41ca47a1fa49d56fef0b2 dependencies/GLFW/src/pointer-constraints-unstable-v1-client-protocol.h
+b1d87eabe4826e204e618a2ad06b0b28 dependencies/GLFW/src/relative-pointer-unstable-v1-client-protocol-code.h
+004436441dfcff5b1cce5cf709ca6dd8 dependencies/GLFW/src/relative-pointer-unstable-v1-client-protocol.h
+83a1c66016769b75b1864ce622606b10 dependencies/GLFW/src/viewporter-client-protocol-code.h
+31660fa8da03c6ea580ca7bf57ebe5fd dependencies/GLFW/src/viewporter-client-protocol.h
+9c6fa10c55e61d52a8a2e0f5c6c70499 dependencies/GLFW/src/wayland-client-protocol-code.h
+ef97da9fdcfb67eb59c1bf48f302ea1a dependencies/GLFW/src/wayland-client-protocol.h
+629a239b8874950da33efdecb9a9f61f dependencies/GLFW/src/xdg-activation-v1-client-protocol-code.h
+b41fb6f3c7ff03b98bafbf7778e0f37b dependencies/GLFW/src/xdg-activation-v1-client-protocol.h
+a755f0ab7da4801962e1d1c0c2cb0af3 dependencies/GLFW/src/xdg-decoration-unstable-v1-client-protocol-code.h
+38246ba875f2bfe17070dca711e3dacc dependencies/GLFW/src/xdg-decoration-unstable-v1-client-protocol.h
+125ba4a9d123ace6ebf0ff734f539ff6 dependencies/GLFW/src/xdg-shell-client-protocol-code.h
+1df368056a3ce6d0cd8cbfe93b718c04 dependencies/GLFW/src/xdg-shell-client-protocol.h
