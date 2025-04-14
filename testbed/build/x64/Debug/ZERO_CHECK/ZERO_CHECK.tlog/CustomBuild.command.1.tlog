@@ -1,0 +1,10 @@
+^C:\USERS\JOSEPPIUS\DOCUMENTS\JOEPHYS\TESTBED\BUILD\CMAKEFILES\689C7F0149CEBF0DBD2D97F10E988143\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/joseppius/Documents/JoePhys/testbed -BC:/Users/joseppius/Documents/JoePhys/testbed/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/joseppius/Documents/JoePhys/testbed/build/testbed.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
