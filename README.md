@@ -74,36 +74,46 @@ make
 ```
 The resulting JoePhys executable will be in JoePhys/build/JoePhys
 
+## Usage
+
+## Contributing
+
 ## Giving Credit Where Credit's Due
 
 ### Libraries Used
 
-The JoePhys physics engine uses no libraries outside of the C++ Standard Library, however the testing environment uses third party libraries help with creating windows, communicating with the GPU and displaying GUI.
-I am extremely grateful to all of the developers who spent great time and effort creating
-wonderful open source libraries for the benefit of everyone, and I could not have created JoePhys
-anywhere near as well (or even at all) if it weren't for the hard work and diligence of some of
-these people.
+The JoePhys physics engine uses no libraries outside of the C++ Standard Library, however the testbed environment uses third party libraries help with creating windows, communicating with the GPU and displaying GUI. I am extremely grateful to all of the developers who spent great time and effort creating wonderful open source libraries for the benefit of everyone, and I could not have created JoePhys anywhere near as well (or even at all) without the use of these libraries to help me visualise and control JoePhys in a testing environment.
 
-With that said, here is the list of all third party libraries used in JoePhys:
+With that said, here is the list of all third party libraries used in the testbed environment:
 
-* glad - (https://glad.dav1d.de/)
-* GLFW - (https://www.glfw.org/)
+* glad - (https://glad.dav1d.de)
+* GLFW - (https://glfw.org)
 * imgui - (https://github.com/ocornut/imgui)
 
 ### Resources Used
 
-There is no way that I am smart enough to invent every formula and function for a realistic physics engine.
-This project is not an invention, it is a conglomeration of things which I have learned and researched 
-from OTHER people and put together into a project. No code is copy pasted or mindlessly stolen, but I have
-taken a generous amount of inspiration from other projects and papers in order to create it. JoePhys is built
-on existing research and prior knowledge. This project was simply created as a learning opportunity.
+There is no way that I am smart enough to invent every formula and function for a realistic physics engine. This project is not an invention, it is a conglomeration of things which I have learned and researched from OTHER people and put together into a project. No code is copy pasted or mindlessly stolen, but I have taken a generous amount of inspiration from other projects and papers in order to create it. JoePhys is built on existing research and prior knowledge. This project was simply created as a learning opportunity.
 
 Again, with that being said, here is a list of all of the resources I learned from to create JoePhys:
 
-* CPhysics by Hayden Marshalla (github.com/HaydenMarshalla/CPhysics)
+* CPhysics by Hayden Marshalla (https://github.com/HaydenMarshalla/CPhysics)
 
   * Much inspiration was taken from this project's code structure and rendering system. No code was explicitly
-    copy pasted, but a select few of the functions are word-for-word exactly the same. (These functions are in Renderer.cpp
+    copy pasted, but some of the functions are word-for-word exactly the same. (These functions are in Renderer.cpp
     and they are simply used for initiating and handling the renderer)
 
-* Im going to add the rest later
+* Pezzza's Work (https://youtube.com/@PezzzasWork)
+
+  * Pointed me in the right direction on getting started with particle physics and taught me about the optimisation where you break the world up into chunks
+
+* Khan Academy (https://khanacademy.org)
+
+  * Helped me to learn about derivatives, differential equations and the beginnings of particle collision resolution (along with many other math concepts along the way)
+
+* Gonkee (https://youtube.com/@Gonkee)
+ 
+  * Taught me about Runge-Kutta methods and the steps required to create soft body physics using springs
+
+## License
+
+
