@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
+set (CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set (CMAKE_CXX_STANDARD 17)
 project(testbed)
 
@@ -17,5 +18,3 @@ target_link_libraries(testbed PUBLIC glfw)
 target_link_libraries(testbed PUBLIC glad)
 target_link_libraries(testbed PUBLIC imgui)
 
-# make it so that CMake always generates a compile_commands.json file (so neovim can make sense of everything)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
