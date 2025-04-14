@@ -1,8 +1,19 @@
 # JoePhys
 
-This is a simple physics engine which I decided to make for my TY physics project. I hope that my teacher will like it :)
+JoePhys is a 2D physics simulation library designed to accurately and efficiently model particle and spring interactions.
 
-## Building
+A testbed application is included to visualize and demonstrate the library’s capabilities.
+
+## Features
+
+### Runge-Kutta 2nd Order
+
+### Chunking
+![hippo](https://media3.giphy.com/media/aUovxH8Vf9qDu/giphy.gif)
+
+## Installation
+
+Pre-build binaries are available here: https://binaries-get-your-binaries.com
 
 ### Building on Windows
 Requirements:  
