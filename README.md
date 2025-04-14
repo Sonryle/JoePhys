@@ -7,13 +7,15 @@ A testbed application is included to visualize and demonstrate the library’s c
 ## Features
 
 ### Particles
+Supports unlimited particles of any radius, mass, and elasticity. Particles may also exist as 'static', meaning they are immovable and possess infinite mass (as shown below for the darker blue particles).
 ![particles](https://raw.githubusercontent.com/Sonryle/JoePhys/refs/heads/main/testbed/example_media/particles.gif)
 
 ### Springs
+Particles can be connected using springs, each with a stiffness constant of any value.
 ![springs](https://raw.githubusercontent.com/Sonryle/JoePhys/refs/heads/main/testbed/example_media/springs.gif)
 
 ### Chunking
-The world 
+When collisions are enabled, each particle is sorted into a world grid, and collision resolution is computed only within the same chunks. This optimization eliminates unnecessary checks between distant particles and greatly improves performance in large, scattered worlds.
 ![inasec](https://raw.githubusercontent.com/Sonryle/JoePhys/refs/heads/main/testbed/example_media/chunks.gif)
 
 ### Runge-Kutta 2nd Order
