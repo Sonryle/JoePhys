@@ -84,7 +84,7 @@ void GUIManager::AddMenuBar()
 				scene_manager.SwitchScene(2);
 			if (ImGui::MenuItem("Rope Scene", NULL, (scene_manager.current_scene_number == 3)))
 				scene_manager.SwitchScene(3);
-			if (ImGui::MenuItem("Floppy Quads Scene", NULL, (scene_manager.current_scene_number == 4)))
+			if (ImGui::MenuItem("Hour Glass Scene", NULL, (scene_manager.current_scene_number == 4)))
 				scene_manager.SwitchScene(4);
 			if (ImGui::MenuItem("Colour Pallete Test Scene", NULL, (scene_manager.current_scene_number == 5)))
 				scene_manager.SwitchScene(5);

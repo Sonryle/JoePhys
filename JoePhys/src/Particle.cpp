@@ -81,7 +81,7 @@ void Particle::ResolveCollision(Particle* other_particle)
 	{
 		// solve for particle one
 		real m_ratio = 1+CoR;
-		vec2 v_diff = p1->vel - p2->vel;
+		vec2 v_diff = p1->vel;
 		vec2 p_diff = p1->pos - p2->pos;
 		vec2 proj = project(v_diff, p_diff);
 		p1->vel -= (proj * m_ratio);
@@ -93,7 +93,7 @@ void Particle::ResolveCollision(Particle* other_particle)
 	{
 		// solve for particle two
 		real m_ratio = 1+CoR;
-		vec2 v_diff = p2->vel - p1->vel;
+		vec2 v_diff = p2->vel;
 		vec2 p_diff = p2->pos - p1->pos;
 		vec2 proj = project(v_diff, p_diff);
 		p2->vel -= (proj * m_ratio);

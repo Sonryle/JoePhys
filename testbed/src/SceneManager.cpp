@@ -20,7 +20,7 @@ void SceneManager::SwitchScene(int scene_number)
 		current_scene = new RopeScene();
 		break;
 	case 4:
-		current_scene = new FloppyQuadsScene();
+		current_scene = new HourGlassScene();
 		break;
 	case 5:
 		current_scene = new ColourDebugScene();

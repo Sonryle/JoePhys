@@ -4,5 +4,5 @@
 #include "scenes/PinballScene.hpp"
 #include "scenes/ClothScene.hpp"
 #include "scenes/RopeScene.hpp"
-#include "scenes/FloppyQuadsScene.hpp"
+#include "scenes/HourGlassScene.hpp"
 #include "scenes/ColourDebugScene.hpp"
