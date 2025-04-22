@@ -16,14 +16,14 @@ Particles can be connected using springs, each with a stiffness constant of any 
 
 ### Chunking
 When collisions are enabled, each particle is sorted into a world grid, and collision resolution is computed only within the same chunks. This optimization eliminates unnecessary checks between distant particles and greatly improves performance in large, scattered worlds.
-![inasec](https://raw.githubusercontent.com/Sonryle/JoePhys/refs/heads/main/testbed/example_media/chunks.gif)
-
-### Runge-Kutta 2nd Order
-Particle and spring movement uses runge-kutta 2nd order, a method for .....
+![chunking](https://raw.githubusercontent.com/Sonryle/JoePhys/refs/heads/main/testbed/example_media/chunks.gif)
 
 ### Deterministic
 
 ### Air Resistance
+
+### Runge-Kutta 2nd Order
+Particle movement & velocity is approximated using Runge-Kutta 2nd order, a numerical method for solving ODEs (Ordinary Differential Equations). This results in an accuracy far above Euler's integration. Implementing this was tricky, as spring forces are dependant on particles relative positions, and so finding the acceleration of each particle at any given step forward in time proved difficult.
 
 ## Installation
 
