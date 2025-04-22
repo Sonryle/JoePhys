@@ -82,7 +82,7 @@ struct NewtonsCradleScene : public Scene
 	{
 		colours.background = Palette::JP_DARK_RED;
 		colours.static_particle = Palette::JP_GRAY;
-		colours.particle = Palette::JP_GREEN;
+		colours.particle = Palette::JP_RED;
 		colours.particle_outline = colours.spring = colours.static_particle_outline = Palette::JP_DARK_GRAY;
 	}
 

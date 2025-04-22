@@ -22,20 +22,22 @@ struct WeightsScene : public Scene
 
 		// Add two particles to the cluster
 		real ob_rad = 0.544f;
-		obstacles->particles.push_back(new Particle(vec2(0, 2.3), vec2(0, 0), 0.2f, ob_rad, PI * ob_rad*ob_rad, 1));
+		obstacles->particles.push_back(new Particle(vec2(ob_rad * -2 - 0.2f, 2.3), vec2(0, 0), 0.2f, ob_rad, PI * ob_rad * ob_rad, 1));
+		obstacles->particles.push_back(new Particle(vec2(0, 2.3), vec2(0, 0), 0.2f, ob_rad, PI * ob_rad * ob_rad, 1));
+		obstacles->particles.push_back(new Particle(vec2(ob_rad*2 + 0.2f, 2.3), vec2(0, 0), 0.2f, ob_rad, PI * ob_rad * ob_rad, 1));
 
 		// Create a rope
 		// -------------
 		Cluster* rope = new Cluster;
 		real spring_stiffness = 10000;
-		vec2 current_pos(-0.632f, -2);
+		vec2 current_pos(-0.632f, -2.5f);
 		real dir = 0;
 
 		// Create left boulder
 		real lrad = 0.5f;
 		Particle* l_boulder = new Particle(current_pos, vec2(0, 0), 0.5f, lrad, PI * lrad * lrad, 0);
 		rope->particles.push_back(l_boulder);
-		current_pos += vec2(sin(dir), cos(dir)) * (lrad - 0.1f);
+		current_pos += vec2(sin(dir), cos(dir)) * (lrad + 0.4f);
 		Particle* old_p = l_boulder;
 
 		// Create left handing rope
@@ -75,7 +77,7 @@ struct WeightsScene : public Scene
 
 		// Create right boulder
 		real rrad = 0.4f;
-		current_pos += vec2(sin(dir), cos(dir)) * (rrad + 0.1f);
+		current_pos += vec2(sin(dir), cos(dir)) * (rrad + 0.6f);
 		Particle* r_boulder = new Particle(current_pos, vec2(0, 0), 0.5f, rrad, PI * rrad * rrad, 0);
 		rope->particles.push_back(r_boulder);
 		rope->springs.push_back(new Spring(r_boulder, old_p, length(r_boulder->pos - old_p->pos), spring_stiffness));
@@ -89,9 +91,9 @@ struct WeightsScene : public Scene
 	{
 		colours.background = Palette::JP_DARK_WHITE;
 		colours.spring = Palette::JP_DARK_GRAY;
-		colours.particle = Palette::JP_GREEN;
+		colours.particle = Palette::JP_WHITE;
 		colours.particle_outline = Palette::JP_DARK_GRAY;
-		colours.static_particle = Palette::JP_DARK_GREEN;
+		colours.static_particle = Palette::JP_GRAY;
 		colours.static_particle_outline = Palette::JP_DARK_GRAY;
 	}
 
@@ -104,7 +106,7 @@ struct WeightsScene : public Scene
 		settings.chunk_scale = 1.0f;
 		settings.sub_steps = 40;
 
-		camera.center.Set(0.0f, 0.0f);
+		camera.center.Set(0.0f, -1.5f);
 		camera.zoom = 1.0f;
 	}
 };

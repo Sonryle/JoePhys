@@ -105,11 +105,8 @@ struct PinballScene : public Scene
 	void SetUpSceneColours() override
 	{
 		colours.background = Palette::JP_DARK_YELLOW;
-		colours.spring = Palette::JP_GREEN;
-		colours.particle = Palette::JP_AQUA;
-		colours.particle_outline = Palette::JP_DARK_GRAY;
+		colours.particle = Palette::JP_YELLOW;
 		colours.static_particle = Palette::JP_DARK_AQUA;
-		colours.static_particle_outline = Palette::JP_DARK_GRAY;
 	}
 
 	void SetUpSceneSettings() override
@@ -124,7 +121,7 @@ struct PinballScene : public Scene
 		settings.gravity.Set(0.0f, -9.8f);
 		settings.circle_res = 20;
 
-		settings.sub_steps = 16;
+		settings.sub_steps = 32;
 		settings.chunk_scale = 0.73f;
 
 		camera.center.Set( 0.0f, 3.5f);

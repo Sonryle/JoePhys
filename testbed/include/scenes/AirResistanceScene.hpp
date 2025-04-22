@@ -19,73 +19,29 @@ struct AirResistanceScene : public Scene
 		world->Create(settings.simulation_hertz, settings.sub_steps, settings.gravity);
 		double PI = 3.141592653589;
 
-		// Create a cluster for the anchor points of the balls
-		Cluster* anchors = new Cluster;
-		for (int x = 0; x < 5; x++)
-		{
-			vec2 vel(0.0f, 0.0f);
-			real elas = 1.0f;
-			real rad = 0.25f;
-			vec2 pos((x * 1.5f) - 3.0f, 4.0f);
-			real mass = PI * rad * rad;
-			Particle* p = new Particle(pos, vel, elas, rad, mass, 1);
-			
-			anchors->particles.push_back(p);
-		}
-
-		// Add a ball to hit the 4 balls
-		Cluster* cradle = new Cluster;
-
-		for (int x = 0; x < 5; x++)
-		{
-			vec2 vel(0.0f, 0.0f);
-			real elas = 1.0f;
-			real rad = 0.75f;
-			vec2 pos(anchors->particles[x]->pos.x, -2.0f);
-			real mass = PI * rad * rad;
-			if (x == 0)
+		Cluster* balls = new Cluster;
+	
+		for (int y = -5; y < 6; y++)
+			for (int x = -4; x < 5; x++)
 			{
-				real len = 6.0f;
-				real radian = PI;
-				real posx = cos(radian) * len;
-				real posy = sin(radian) * len;
-				posx += anchors->particles[x]->pos.x;
-				posy += 4.0f;
-
-				pos.Set(posx, posy);
+				vec2 vel(0.0f, 0.0f);
+				vec2 pos((0.5f * x) + 0.05f, (0.4f * y) + 8.0f);
+				real radius = (x + 7) * 0.015f;
+				real mass = (float)PI * radius * radius;
+				real elasticity = 0.8f;
+				Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass, 0);
+				// Add the particle to the world
+				balls->particles.push_back(myParticle);
 			}
-			Particle* p = new Particle(pos, vel, elas, rad, mass, 0);
-			
-			cradle->particles.push_back(p);
-		}
-
-
-
-		// Add springs connecting the balls to their anchor points
-		for (int n = 0; n < 5; n++)
-		{
-			Particle* pA = cradle->particles[n];
-			Particle* pB = anchors->particles[n];
-			real len = 6.0f;
-			real stiffness = 10000.0f;
-			Spring* s = new Spring(pA, pB, len, stiffness);
-
-			anchors->springs.push_back(s);
-		}
 		
 		// Add clusters to world
-		world->clusters.push_back(cradle);
-		world->clusters.push_back(anchors);
+		world->clusters.push_back(balls);
 	}
 
 	void SetUpSceneColours() override
 	{
 		colours.background = Palette::JP_DARK_GRAY;
-		colours.spring = Palette::JP_DARK_GRAY;
-		colours.particle = Palette::JP_GREEN;
-		colours.particle_outline = Palette::JP_DARK_GRAY;
-		colours.static_particle = Palette::JP_GRAY;
-		colours.static_particle_outline = Palette::JP_DARK_GRAY;
+		colours.particle = Palette::JP_PURPLE;
 	}
 
 	void SetUpSceneSettings() override
@@ -100,8 +56,8 @@ struct AirResistanceScene : public Scene
 		settings.chunk_scale = 1.7f;
 		settings.sub_steps = 64;
 
-		camera.center.Set(0.0f, 0.0f);
-		camera.zoom = 2.0f;
+		camera.center.Set(0.0f, 2.0f);
+		camera.zoom = 1.0f;
 	}
 };
 

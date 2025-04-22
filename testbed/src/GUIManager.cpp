@@ -80,9 +80,9 @@ void GUIManager::AddMenuBar()
 				scene_manager.SwitchScene(0);
 			if (ImGui::MenuItem("Cloth Scene", NULL, (scene_manager.current_scene_number == 1)))
 				scene_manager.SwitchScene(1);
-			if (ImGui::MenuItem("Pinball Scene", NULL, (scene_manager.current_scene_number == 2)))
+			if (ImGui::MenuItem("Rope Scene", NULL, (scene_manager.current_scene_number == 2)))
 				scene_manager.SwitchScene(2);
-			if (ImGui::MenuItem("Rope Scene", NULL, (scene_manager.current_scene_number == 3)))
+			if (ImGui::MenuItem("Pinball Scene", NULL, (scene_manager.current_scene_number == 3)))
 				scene_manager.SwitchScene(3);
 			if (ImGui::MenuItem("Hour Glass Scene", NULL, (scene_manager.current_scene_number == 4)))
 				scene_manager.SwitchScene(4);

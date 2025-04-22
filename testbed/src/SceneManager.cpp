@@ -14,10 +14,10 @@ void SceneManager::SwitchScene(int scene_number)
 		current_scene = new ClothScene();
 		break;
 	case 2:
-		current_scene = new PinballScene();
+		current_scene = new RopeScene();
 		break;
 	case 3:
-		current_scene = new RopeScene();
+		current_scene = new PinballScene();
 		break;
 	case 4:
 		current_scene = new HourGlassScene();

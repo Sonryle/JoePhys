@@ -70,9 +70,9 @@ struct RopeScene : public Scene
 	{
 		colours.background = Palette::JP_DARK_BLUE;
 		colours.spring = Palette::JP_DARK_GRAY;
-		colours.particle = Palette::JP_GREEN;
+		colours.particle = Palette::JP_DARK_AQUA;
 		colours.particle_outline = Palette::JP_DARK_GRAY;
-		colours.static_particle = Palette::JP_DARK_GREEN;
+		colours.static_particle = Palette::JP_GRAY;
 		colours.static_particle_outline = Palette::JP_DARK_GRAY;
 	}
 
