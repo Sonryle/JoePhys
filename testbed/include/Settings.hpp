@@ -31,6 +31,7 @@ struct Settings
 	real max_particle_size;
 
 	// Simulation vars
+	bool is_paused;
 	vec2 gravity;
 	bool enable_gravity;
 	bool enable_drag;

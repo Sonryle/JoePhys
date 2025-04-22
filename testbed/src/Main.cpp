@@ -15,7 +15,8 @@ void Step()
 	window_mgr.InputCallback();
 
 	// Step the world forward
-	scene_manager.current_scene->Step();
+	if (!settings.is_paused)
+		scene_manager.current_scene->Step();
 
 	// Render Frame
 	glClear(GL_COLOR_BUFFER_BIT);

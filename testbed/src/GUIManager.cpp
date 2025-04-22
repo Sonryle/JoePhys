@@ -263,14 +263,6 @@ void GUIManager::AddSimulationWindow()
 				   "is greater than the framerate of the program, time appears to have slowed down)\n";
        		ImGui::SetTooltip("%s", desc);
 	}
-	ImGui::Checkbox("Render Chunks", &settings.render_chunks);
-	ImGui::SameLine();
-	ImGui::TextDisabled("(?)");
-    	if (ImGui::IsItemHovered(ImGuiHoveredFlags_DelayShort))
-	{
-		const char* desc = "Chunks are only created/destroyed if particle collision is enabled.";
-       		ImGui::SetTooltip("%s", desc);
-	}
 	ImGui::SliderFloat("Chunk Scale", &settings.chunk_scale, 0.05f, 2.0f);
 	ImGui::Checkbox("Gravity (m/s²)", &settings.enable_gravity);
 	AddArrowDiagram(&settings.gravity.x, 50.0f);
@@ -306,6 +298,24 @@ void GUIManager::AddOptionsWindow()
 		ImGui::SliderFloat("Radius", &settings.repulsion_tool_radius, 1, 50, "%g");
 	}
 	ImGui::Separator();
+	ImGui::Checkbox("Pause", &settings.is_paused);
+	ImGui::SameLine();
+	ImGui::TextDisabled("\tCtrl+P");
+	if (settings.is_paused)
+	{
+		if (ImGui::Button("Step Forward"))
+			scene_manager.current_scene->Step();
+		ImGui::SameLine();
+		ImGui::TextDisabled("\tCtrl+F");
+	}
+	ImGui::Checkbox("Render Chunks", &settings.render_chunks);
+	ImGui::SameLine();
+	ImGui::TextDisabled("(?)");
+	if (ImGui::IsItemHovered(ImGuiHoveredFlags_DelayShort))
+	{
+		const char* desc = "Chunks are only created/destroyed if particle collision is enabled.";
+		ImGui::SetTooltip("%s", desc);
+	}
 	if (ImGui::Checkbox("Fullscreen", &settings.is_fullscreen))
 		window_mgr.SetFullscreen(settings.is_fullscreen);
 	ImGui::End();

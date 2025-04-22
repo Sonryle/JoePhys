@@ -236,11 +236,9 @@ Particle* Scene::GetNearestParticle(vec2 pos)
 
 void Scene::MoveParticle(Particle* part, vec2 pos)
 {
-	vec2 old_pos = part->pos;
-
 	// Reset and velocity or acceleration
 	part->ResetAcceleration();
-	part->vel.Set(0.0f, 0.0f);
+	part->vel = (pos - part->pos) * 10;
 
 	// Teleport particle to position
 	part->pos = pos;

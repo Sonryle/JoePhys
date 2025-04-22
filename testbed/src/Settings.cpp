@@ -24,6 +24,7 @@ void Settings::Reset()
 	min_particle_size = 0.1f;
 	max_particle_size = 5.0f;
 
+	is_paused = 0;
 	gravity.Set(0.0f, 0.0f);
 	enable_gravity = 1;
 	enable_drag = 1;
