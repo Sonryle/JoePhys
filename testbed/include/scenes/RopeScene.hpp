@@ -68,7 +68,7 @@ struct RopeScene : public Scene
 
 	void SetUpSceneColours() override
 	{
-		colours.background = Palette::JP_PURPLE;
+		colours.background = Palette::JP_DARK_BLUE;
 		colours.spring = Palette::JP_DARK_GRAY;
 		colours.particle = Palette::JP_GREEN;
 		colours.particle_outline = Palette::JP_DARK_GRAY;

@@ -86,8 +86,14 @@ void GUIManager::AddMenuBar()
 				scene_manager.SwitchScene(3);
 			if (ImGui::MenuItem("Hour Glass Scene", NULL, (scene_manager.current_scene_number == 4)))
 				scene_manager.SwitchScene(4);
-			if (ImGui::MenuItem("Colour Pallete Test Scene", NULL, (scene_manager.current_scene_number == 5)))
+			if (ImGui::MenuItem("Wrecking Ball Scene", NULL, (scene_manager.current_scene_number == 5)))
 				scene_manager.SwitchScene(5);
+			if (ImGui::MenuItem("Weights Scene", NULL, (scene_manager.current_scene_number == 6)))
+				scene_manager.SwitchScene(6);
+			if (ImGui::MenuItem("Air Resistance Scene", NULL, (scene_manager.current_scene_number == 7)))
+				scene_manager.SwitchScene(7);
+			if (ImGui::MenuItem("Colour Pallete Test Scene", NULL, (scene_manager.current_scene_number == 8)))
+				scene_manager.SwitchScene(8);
 
 			ImGui::EndMenu();
 		}

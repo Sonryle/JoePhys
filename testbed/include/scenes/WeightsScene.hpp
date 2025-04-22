@@ -1,5 +1,5 @@
-#ifndef JP_ROPE_SCENE
-#define JP_ROPE_SCENE
+#ifndef WEIGHTS_SCENE
+#define WEIGHTS_SCENE
 
 #include "../Scenes.hpp"
 #include "../Settings.hpp"
@@ -8,7 +8,7 @@
 
 #include <cstdio>	// for "stderr" file path constant
 
-struct RopeScene : public Scene
+struct WeightsScene : public Scene
 {
 	// constructors & destructors
 	void SetUpScene() override
@@ -21,45 +21,64 @@ struct RopeScene : public Scene
 		Cluster* obstacles = new Cluster;
 
 		// Add two particles to the cluster
-		vec2 posA(-2.66f, -0);
-		vec2 velA(0.0f, 0.0f);
-		real elasticityA = 0.2f;
-		real radiusA = 1.5f;
-		real massA = PI * radiusA * radiusA;
-		Particle* partA = new Particle(posA, velA, elasticityA, radiusA, massA, 1);
-		obstacles->particles.push_back(partA);
-
-		vec2 posB(3, 0);
-		vec2 velB(-0.0f, -0.0f);
-		real elasticityB = 0.2f;
-		real radiusB = 1;
-		real massB = PI * radiusB * radiusB;
-		Particle* partB = new Particle(posB, velB, elasticityB, radiusB, massB, 1);
-		obstacles->particles.push_back(partB);
+		real ob_rad = 0.544f;
+		obstacles->particles.push_back(new Particle(vec2(0, 2.3), vec2(0, 0), 0.2f, ob_rad, PI * ob_rad*ob_rad, 1));
 
 		// Create a rope
+		// -------------
 		Cluster* rope = new Cluster;
-		Particle* old_part = nullptr;
-		for (int x = -28; x < 28; x++)
-		{
-			vec2 vel(0.0f, 0.0f);
-			real radius = 0.1f;
-			vec2 pos(radius * 3.0f * x, 2.5f);
-			real elasticity = 0.2f;
-			real mass = PI * radius * radius;
-			Particle* myParticle = new Particle(pos, vel, elasticity, radius, mass, 0);
-			// Add the particle to the physics object
-			rope->particles.push_back(myParticle);
+		real spring_stiffness = 10000;
+		vec2 current_pos(-0.632f, -2);
+		real dir = 0;
 
-			real stiffness = 2500.0f;
-			if (old_part != nullptr)
-			{
-				real len = length(old_part->pos - myParticle->pos);
-				Spring* s = new Spring(old_part, myParticle, len, stiffness);
-				rope->springs.push_back(s);
-			}
-			old_part = myParticle;
+		// Create left boulder
+		real lrad = 0.5f;
+		Particle* l_boulder = new Particle(current_pos, vec2(0, 0), 0.5f, lrad, PI * lrad * lrad, 0);
+		rope->particles.push_back(l_boulder);
+		current_pos += vec2(sin(dir), cos(dir)) * (lrad - 0.1f);
+		Particle* old_p = l_boulder;
+
+		// Create left handing rope
+		for (int n = 0; n < 20; n++)
+		{
+			real rad = 0.1f;
+			current_pos += vec2(sin(dir), cos(dir)) * rad * 2;
+			Particle* p = new Particle(current_pos, vec2(0, 0), 0.5f, rad, PI * rad * rad, 0);
+			rope->particles.push_back(p);
+			rope->springs.push_back(new Spring(p, old_p, length(p->pos - old_p->pos), spring_stiffness));
+			old_p = p;
 		}
+
+		// Create curve
+		real curve_segments = 10;
+		for (int n = 0; n < curve_segments; n++)
+		{
+			real rad = 0.1f;
+			dir += (PI / 2) / (curve_segments/2);
+			current_pos += vec2(sin(dir), cos(dir)) * rad * 2;
+			Particle* p = new Particle(current_pos, vec2(0, 0), 0.5f, rad, PI * rad * rad, 0);
+			rope->particles.push_back(p);
+			rope->springs.push_back(new Spring(p, old_p, length(p->pos - old_p->pos), spring_stiffness));
+			old_p = p;
+		}
+
+		// Create right handing rope
+		for (int n = 0; n < 18; n++)
+		{
+			real rad = 0.1f;
+			current_pos += vec2(sin(dir), cos(dir)) * rad * 2;
+			Particle* p = new Particle(current_pos, vec2(0, 0), 0.5f, rad, PI * rad * rad, 0);
+			rope->particles.push_back(p);
+			rope->springs.push_back(new Spring(p, old_p, length(p->pos - old_p->pos), spring_stiffness));
+			old_p = p;
+		}
+
+		// Create right boulder
+		real rrad = 0.4f;
+		current_pos += vec2(sin(dir), cos(dir)) * (rrad + 0.1f);
+		Particle* r_boulder = new Particle(current_pos, vec2(0, 0), 0.5f, rrad, PI * rrad * rrad, 0);
+		rope->particles.push_back(r_boulder);
+		rope->springs.push_back(new Spring(r_boulder, old_p, length(r_boulder->pos - old_p->pos), spring_stiffness));
 
 		// Add cluster to the world
 		world->clusters.push_back(obstacles);
@@ -68,7 +87,7 @@ struct RopeScene : public Scene
 
 	void SetUpSceneColours() override
 	{
-		colours.background = Palette::JP_PURPLE;
+		colours.background = Palette::JP_DARK_WHITE;
 		colours.spring = Palette::JP_DARK_GRAY;
 		colours.particle = Palette::JP_GREEN;
 		colours.particle_outline = Palette::JP_DARK_GRAY;

@@ -64,8 +64,7 @@ struct ClothScene : public Scene
 
 	void SetUpSceneColours() override
 	{
-		colours.background = Palette::JP_RED;
-		/* colours.spring = Palette::JP_DARK_YELLOW; */
+		colours.background = Palette::JP_DARK_GREEN;
 		colours.spring = Palette::JP_WHITE;
 		colours.particle = Palette::JP_YELLOW;
 		colours.particle_outline = Palette::JP_DARK_GRAY;

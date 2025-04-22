@@ -78,7 +78,7 @@ struct HourGlassScene : public Scene
 
 	void SetUpSceneColours() override
 	{
-		colours.background = Palette::JP_DARK_YELLOW;
+		colours.background = Palette::JP_DARK_PURPLE;
 		colours.spring = Palette::JP_DARK_GRAY;
 		colours.particle = Palette::JP_BLUE;
 		colours.particle_outline = Palette::JP_DARK_GRAY;

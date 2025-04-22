@@ -80,12 +80,10 @@ struct NewtonsCradleScene : public Scene
 
 	void SetUpSceneColours() override
 	{
-		colours.background = Palette::JP_DARK_PURPLE;
-		colours.spring = Palette::JP_DARK_GRAY;
-		colours.particle = Palette::JP_GREEN;
-		colours.particle_outline = Palette::JP_DARK_GRAY;
+		colours.background = Palette::JP_DARK_RED;
 		colours.static_particle = Palette::JP_GRAY;
-		colours.static_particle_outline = Palette::JP_DARK_GRAY;
+		colours.particle = Palette::JP_GREEN;
+		colours.particle_outline = colours.spring = colours.static_particle_outline = Palette::JP_DARK_GRAY;
 	}
 
 	void SetUpSceneSettings() override

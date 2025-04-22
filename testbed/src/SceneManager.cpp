@@ -23,6 +23,15 @@ void SceneManager::SwitchScene(int scene_number)
 		current_scene = new HourGlassScene();
 		break;
 	case 5:
+		current_scene = new WreckingBallScene();
+		break;
+	case 6:
+		current_scene = new WeightsScene();
+		break;
+	case 7:
+		current_scene = new AirResistanceScene();
+		break;
+	case 8:
 		current_scene = new ColourDebugScene();
 		break;
 	default:

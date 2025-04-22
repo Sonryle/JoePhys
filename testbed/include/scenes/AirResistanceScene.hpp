@@ -1,5 +1,5 @@
-#ifndef NEWTONS_CRADLE_SCENE
-#define NEWTONS_CRADLE_SCENE
+#ifndef AIR_RESISTANCE_SCENE
+#define AIR_RESISTANCE_SCENE
 
 // TEMPORARY FOR "stderr"
 #include <cstdio>
@@ -10,7 +10,7 @@
 #include "JoePhys/Particle.hpp"
 #include "JoePhys/Spring.hpp"
 
-struct NewtonsCradleScene : public Scene
+struct AirResistanceScene : public Scene
 {
 	// constructors & destructors
 	void SetUpScene() override
@@ -80,7 +80,7 @@ struct NewtonsCradleScene : public Scene
 
 	void SetUpSceneColours() override
 	{
-		colours.background = Palette::JP_DARK_PURPLE;
+		colours.background = Palette::JP_DARK_GRAY;
 		colours.spring = Palette::JP_DARK_GRAY;
 		colours.particle = Palette::JP_GREEN;
 		colours.particle_outline = Palette::JP_DARK_GRAY;

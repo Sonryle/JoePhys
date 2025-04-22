@@ -104,7 +104,7 @@ struct PinballScene : public Scene
 
 	void SetUpSceneColours() override
 	{
-		colours.background = Palette::JP_GREEN;
+		colours.background = Palette::JP_DARK_YELLOW;
 		colours.spring = Palette::JP_GREEN;
 		colours.particle = Palette::JP_AQUA;
 		colours.particle_outline = Palette::JP_DARK_GRAY;

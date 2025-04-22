@@ -1,5 +1,5 @@
-#ifndef NEWTONS_CRADLE_SCENE
-#define NEWTONS_CRADLE_SCENE
+#ifndef WRECKING_BALL_SCENE
+#define WRECKING_BALL_SCENE
 
 // TEMPORARY FOR "stderr"
 #include <cstdio>
@@ -10,7 +10,7 @@
 #include "JoePhys/Particle.hpp"
 #include "JoePhys/Spring.hpp"
 
-struct NewtonsCradleScene : public Scene
+struct WreckingBallScene : public Scene
 {
 	// constructors & destructors
 	void SetUpScene() override
@@ -19,68 +19,33 @@ struct NewtonsCradleScene : public Scene
 		world->Create(settings.simulation_hertz, settings.sub_steps, settings.gravity);
 		double PI = 3.141592653589;
 
-		// Create a cluster for the anchor points of the balls
-		Cluster* anchors = new Cluster;
-		for (int x = 0; x < 5; x++)
-		{
-			vec2 vel(0.0f, 0.0f);
-			real elas = 1.0f;
-			real rad = 0.25f;
-			vec2 pos((x * 1.5f) - 3.0f, 4.0f);
-			real mass = PI * rad * rad;
-			Particle* p = new Particle(pos, vel, elas, rad, mass, 1);
-			
-			anchors->particles.push_back(p);
-		}
+		// Create a wrecking ball
+		Cluster* wrecking_ball = new Cluster;
+		wrecking_ball->particles.push_back(new Particle(vec2(-2, 3), vec2(0, 0), 0.5f, 0.1f, 0, 1));
+		wrecking_ball->particles.push_back(new Particle(vec2(-7, 3), vec2(0, 0), 0.5f, 0.75f, 30, 0));
+		wrecking_ball->springs.push_back(new Spring(wrecking_ball->particles[0], wrecking_ball->particles[1], 5, 5000));
 
-		// Add a ball to hit the 4 balls
-		Cluster* cradle = new Cluster;
+		// Create a platform for particles
+		Cluster* platform = new Cluster;
+		for (int n = 0; n < 20; n++)
+			platform->particles.push_back(new Particle(vec2(n * 0.2f, -3), vec2(0, 0), 0.5f, 0.1f, 0, 1));
 
-		for (int x = 0; x < 5; x++)
-		{
-			vec2 vel(0.0f, 0.0f);
-			real elas = 1.0f;
-			real rad = 0.75f;
-			vec2 pos(anchors->particles[x]->pos.x, -2.0f);
-			real mass = PI * rad * rad;
-			if (x == 0)
-			{
-				real len = 6.0f;
-				real radian = PI;
-				real posx = cos(radian) * len;
-				real posy = sin(radian) * len;
-				posx += anchors->particles[x]->pos.x;
-				posy += 4.0f;
-
-				pos.Set(posx, posy);
-			}
-			Particle* p = new Particle(pos, vel, elas, rad, mass, 0);
-			
-			cradle->particles.push_back(p);
-		}
-
-
-
-		// Add springs connecting the balls to their anchor points
-		for (int n = 0; n < 5; n++)
-		{
-			Particle* pA = cradle->particles[n];
-			Particle* pB = anchors->particles[n];
-			real len = 6.0f;
-			real stiffness = 10000.0f;
-			Spring* s = new Spring(pA, pB, len, stiffness);
-
-			anchors->springs.push_back(s);
-		}
+		// Create the particles to be hit
+		Cluster* debris = new Cluster;
+		for (int x = 0; x < 20; x++)
+			for (int y = 0; y < 20; y++)
+				debris->particles.push_back(new Particle(vec2(x * 0.2f, y * 0.2f - 2.8f), vec2(0, 0), 0.5f, 0.1f, PI * 0.01f, 0));
 		
 		// Add clusters to world
-		world->clusters.push_back(cradle);
-		world->clusters.push_back(anchors);
+		// ---------------------
+		world->clusters.push_back(wrecking_ball);
+		world->clusters.push_back(platform);
+		world->clusters.push_back(debris);
 	}
 
 	void SetUpSceneColours() override
 	{
-		colours.background = Palette::JP_DARK_PURPLE;
+		colours.background = Palette::JP_DARK_AQUA;
 		colours.spring = Palette::JP_DARK_GRAY;
 		colours.particle = Palette::JP_GREEN;
 		colours.particle_outline = Palette::JP_DARK_GRAY;
@@ -96,12 +61,12 @@ struct NewtonsCradleScene : public Scene
 		settings.repulsion_tool_strength = 25.0f;
 
 		settings.gravity.Set(0.0f, -9.8f);
-		settings.circle_res = 20;
-		settings.chunk_scale = 1.7f;
-		settings.sub_steps = 64;
+		settings.circle_res = 15;
+		settings.chunk_scale = 0.75f;
+		settings.sub_steps = 16;
 
 		camera.center.Set(0.0f, 0.0f);
-		camera.zoom = 2.0f;
+		camera.zoom = 1.0f;
 	}
 };
 
