@@ -33,7 +33,7 @@ Particle movement & velocity is approximated using Runge-Kutta 2nd order, a nume
 
 ## Installation
 
-Pre-built binaries for the library and testing environment are available here: https://binaries-get-your-binaries.com
+Pre-built binaries for the library and testing environment are available ![here](https://github.com/Sonryle/JoePhys/releases/tag/v1.0.0)
 
 If you are trying to compile the library, I will assume you have enough programming knowledge to do so by yourself, however I will supply step by step instructions on how to build the *testing environment* yourself.
 
