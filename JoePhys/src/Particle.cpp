@@ -85,7 +85,6 @@ void Particle::ResolveCollision(Particle* other_particle)
 		vec2 p_diff = p1->pos - p2->pos;
 		vec2 proj = project(v_diff, p_diff);
 		p1->vel -= (proj * m_ratio);
-		p2->vel.Set(0, 0);
 
 		return;
 	}
@@ -97,7 +96,6 @@ void Particle::ResolveCollision(Particle* other_particle)
 		vec2 v_diff = p2->vel - p1->vel;
 		vec2 p_diff = p2->pos - p1->pos;
 		vec2 proj = project(v_diff, p_diff);
-		p1->vel.Set(0, 0);
 		p2->vel -= (proj * m_ratio);
 
 		return;
