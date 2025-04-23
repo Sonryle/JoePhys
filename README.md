@@ -95,7 +95,7 @@ The JoePhys library is simple and straightforward to use. After including "JoePh
 int main()
 {
  // World settings
- int simulation_hertz = 120; // number of simulation "steps" per second (must match framerate for real time physics)
+ int simulation_hertz = 120; // number of simulation "steps" per simulated second (must match framerate for real time physics)
  int sub_steps = 8;          // number of smaller "sub" steps per simulation step
  vec2 gravity(0.0f, -9.8f)   // vec2 is included in JoePhys.hpp
 
@@ -114,16 +114,9 @@ World settings can be changed at any point
  myWorld.chunk_scale = 1.0f; // Scale of each chunk in the world grid in meters
 ```
 
-Adding particles to the world is straightforward aswell, but it needs a tiny bit of explanation. 
-
-Particles and springs are stored in "Clusters", which are then stored in the world. This is done in order to create a more organised world, as every group of Particles and springs can be organised into a "Cluster".
-
-For example in the Hour Glass scene in the JoePhys testing environment, the particles were organised into two clusters, a cluster named "bowl" for the hour glass shaped *cluster* of static particles, and a cluster named "sand" for the slightly smaller sized sand particles.
+Creating a particle goes like this
 
 ```c++
- // Create a cluster for our particle
- Cluster myCluster;
-
  // Particle data
  vec2 position(0.0f, 0.0f);  // in meters
  vec2 velocity(0.0f, 0.0f);  // initial velocity of our particle (in meters per second)
@@ -133,7 +126,126 @@ For example in the Hour Glass scene in the JoePhys testing environment, the part
  bool is_static = 0;         // static particles are immovable and treated as if they had an infinite mass
 
  // Create particle
+ Particle* myParticle = new Particle(position, velocity, elasticity, radius, mass, is_static);
+```
 
+Adding particles to the world is straightforward aswell, but it needs a tiny bit of explanation. 
+
+Particles and springs are stored in "Clusters", which are then stored in the world. This is done in order to create a more organised world, as every group of Particles and springs can be organised into a "Cluster".
+
+```c++
+ // Create a cluster to contain our particle
+ Cluster* myCluster = new Cluster;
+ myCluster->particles.push_back(myParticle);
+
+ // Add the clutser to the world
+ World.clusters.push_back(myCluster);
+```
+
+A pointer to the particle is now stored in the world and will be used in all future physics updates.
+
+You can move the world forwards by one *simulation step* by calling the `Step()` function. Again, the number of simulation steps per *simulated second* is controlled by the *simulation_hertz* setting in `myWorld.simulation_hertz`)
+
+```c++
+ myWorld.Step(0);
+```
+
+Now the positions and velocities of every particle in our world will have updated.
+
+There are certain flags that you can pass into the step function which can disable certain features of the world. These flags are:
+
+* NO_GRAVITY
+* NO_DRAG
+* NO_PARTICLE_MOVEMENT
+* NO_PARTICLE_COLLISION
+* NO_SPRING_FORCES
+
+these can be passed into the Step function like so:
+
+```c++
+ myWorld.Step(NO_GRAVITY);
+ myWorld.Step(NO_PARTICLE_COLLISION);
+
+ // Flags can be chained together
+ myWorld.Step(NO_GRAVITY || NO_DRAG || NO_SPRING_FORCES);
+```
+
+Creating springs to join particles is an easy task too, simply create a Spring and add it to a cluster
+
+```c++
+ // Spring data
+ float length = 2;      // in meters
+ float stiffness = 100; // in newtons per meter
+
+ // Create our spring
+ Spring* mySpring = new Spring(pointerToParticleOne, pointerToParticleTwo, length, stiffness);
+ myCluster->springs.push_back(mySpring);
+```
+
+And that's it!! That is all you need to know to get started with JoePhys!
+
+To wrap things up, here is an example of what a program using JoePhys could look like
+```c++
+#include <JoePhys/JoePhys.hpp>
+#define PI 3.141592653589
+#define simulation_hertz 120
+#define sub_steps 16
+
+World myWorld;
+
+// Sets up a Newton's Cradle scene in the world
+void SetUpWorld()
+{
+ myWorld.Create(simulation_hertz, sub_steps, vec2(0.0f, -9.8f));
+
+ // Add anchor points for steel balls
+ Cluster* anchors = new Cluster;
+ for (int x = 0; x < 5; x++)
+  anchors->particles.push_back(new Particle(vec2((x * 1.5f) - 3.0f, 4.0f), vec2(0, 0), 1.0f, 0.25f, 1, 1));
+
+ // Add steel balls
+ Cluster* balls = new Cluster;
+ for (int x = 0; x < 5; x++)
+  if (x == 0) // if its the left-most steel ball, it must be raised to the left so that it will fall
+   balls->particles.push_back(new Particle(vec2((x * 1.5f) - 9.0f, 4.0f), vec2(0, 0), 1.0f, 0.75f, 5, 0));
+  else
+   balls->particles.push_back(new Particle(vec2((x * 1.5f) - 3.0f, -2.0f), vec2(0, 0), 1.0f, 0.75f, 5, 0));
+
+ // Add springs connecting the balls to their anchor points
+ for (int n = 0; n < 5; n++)
+  anchors->springs.push_back(new Spring(balls->particles[n], anchors->particles[n], 6.0f, 10000.0f));
+	
+ // Add clusters to world
+ myWorld->clusters.push_back(anchors);
+ myWorld->clusters.push_back(balls);
+}
+
+void RenderWorld()
+{
+ // loop over every cluster in the world
+ for (Cluster* c : myWorld.clusters))
+ {
+  for (Particle* p : c->particles)
+   if (p->is_static)
+    yourOwnRenderer.RenderCircle(p->pos, p->radius, DARK_BLUE);
+   else
+    yourOwnRenderer.RenderCircle(p->pos, p->radius, BLUE);
+
+  for (Spring* s : world->clusters[c]->springs)
+   yourOwnRenderer.RenderLine(s->particleA->pos, s->particleB->pos, BLACK);
+  }
+}
+
+int main()
+{
+ SetUpWorld();
+
+ while(FrameLimitFunction(120))
+ {
+  myWorld.Step(0);
+  RenderWorld();
+ }
+}
 ```
 
 ## Contributing
