@@ -131,7 +131,7 @@ Creating a particle goes like this
 
 Adding particles to the world is straightforward aswell, but it needs a tiny bit of explanation. 
 
-Particles and springs are stored in "Clusters", which are then stored in the world. This is done in order to create a more organised world, as every group of Particles and springs can be organised into a "Cluster".
+Particles and springs are stored in "Clusters", which are then stored in the world. This is done in order to create a more organised world, as every group of particles and springs can be organised into a "Cluster".
 
 ```c++
  // Create a cluster to contain our particle
@@ -170,7 +170,7 @@ these can be passed into the Step function like so:
  myWorld.Step(NO_GRAVITY || NO_DRAG || NO_SPRING_FORCES);
 ```
 
-Creating springs to join particles is an easy task too, simply create a Spring and add it to a cluster
+Creating springs to join particles is an easy task too, simply create a spring and add it to a cluster
 
 ```c++
  // Spring data
@@ -187,6 +187,7 @@ And that's it!! That is all you need to know to get started with JoePhys!
 To wrap things up, here is an example of what a program using JoePhys could look like
 ```c++
 #include <JoePhys/JoePhys.hpp>
+
 #define PI 3.141592653589
 #define simulation_hertz 120
 #define sub_steps 16
@@ -240,10 +241,13 @@ int main()
 {
  SetUpWorld();
 
- while(FrameLimitFunction(120))
+ while(1)
  {
-  myWorld.Step(0);
-  RenderWorld();
+  if(FrameLimitFunction(myWorld.simulation_hertz))
+  {
+   myWorld.Step(0);
+   RenderWorld();
+  }
  }
 }
 ```
