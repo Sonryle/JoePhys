@@ -87,6 +87,8 @@ The resulting `testbed` executable will be in JoePhys/testbed/build/JoePhys
 
 ## Usage
 
+The JoePhys library is simple and straightforward to use. After including "JoePhys/
+
 ## Contributing
 
 ## Giving Credit Where Credit's Due
