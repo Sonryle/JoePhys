@@ -298,4 +298,4 @@ Again, with that being said, here is a list of all of the resources I learned fr
 
 ## License
 
-
+JoePhys' MIT license can be read [here](LICENSE).
