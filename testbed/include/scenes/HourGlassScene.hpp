@@ -55,18 +55,20 @@ struct HourGlassScene : public Scene
 		// ---------------
 
 		Cluster* sand = new Cluster;
-		real width = 30;
-		real height = 30;
+		real width = 50;
+		real height = 50;
 		radius = 0.1f;
+		bool shifted = 0;
 		mass = PI * radius * radius	;
 		Particle* quadp[15][8];
 		for (real x = width / -2; x < width / 2; x++)
 			for (real y = -height/2+5; y < height/2+5; y++)
 			{
-				vec2 pos((x * radius * 1.9f), (y * radius * 1.9f) - 1);
-				if ((int)pos.y % 2 == 0)
+				vec2 pos((x * radius * 2), (y * radius * 1.73f) - 1);
+				if (shifted)
 					pos.x += radius;
-				if (length(pos) < len - radius * 0.5f)
+				shifted = !shifted;
+				if (length(pos) < len - 0.23f)
 					sand->particles.push_back(new Particle(pos, vec2(0.0f, 0.0f), 0.5f, radius, mass, 0));
 			}
 
@@ -94,9 +96,9 @@ struct HourGlassScene : public Scene
 		settings.repulsion_tool_strength = 25.0f;
 
 		settings.gravity.Set(0.0f, -9.8f);
-		settings.circle_res = 20;
-		settings.chunk_scale = 1.5f;
-		settings.sub_steps = 8;
+		settings.circle_res = 10;
+		settings.chunk_scale = 0.6f;
+		settings.sub_steps = 25;
 
 		camera.center.Set(0.0f, -3.25f);
 		camera.zoom = 1.5f;

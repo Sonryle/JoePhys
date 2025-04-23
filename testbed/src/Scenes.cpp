@@ -238,7 +238,7 @@ void Scene::MoveParticle(Particle* part, vec2 pos)
 {
 	// Reset and velocity or acceleration
 	part->ResetAcceleration();
-	part->vel = (pos - part->pos) * 10;
+	part->vel = (pos - part->pos) * 20;
 
 	// Teleport particle to position
 	part->pos = pos;
