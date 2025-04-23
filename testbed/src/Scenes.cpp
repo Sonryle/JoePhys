@@ -8,6 +8,7 @@
 #include "JoePhys/World.hpp"
 #include "Renderer.hpp"
 #include "SceneManager.hpp"
+#include "WindowManager.hpp"
 #include "Settings.hpp"
 
 Scene::Scene()
@@ -73,7 +74,7 @@ void Scene::Render()
 	
 	// Render a circle around selected particle
 	colour outline_col(1.0f, 1.0f, 1.0f, 1.0f);
-	if (selected_particle != nullptr)
+	if (selected_particle != nullptr && !window_mgr.ctrl_pressed)
 		renderer.AddCircle(selected_particle->pos, selected_particle->radius * 1.2f, settings.circle_res, outline_col);
 	
 	// Render chunks
