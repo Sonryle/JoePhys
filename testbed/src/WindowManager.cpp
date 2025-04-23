@@ -92,12 +92,12 @@ void WindowManager::KeyCallback(GLFWwindow* window, int key, int scancode, int a
 	case GLFW_KEY_S:
 			if (action == GLFW_PRESS && window_mgr.ctrl_pressed)
 				gui_manager.simulation_window_shown = !gui_manager.simulation_window_shown;
-			else if (action == GLFW_PRESS && window_mgr.world_exists)
+			else if (action == GLFW_PRESS && window_mgr.world_exists && !glfwGetMouseButton(window_mgr.window, GLFW_MOUSE_BUTTON_LEFT))
 			{
 				Particle* p = scene_manager.current_scene->GetNearestParticle(camera.ScreenSpaceToWorldSpace(window_mgr.cursor_pos));
+				p->is_static = !p->is_static;
 				p->vel.Set(0.0f, 0.0f);
 				p->ResetAcceleration();
-				p->is_static = !p->is_static;
 			}
 		break;
 	case GLFW_KEY_O:

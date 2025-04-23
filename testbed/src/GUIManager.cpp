@@ -322,7 +322,7 @@ void GUIManager::AddLearnWindow()
 
 	// Set the correct position & scale
 	ImGuiIO io = ImGui::GetIO();
-	ImVec2 initial_size(io.DisplaySize.x * 0.6f, io.DisplaySize.y * 0.5f);
+	ImVec2 initial_size(io.DisplaySize.x * 0.6f, io.DisplaySize.y * 0.54f);
 	ImVec2 initial_pos(io.DisplaySize.x / 2 - initial_size.x / 2, io.DisplaySize.y / 2 - initial_size.y / 2);
 	ImGui::SetWindowSize(initial_size, ImGuiCond_FirstUseEver);
 	ImGui::SetWindowPos(initial_pos, ImGuiCond_FirstUseEver);
@@ -365,6 +365,11 @@ void GUIManager::AddLearnWindow()
 	ImGui::BulletText("You can create a repulsion force around your cursor by pressing R");
 	ImGui::Indent();
 	ImGui::BulletText("The radius and strength of this tool can be changed in the options window (settings->options->repulsion tool");
+	ImGui::Unindent();
+	ImGui::Spacing();
+	ImGui::BulletText("You can toggle the selected particle between static and non-static by pressing S");
+	ImGui::Indent();
+	ImGui::BulletText("Note that this will not work while the particle is being moved as the particle is always static while being moved.");
 	ImGui::Unindent();
 	ImGui::Spacing();
 	ImGui::Spacing();
