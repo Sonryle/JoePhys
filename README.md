@@ -3,45 +3,45 @@
 JoePhys is a 2D physics simulation library written in C++ which is designed to accurately and efficiently model particle and spring interactions.
 
 A testbed application is included to visualize and demonstrate the library’s capabilities.
-![testbed](https://github.com/Sonryle/JoePhys/blob/main/testbed/example_media/JoePhys.gif)
+[testbed](https://github.com/Sonryle/JoePhys/blob/main/testbed/example_media/JoePhys.gif)
 
 ## Features
 
 ### Particles
 Supports unlimited particles of any radius, mass, and elasticity. Particles may also exist as 'static', meaning they are immovable and possess infinite mass (as shown below for the darker blue particles).
-![particles](https://github.com/Sonryle/JoePhys/blob/main/testbed/example_media/Particles.gif)
+[particles](https://github.com/Sonryle/JoePhys/blob/main/testbed/example_media/Particles.gif)
 
 ### Springs
 Particles can be connected using springs, each with a stiffness constant of any value.
-![springs](https://github.com/Sonryle/JoePhys/blob/main/testbed/example_media/Springs.gif)
+[springs](https://github.com/Sonryle/JoePhys/blob/main/testbed/example_media/Springs.gif)
 
 ### Chunking
 When collisions are enabled, each particle is sorted into a world grid, and collision resolution is computed only within the same chunks. This optimization eliminates unnecessary checks between distant particles and greatly improves performance in large, scattered worlds.
-![chunking](https://github.com/Sonryle/JoePhys/blob/main/testbed/example_media/Chunking.gif)
+[chunking](https://github.com/Sonryle/JoePhys/blob/main/testbed/example_media/Chunking.gif)
 
 ### Deterministic
 JoePhys is deterministic, meaning that replaying a scene with the same settings will always reward you with the exact same result.
-![deterministic](https://github.com/Sonryle/JoePhys/blob/main/testbed/example_media/Deterministic.gif)
+[deterministic](https://github.com/Sonryle/JoePhys/blob/main/testbed/example_media/Deterministic.gif)
 
 ### Air Resistance
 Particles traveling through the air will experience drag, depending on their mass and velocity. You can see in the GIF below that smaller particles with less mass fall at a slower rate than larger particles with greater mass.
-![air_resistance](https://github.com/Sonryle/JoePhys/blob/main/testbed/example_media/Air%20Resistance.gif)
+[air_resistance](https://github.com/Sonryle/JoePhys/blob/main/testbed/example_media/Air%20Resistance.gif)
 
 ### Runge-Kutta 2nd Order
 Particle movement & velocity is approximated using Runge-Kutta 2nd order, a numerical method for solving ODEs (Ordinary Differential Equations). This results in an accuracy far above Euler's integration. Implementing this was tricky, as spring forces are dependant on particles relative positions, and so finding the acceleration of each particle at any given step forward in time proved difficult.
-![runge_kutta](https://github.com/Sonryle/JoePhys/blob/main/testbed/example_media/Runge%20Kutta.gif)
+[runge_kutta](https://github.com/Sonryle/JoePhys/blob/main/testbed/example_media/Runge%20Kutta.gif)
 
 ## Installation
 
-Pre-built binaries for the library and testing environment are available ![here](https://github.com/Sonryle/JoePhys/releases/tag/v1.0.0)
+Pre-built binaries for the library and testing environment are available [here](https://github.com/Sonryle/JoePhys/releases/tag/v1.0.0)
 
 If you are trying to compile the library, I will assume you have enough programming knowledge to do so by yourself, however I will supply step by step instructions on how to build the *testing environment* yourself.
 
 ### Building the testing environment on Windows
 Requirements:
-* ![Git](https://git-scm.com/downloads)
-* ![CMake](https://cmake.org/download)  
-* ![Visual Studio](https://visualstudio.microsoft.com/) or a C++ compiler supported by CMake
+* [Git](https://git-scm.com/downloads)
+* [CMake](https://cmake.org/download)  
+* [Visual Studio](https://visualstudio.microsoft.com/) or a C++ compiler supported by CMake
 
 Open powershell and navigate to where you want the JoePhys main folder to be downloaded. You can clone the JoePhys repository using Git:
 ```sh
