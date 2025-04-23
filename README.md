@@ -260,7 +260,9 @@ Forks of JoePhys are welcome! You are also welcome to submit pull requests, whic
 
 ### Libraries Used
 
-The JoePhys physics engine uses no libraries outside of the C++ Standard Library, however the testbed environment uses third party libraries help with creating windows, communicating with the GPU and displaying GUI. I am extremely grateful to all of the developers who spent great time and effort creating wonderful open source libraries for the benefit of everyone, and I could not have created JoePhys anywhere near as well (or even at all) without the use of these libraries to help me visualise and control JoePhys in a testing environment.
+The JoePhys physics engine uses no libraries outside of the C++ Standard Library, however the testbed environment uses third party libraries help with creating windows, communicating with the GPU and displaying GUI.
+
+I am extremely grateful to all of the developers who spent great time and effort creating wonderful open source libraries for the benefit of everyone, and I could not have created JoePhys anywhere near as well (or even at all) without the use of these libraries to help me visualise and control JoePhys in a testing environment.
 
 With that said, here is the list of all third party libraries used in the testbed environment:
 
@@ -276,9 +278,7 @@ Again, with that being said, here is a list of all of the resources I learned fr
 
 * CPhysics by Hayden Marshalla (https://github.com/HaydenMarshalla/CPhysics)
 
-  * Much inspiration was taken from this project's code structure and rendering system. No code was explicitly
-    copy pasted, but some of the functions are word-for-word exactly the same. (These functions are in Renderer.cpp
-    and they are simply used for initiating and handling the renderer)
+  * Much inspiration was taken from this project's code structure and rendering system. No code was explicitly copy pasted, but some of the functions in the testing environment are word-for-word exactly the same. (These functions are in Renderer.cpp and they are simply used for initiating and handling the renderer)
 
 * Pezzza's Work (https://youtube.com/@PezzzasWork)
 
@@ -291,6 +291,10 @@ Again, with that being said, here is a list of all of the resources I learned fr
 * Gonkee (https://youtube.com/@Gonkee)
  
   * Taught me about Runge-Kutta methods and the steps required to create soft body physics using springs
+ 
+* Wikipedia (https://en.wikipedia.org)
+
+  * Gave me insight on some topics such as Runge-Kutta and particle collision resolution
 
 ## License
 
