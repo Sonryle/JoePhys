@@ -33,12 +33,15 @@ Particle movement & velocity is approximated using Runge-Kutta 2nd order, a nume
 
 ## Installation
 
-Pre-build binaries are available here: https://binaries-get-your-binaries.com
+Pre-built binaries for the library and testing environment are available here: https://binaries-get-your-binaries.com
 
-### Building on Windows
-Requirements:  
-* You must have CMake installed (https://cmake.org/download/)  
-* You must have Git installed (https://git-scm.com/downloads)
+If you are trying to compile the library, I will assume you have enough programming knowledge to do so by yourself, however I will supply step by step instructions on how to build the *testing environment* yourself.
+
+### Building the testing environment on Windows
+Requirements:
+* ![Git](https://git-scm.com/downloads)
+* ![CMake](https://cmake.org/download)  
+* ![Visual Studio](https://visualstudio.microsoft.com/) or a C++ compiler supported by CMake
 
 Open powershell and navigate to where you want the JoePhys main folder to be downloaded. You can clone the JoePhys repository using Git:
 ```sh
@@ -46,39 +49,41 @@ git clone https://github.com/Sonryle/JoePhys
 ```
 Then build the project:
 ```sh
-cd JoePhys
+cd JoePhys/testbed
 mkdir build
 cd build
 cmake ..
 ```
-In `JoePhys/build` you will be met with a Visual Studio project file (`JoePhys.sln`). Use this to compile the project.
+In `JoePhys/testbed/build` you will be met with a Visual Studio project file (`testbed.sln`). Open this file with Visual Studio and compile the project, making sure to switch the project configuration from "Debug" to "Release".
 
-#### If you don't want to install Visual Studio
-If you prefer not to install Visual Studio, you can build JoePhys using the following steps:
+#### If you don't want to use Visual Studio
+If you would prefer not to install Visual Studio, you can build the testing environment using the following steps:
 ```sh
 git clone https://github.com/Sonryle/JoePhys
-cd JoePhys
+cd JoePhys/testbed
 mkdir build
 cd build
 cmake ..
 cmake --build . --config Release
 ```
-The resulting JoePhys.exe file will be in JoePhys/build/Release/JoePhys.exe
-### Building on Linux
+The resulting `testbed.exe` file will be in JoePhys/testbed/build/Release/testbed.exe
+
+### Building the testing environment on Linux
 Requirements:  
 * You must have CMake installed
 * You must have Git installed
+* You must have Make installed
 
 In your terminal simply clone the repo, generate the make files with CMake and then build the project
 ```sh
 git clone https://github.com/Sonryle/JoePhys
-cd JoePhys
+cd JoePhys/testbed
 mkdir build
 cd build
 cmake ..
 make
 ```
-The resulting JoePhys executable will be in JoePhys/build/JoePhys
+The resulting `testbed` executable will be in JoePhys/testbed/build/JoePhys
 
 ## Usage
 
