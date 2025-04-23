@@ -1,6 +1,6 @@
 # JoePhys
 
-JoePhys is a 2D physics simulation library designed to accurately and efficiently model particle and spring interactions.
+JoePhys is a 2D physics simulation library written in C++ which is designed to accurately and efficiently model particle and spring interactions.
 
 A testbed application is included to visualize and demonstrate the library’s capabilities.
 ![testbed](https://github.com/Sonryle/JoePhys/blob/main/testbed/example_media/JoePhys.gif)
@@ -20,9 +20,11 @@ When collisions are enabled, each particle is sorted into a world grid, and coll
 ![chunking](https://github.com/Sonryle/JoePhys/blob/main/testbed/example_media/Chunking.gif)
 
 ### Deterministic
+JoePhys is deterministic, meaning that replaying a scene with the same settings will always reward you with the exact same result.
 ![deterministic](https://github.com/Sonryle/JoePhys/blob/main/testbed/example_media/Deterministic.gif)
 
 ### Air Resistance
+Particles traveling through the air will experience drag, depending on their mass and velocity. You can see in the GIF below that smaller particles with less mass fall at a slower rate than larger particles with greater mass.
 ![air_resistance](https://github.com/Sonryle/JoePhys/blob/main/testbed/example_media/Air%20Resistance.gif)
 
 ### Runge-Kutta 2nd Order
