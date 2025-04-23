@@ -254,6 +254,8 @@ int main()
 
 ## Contributing
 
+Forks of JoePhys are welcome! You are also welcome to submit pull requests, which I will look through and make a decision on, but I must warn you that (while I am not expecting any forks or pull requests at all hahaha) I will be fairly strict on what I allow to be added to JoePhys (don't feel discouraged if you want to add cool things, if I agree with them and think they are cool too, then I will 100% merge your pull request or create a separate branch for you)
+
 ## Giving Credit Where Credit's Due
 
 ### Libraries Used
