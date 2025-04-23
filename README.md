@@ -54,7 +54,7 @@ mkdir build
 cd build
 cmake ..
 ```
-In `JoePhys/testbed/build` you will be met with a Visual Studio project file (`testbed.sln`). Open this file with Visual Studio and compile the project, making sure to switch the project configuration from "Debug" to "Release".
+In `JoePhys/testbed/build` you will be met with a Visual Studio project file (`testbed.sln`). Open this file with Visual Studio and build the project, making sure to switch the project configuration from "Debug" to "Release".
 
 #### If you don't want to use Visual Studio
 If you would prefer not to install Visual Studio, you can build the testing environment using the following steps:
