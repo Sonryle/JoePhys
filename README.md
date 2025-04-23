@@ -87,7 +87,54 @@ The resulting `testbed` executable will be in JoePhys/testbed/build/JoePhys
 
 ## Usage
 
-The JoePhys library is simple and straightforward to use. After including "JoePhys/
+The JoePhys library is simple and straightforward to use. After including "JoePhys/JoePhys.hpp", all you need to do is create a new World.
+
+```c++
+#include <JoePhys/JoePhys.hpp>
+
+int main()
+{
+ // World settings
+ int simulation_hertz = 120; // number of simulation "steps" per second (must match framerate for real time physics)
+ int sub_steps = 8;          // number of smaller "sub" steps per simulation step
+ vec2 gravity(0.0f, -9.8f)   // vec2 is included in JoePhys.hpp
+
+ // Create world
+ World myWorld();
+ myWorld.Create(simulation_hertz, sub_steps, gravity);
+}
+```
+
+World settings can be changed at any point
+
+```c++
+ myWorld.simulation_hertz = 200;
+ myWorld.sub_steps = 16;
+ myWorld.gravity.Set(0.0f, 0.0f);
+ myWorld.chunk_scale = 1.0f; // Scale of each chunk in the world grid in meters
+```
+
+Adding particles to the world is straightforward aswell, but it needs a tiny bit of explanation. 
+
+Particles and springs are stored in "Clusters", which are then stored in the world. This is done in order to create a more organised world, as every group of Particles and springs can be organised into a "Cluster".
+
+For example in the Hour Glass scene in the JoePhys testing environment, the particles were organised into two clusters, a cluster named "bowl" for the hour glass shaped *cluster* of static particles, and a cluster named "sand" for the slightly smaller sized sand particles.
+
+```c++
+ // Create a cluster for our particle
+ Cluster myCluster;
+
+ // Particle data
+ vec2 position(0.0f, 0.0f);  // in meters
+ vec2 velocity(0.0f, 0.0f);  // initial velocity of our particle (in meters per second)
+ float elasticity = 0.75f;   // 0 = no velocity retained after collision, 1 = 100% velocity retained
+ float radius = 0.5f;        // in meters
+ float mass = 1;             // in grams
+ bool is_static = 0;         // static particles are immovable and treated as if they had an infinite mass
+
+ // Create particle
+
+```
 
 ## Contributing
 
