@@ -163,6 +163,7 @@ void WindowManager::ScrollCallback(GLFWwindow*, double dx, double dy)
 			Particle* p = scene_manager.current_scene->GetNearestParticle(camera.ScreenSpaceToWorldSpace(window_mgr.cursor_pos));
 			if (p != nullptr)
 			{
+				real old_radius = p->radius;
 				p->radius += dy / 10.0f;
 
 				if (p->radius < settings.min_particle_size)
@@ -170,7 +171,8 @@ void WindowManager::ScrollCallback(GLFWwindow*, double dx, double dy)
 				if (p->radius > settings.max_particle_size)
 					p->radius = settings.max_particle_size;
 
-				p->mass = PI * p->radius * p->radius;
+				// Find old mass to radius
+				p->mass = (p->mass / (PI * old_radius * old_radius)) * PI * p->radius * p->radius;
 			}
 		}
 	}

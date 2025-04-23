@@ -9,11 +9,7 @@ GUIManager::GUIManager()
 	appearance_window_shown = 0;
 	simulation_window_shown = 0;
 	options_window_shown = 0;
-
-	learn_ui_window_shown = 0;
-	learn_joephys_window_shown = 0;
-	programmer_guide_window_shown = 0;
-	return;
+	learn_window_shown = 0;
 }
 
 // creates an imgui context and initiates GLFW & OpenGL for imgui
@@ -22,6 +18,8 @@ void GUIManager::Init(GLFWwindow* window)
 	ImGui::CreateContext();	
 	ImGui_ImplGlfw_InitForOpenGL(window, 1);
 	ImGui_ImplOpenGL3_Init();
+
+	ImGui::GetIO().IniFilename = nullptr;
 
 	ImGuiStyle& style = ImGui::GetStyle();
 	style.Alpha = 0.85f;
@@ -39,13 +37,8 @@ void GUIManager::Render()
 		AddSimulationWindow();
 	if (options_window_shown)
 		AddOptionsWindow();
-
-	if (learn_ui_window_shown)
-		AddLearnUIWindow();
-	if (learn_joephys_window_shown)
-		AddLearnJoePhysWindow();
-	if (programmer_guide_window_shown)
-		AddProgrammerGuideWindow();
+	if (learn_window_shown)
+		AddLearnWindow();
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -99,14 +92,15 @@ void GUIManager::AddMenuBar()
 		}
 		if (ImGui::BeginMenu("Help"))
 		{
-			if (ImGui::MenuItem("Learn How To Use JoePhys", NULL, learn_ui_window_shown))
-				learn_ui_window_shown = !learn_ui_window_shown;
-			if (ImGui::MenuItem("Learn How JoePhys Was Made", NULL, learn_joephys_window_shown))
-				learn_joephys_window_shown = !learn_joephys_window_shown;
-			if (ImGui::MenuItem("Programmer Guide", NULL, programmer_guide_window_shown))
-				programmer_guide_window_shown = !programmer_guide_window_shown;
+			if (ImGui::MenuItem("Learn How To Use Testing Environment", NULL, learn_window_shown))
+				learn_window_shown = !learn_window_shown;
 			ImGui::EndMenu();
 		}
+
+		ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - ImGui::CalcTextSize("https://github.com/Sonryle/JoePhys ").x);
+		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.5f, 0.5f, 0.5f, 1.0f));
+		ImGui::Text("https://github.com/Sonryle/JoePhys"); ImGui::PopStyleColor();
+
 		ImGui::EndMainMenuBar();
 	}
 }
@@ -321,14 +315,14 @@ void GUIManager::AddOptionsWindow()
 	ImGui::End();
 }
 
-void GUIManager::AddLearnUIWindow()
+void GUIManager::AddLearnWindow()
 {
 	// Begin the window
-	ImGui::Begin("Learn How To Use JoePhys", NULL, ImGuiWindowFlags_None);
+	ImGui::Begin("Learn How To Use The Testing Environment", NULL, ImGuiWindowFlags_None);
 
 	// Set the correct position & scale
 	ImGuiIO io = ImGui::GetIO();
-	ImVec2 initial_size(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f);
+	ImVec2 initial_size(io.DisplaySize.x * 0.6f, io.DisplaySize.y * 0.5f);
 	ImVec2 initial_pos(io.DisplaySize.x / 2 - initial_size.x / 2, io.DisplaySize.y / 2 - initial_size.y / 2);
 	ImGui::SetWindowSize(initial_size, ImGuiCond_FirstUseEver);
 	ImGui::SetWindowPos(initial_pos, ImGuiCond_FirstUseEver);
@@ -352,42 +346,43 @@ void GUIManager::AddLearnUIWindow()
 	ImGui::Spacing();
 	ImGui::Spacing();
 
-	ImGui::SeparatorText("World Interaction:");
+	ImGui::SeparatorText("Particle Interaction:");
 	ImGui::Spacing();
 
 	ImGui::Text("You will notice that the closest particle to your cursor is always highlighted");
 	ImGui::Spacing();
 	ImGui::BulletText("You can click on the scene to teleport the selected particle to your cursor");
+	ImGui::BulletText("You can scroll to increase the selected particle's radius");
+	ImGui::Indent();
+	ImGui::BulletText("Note that the mass of the particle will scale in direct proportion to its change in size");
+	ImGui::Unindent();
+	ImGui::Spacing();
+	ImGui::BulletText("You can create an attraction force around your cursor by pressing A");
+	ImGui::Indent();
+	ImGui::BulletText("The radius and strength of this tool can be changed in the options window (settings->options->attraction tool");
+	ImGui::Unindent();
+	ImGui::Spacing();
+	ImGui::BulletText("You can create a repulsion force around your cursor by pressing R");
+	ImGui::Indent();
+	ImGui::BulletText("The radius and strength of this tool can be changed in the options window (settings->options->repulsion tool");
+	ImGui::Unindent();
+	ImGui::Spacing();
+	ImGui::Spacing();
+	ImGui::Spacing();
+	ImGui::Spacing();
+	ImGui::Spacing();
+	ImGui::Spacing();
+
+	ImGui::SeparatorText("World Interaction:");
+	ImGui::Spacing();
+
+	ImGui::BulletText("You can spawn new particles by pressing P");
+	ImGui::Indent();
+	ImGui::BulletText("Press and hold P to spawn particles at rapid speeds!");
+	ImGui::Unindent();
 
 
-	ImGui::End();
-}
-void GUIManager::AddLearnJoePhysWindow()
-{
-	// Begin the window
-	ImGui::Begin("Learn How JoePhys Was Made", NULL, ImGuiWindowFlags_None);
 
-	// Set the correct position & scale
-	ImGuiIO io = ImGui::GetIO();
-	ImVec2 initial_size(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f);
-	ImVec2 initial_pos(io.DisplaySize.x / 2 - initial_size.x / 2, io.DisplaySize.y / 2 - initial_size.y / 2);
-	ImGui::SetWindowSize(initial_size, ImGuiCond_FirstUseEver);
-	ImGui::SetWindowPos(initial_pos, ImGuiCond_FirstUseEver);
-
-	ImGui::End();
-}
-
-void GUIManager::AddProgrammerGuideWindow()
-{
-	// Begin the window
-	ImGui::Begin("Programmer Guide", NULL, ImGuiWindowFlags_None);
-
-	// Set the correct position & scale
-	ImGuiIO io = ImGui::GetIO();
-	ImVec2 initial_size(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f);
-	ImVec2 initial_pos(io.DisplaySize.x / 2 - initial_size.x / 2, io.DisplaySize.y / 2 - initial_size.y / 2);
-	ImGui::SetWindowSize(initial_size, ImGuiCond_FirstUseEver);
-	ImGui::SetWindowPos(initial_pos, ImGuiCond_FirstUseEver);
 
 	ImGui::End();
 }
