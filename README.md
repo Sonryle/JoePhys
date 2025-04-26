@@ -129,7 +129,7 @@ Creating a particle goes like this
  Particle* myParticle = new Particle(position, velocity, elasticity, radius, mass, is_static);
 ```
 
-Adding particles to the world is straightforward aswell, but it needs a tiny bit of explanation. 
+Adding particles to the world is straightforward as well, but it needs a tiny bit of explanation. 
 
 Particles and springs are stored in "Clusters", which are then stored in the world. This is done in order to create a more organised world, as every group of particles and springs can be organised into a "Cluster".
 
@@ -260,7 +260,7 @@ Forks of JoePhys are welcome! You are also welcome to submit pull requests, whic
 
 ### Third Party Libraries Used
 
-The JoePhys physics engine uses no libraries outside of the C++ Standard Library, however the testbed environment uses third party libraries help with creating windows, communicating with the GPU and displaying GUI.
+The JoePhys physics engine uses no libraries outside of the C++ Standard Library, however the testbed environment uses third party libraries to help with creating windows, communicating with the GPU and displaying GUI.
 
 I am extremely grateful to all of the developers who spent great time and effort creating wonderful open source libraries for the benefit of everyone, and I could not have created JoePhys anywhere near as well (or even at all) without the use of these libraries to help me visualise and control JoePhys in a testing environment.
 
